@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "343421504665",
+    "firebase_url": "https://tecapp-25ed3.firebaseio.com",
+    "project_id": "tecapp-25ed3",
+    "storage_bucket": "tecapp-25ed3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:343421504665:android:37ba31a3341be157",
+        "android_client_info": {
+          "package_name": "com.material.components"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "343421504665-m17ufqeu75rd1rsl28ejgv7ikpdslp2p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.material.components",
+            "certificate_hash": "f1d1a285a7f86d536ebf965235e3c8dceed201e6"
+          }
+        },
+        {
+          "client_id": "343421504665-i8hvmmj1rqj3kaf4bae2t2ton82aeut4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_PgKhtfOg8wz4F2y0smyBcX1Dmh376cA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "343421504665-i8hvmmj1rqj3kaf4bae2t2ton82aeut4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
