@@ -18,4 +18,11 @@ public class People {
         this.section = section;
     }
 
+
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+
 }
