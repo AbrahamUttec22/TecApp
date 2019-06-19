@@ -51,9 +51,11 @@
                         android:layout_height="wrap_content">
 
                         <AutoCompleteTextView
+                            android:id="@+id/txtName"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Full Name"
+                            android:hint="Nombre Completo"
+                            android:digits=" ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz"
                             android:inputType="text"
                             android:maxLines="1"
                             android:singleLine="true" />
@@ -65,13 +67,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <AutoCompleteTextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Username"
-                            android:inputType="text"
-                            android:maxLines="1"
-                            android:singleLine="true" />
 
                     </android.support.design.widget.TextInputLayout>
 
@@ -80,9 +75,10 @@
                         android:layout_height="wrap_content">
 
                         <AutoCompleteTextView
+                            android:id="@+id/txtEmail"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Email"
+                            android:hint="Correo"
                             android:inputType="textEmailAddress"
                             android:maxLines="1"
                             android:singleLine="true" />
@@ -94,9 +90,10 @@
                         android:layout_height="wrap_content">
 
                         <EditText
+                            android:id="@+id/txtPassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Password"
+                            android:hint="Contraseña"
                             android:inputType="textPassword"
                             android:maxLines="1"
                             android:singleLine="true" />
@@ -108,9 +105,10 @@
                         android:layout_height="wrap_content">
 
                         <EditText
+                            android:id="@+id/txtConfirmPassword"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Re-type Password"
+                            android:hint="Confirmar Contraseña"
                             android:inputType="textPassword"
                             android:maxLines="1"
                             android:singleLine="true" />
@@ -129,22 +127,22 @@
                             android:layout_height="wrap_content"
                             android:paddingLeft="@dimen/spacing_medium"
                             android:paddingRight="@dimen/spacing_medium"
-                            android:text="Gender"
+                            android:text="Tipo de usuario"
                             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
                             android:textColor="@color/grey_90" />
 
                         <RadioGroup
-                            android:id="@+id/gender"
+                            android:id="@+id/rbTipo"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/spacing_medium"
                             android:orientation="horizontal">
 
                             <android.support.v7.widget.AppCompatRadioButton
-                                android:id="@+id/radio_female"
+                                android:id="@+id/radio_adminitrador"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Female"
+                                android:text="Administrador"
                                 android:checked="true"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                                 android:textColor="@color/grey_90" />
@@ -154,10 +152,10 @@
                                 android:layout_height="0dp" />
 
                             <android.support.v7.widget.AppCompatRadioButton
-                                android:id="@+id/radio_male"
+                                android:id="@+id/radio_usuario"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Male"
+                                android:text="Usuario"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                                 android:textColor="@color/grey_90" />
 
@@ -166,21 +164,16 @@
                     </LinearLayout>
 
                     <Button
-                        android:id="@+id/email_sign_in_button"
+                        android:id="@+id/registrarUsuario"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
                         android:background="@drawable/btn_rounded_accent"
-                        android:text="REGISTER"
+                        android:text="REGISTRAR"
                         android:textColor="@android:color/white" />
 
 
-                    <Button
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/btn_rounded_primary"
-                        android:text="REGISTER WITH FACEBOOK"
-                        android:textColor="@android:color/white" />
+
 
                 </LinearLayout>
 

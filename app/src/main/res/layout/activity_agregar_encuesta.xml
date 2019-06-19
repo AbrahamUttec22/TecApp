@@ -74,7 +74,7 @@
 
                 <EditText
                     android:id="@+id/etBirthday"
-                    android:hint="Fecha de evento"
+                    android:hint="Fecha de cierre"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:inputType="date"
@@ -129,7 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_mxlarge" />
 
-         </LinearLayout>
+        </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

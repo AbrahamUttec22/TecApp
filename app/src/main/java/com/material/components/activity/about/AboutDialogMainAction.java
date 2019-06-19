@@ -82,26 +82,11 @@ public class AboutDialogMainAction extends AppCompatActivity {
 
         ((TextView) dialog.findViewById(R.id.tv_version)).setText("Version " + BuildConfig.VERSION_NAME);
 
-        ((View) dialog.findViewById(R.id.bt_getcode)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://codecanyon.net/user/dream_space/portfolio"));
-                startActivity(i);
-            }
-        });
 
         ((ImageButton) dialog.findViewById(R.id.bt_close)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-            }
-        });
-
-        ((Button) dialog.findViewById(R.id.bt_rate)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Tools.rateAction(AboutDialogMainAction.this);
             }
         });
 

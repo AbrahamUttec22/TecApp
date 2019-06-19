@@ -7,16 +7,16 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/logo_tecgurus"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/logo_tecgurus"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
-        <!-- Add Google Map Library -->
-        <uses-library android:name="com.google.android.maps" />
-
-        <!-- Google API Key -->
+        <activity android:name=".activity.form.AgregarAnuncioActivity"></activity>
+        <activity android:name=".activity.form.AgregarEncuestaActivity" />
+        <activity android:name=".activity.dialog.EncuestaActivity" />
+        <activity android:name=".activity.bottomsheet.UserActivity" /> <!-- Add Google Map Library -->
+        <uses-library android:name="com.google.android.maps" /> <!-- Google API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -24,20 +24,14 @@
         <activity
             android:name=".activity.MainMenu"
             android:label="@string/app_name"
-            android:screenOrientation="portrait">
-
-        </activity>
-
-        <activity
-            android:name=".activity.MainEmptyActivity">
+            android:screenOrientation="portrait" />
+        <activity android:name=".activity.MainEmptyActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
         <activity
             android:name=".activity.bottomnavigation.BottomNavigationBasic"
             android:screenOrientation="portrait" />

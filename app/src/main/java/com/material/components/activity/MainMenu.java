@@ -5,9 +5,11 @@ import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -16,6 +18,16 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.material.components.BuildConfig;
 import com.material.components.R;
 import com.material.components.activity.about.AboutApp;
@@ -45,6 +57,7 @@ import com.material.components.activity.bottomsheet.BottomSheetFloating;
 import com.material.components.activity.bottomsheet.BottomSheetFull;
 import com.material.components.activity.bottomsheet.BottomSheetList;
 import com.material.components.activity.bottomsheet.BottomSheetMap;
+import com.material.components.activity.bottomsheet.UserActivity;
 import com.material.components.activity.button.ButtonBasic;
 import com.material.components.activity.button.ButtonInUtilities;
 import com.material.components.activity.button.FabMiddle;
@@ -79,9 +92,12 @@ import com.material.components.activity.dialog.DialogGDPRBasic;
 import com.material.components.activity.dialog.DialogHeader;
 import com.material.components.activity.dialog.DialogImage;
 import com.material.components.activity.dialog.DialogTermOfServices;
+import com.material.components.activity.dialog.EncuestaActivity;
 import com.material.components.activity.expansionpanel.ExpansionPanelBasic;
 import com.material.components.activity.expansionpanel.ExpansionPanelInvoice;
 import com.material.components.activity.expansionpanel.ExpansionPanelTicket;
+import com.material.components.activity.form.AgregarAnuncioActivity;
+import com.material.components.activity.form.AgregarEncuestaActivity;
 import com.material.components.activity.form.FormLogin;
 import com.material.components.activity.form.FormProfileData;
 import com.material.components.activity.form.FormSignUp;
@@ -251,17 +267,53 @@ public class MainMenu extends AppCompatActivity {
     private RecyclerView recycler;
     private MainMenuAdapter adapter;
     private SharedPref sharedPref;
+    FirebaseFirestore db = FirebaseFirestore.getInstance();
+    private FirebaseAuth mAuth;
+    private CollectionReference userCollection;
+
+
+    public void init() {
+        FirebaseApp.initializeApp(this);
+        //save the collection marks on val maksCollection
+        userCollection = FirebaseFirestore.getInstance().collection("Usuarios");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String email = user.getEmail();
+            userCollection.whereEqualTo("email", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String rol = document.get("rol").toString();
+                            if (rol.equalsIgnoreCase("administrador")) {
+                                result = "administrador";
+                                setContentView(R.layout.activity_main);
+                                initComponentMenu();
+                            } else if (rol.equalsIgnoreCase("usuario")) {
+                                result = "usuario";
+                                setContentView(R.layout.activity_main);
+                                initComponentMenu();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        init();
+        //setContentView(R.layout.activity_main);
         sharedPref = new SharedPref(this);
-        initComponentMenu();
+        //  initComponentMenu();
         Tools.setSystemBarColor(this, R.color.grey_1000);
     }
 
     private void initComponentMenu() {
+
+
         recycler = (RecyclerView) findViewById(R.id.main_recycler);
         adapter = new MainMenuAdapter(this, generateMenuItems(), new MainMenuAdapter.OnItemClickListener() {
             @Override
@@ -269,12 +321,6 @@ public class MainMenu extends AppCompatActivity {
                 onMenuItemSelected(itemId);
             }
         });
-//        ((ImageButton) findViewById(R.id.bt_about)).setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                showDialogAbout();
-//            }
-//        });
 
         adapter.setMode(ExpandableRecyclerAdapter.MODE_ACCORDION);
         recycler.setLayoutManager(new LinearLayoutManager(this));
@@ -282,13 +328,19 @@ public class MainMenu extends AppCompatActivity {
         recycler.setAdapter(adapter);
 
         if (sharedPref.isFirstLaunch()) {
-            showDialogAbout();
+            // showDialogAbout();
         }
+    }
+
+    public String result = "";
+
+    private void whatUserIs() {
+
     }
 
     private void onMenuItemSelected(int itemId) {
         if (sharedPref.actionClickOffer()) {
-            showDialogOffer();
+            //  showDialogOffer();
             return;
         }
         switch (itemId) {
@@ -327,9 +379,10 @@ public class MainMenu extends AppCompatActivity {
                 break;
             case 204:
                 startActivity(new Intent(this, BottomSheetFloating.class));
+                startActivity(new Intent(this, BottomSheetFull.class));
                 break;*/
             case 205:
-                startActivity(new Intent(this, BottomSheetFull.class));
+                startActivity(new Intent(this, UserActivity.class));
                 break;
 
             // Buttons -----------------------------------------------------------------------------
@@ -350,7 +403,7 @@ public class MainMenu extends AppCompatActivity {
                 break;
 
             // Cards -------------------------------------------------------------------------------
-            case 401:
+            case 401://see events
                 startActivity(new Intent(this, CardBasic.class));
                 break;
             case 402:
@@ -388,7 +441,8 @@ public class MainMenu extends AppCompatActivity {
                 startActivity(new Intent(this, DialogCustom.class));
                 break;
             case 604:
-                startActivity(new Intent(this, DialogCustomInfo.class));
+               // startActivity(new Intent(this, DialogCustomInfo.class));
+                startActivity(new Intent(this, EncuestaActivity.class));
                 break;
             case 605:
                 startActivity(new Intent(this, DialogCustomWarning.class));
@@ -617,19 +671,23 @@ public class MainMenu extends AppCompatActivity {
 
             // Form --------------------------------------------------------------------------------
             case 1601:
-                startActivity(new Intent(this, FormLogin.class));
+                //startActivity(new Intent(this, FormLogin.class));
+
                 break;
             case 1602:
-                startActivity(new Intent(this, FormSignUp.class));
+                //startActivity(new Intent(this, FormSignUp.class));
+                startActivity(new Intent(this, AgregarAnuncioActivity.class));
                 break;
             case 1603:
                 startActivity(new Intent(this, FormProfileData.class));
                 break;
             case 1604:
-                startActivity(new Intent(this, FormWithIcon.class));
+                //startActivity(new Intent(this, FormWithIcon.class));
+                startActivity(new Intent(this, AgregarEncuestaActivity.class));
                 break;
             case 1605:
-                startActivity(new Intent(this, FormTextArea.class));
+                //startActivity(new Intent(this, FormTextArea.class));
+                startActivity(new Intent(this, FormWithIcon.class));
                 break;
 
             // Toolbars ----------------------------------------------------------------------------
@@ -1014,9 +1072,8 @@ public class MainMenu extends AppCompatActivity {
 
     private List<MainMenuAdapter.ListItem> generateMenuItems() {
         List<MainMenuAdapter.ListItem> items = new ArrayList<>();
-
-        /* Probably for events
         items.add(new MainMenuAdapter.ListItem(-1, null, -1, MenuType.DIVIDER));
+        /* Probably for events
         items.add(new MainMenuAdapter.ListItem(100, "Bottom Navigation", R.drawable.ic_view_column, MenuType.HEADER));
         items.add(new MainMenuAdapter.ListItem(101, "Basic", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(102, "Shifting", -1, MenuType.SUB_HEADER));
@@ -1026,14 +1083,15 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(106, "Primary", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(107, "Map Blue", -1, MenuType.SUB_HEADER));
         */
-
-        //I used to for the user its a nice view
-        items.add(new MainMenuAdapter.ListItem(200, "Usuarios", R.drawable.ic_call_to_actio, MenuType.HEADER));
-        // items.add(new MainMenuAdapter.ListItem(201, "Basic", -1, MenuType.SUB_HEADER));
-        //items.add(new MainMenuAdapter.ListItem(202, "List", -1, MenuType.SUB_HEADER));
-        // items.add(new MainMenuAdapter.ListItem(203, "Map", -1, MenuType.SUB_HEADER));
-        //items.add(new MainMenuAdapter.ListItem(204, "Floating", -1, MenuType.SUB_HEADER));
-        items.add(new MainMenuAdapter.ListItem(205, "Panel de usuarios", -1, MenuType.SUB_HEADER));//see the users
+        if (result.equalsIgnoreCase("administrador")) {
+            //I used to for the user its a nice view
+            items.add(new MainMenuAdapter.ListItem(200, "Usuarios", R.drawable.ic_call_to_actio, MenuType.HEADER));
+            // items.add(new MainMenuAdapter.ListItem(201, "Basic", -1, MenuType.SUB_HEADER));
+            //items.add(new MainMenuAdapter.ListItem(202, "List", -1, MenuType.SUB_HEADER));
+            // items.add(new MainMenuAdapter.ListItem(203, "Map", -1, MenuType.SUB_HEADER));
+            //items.add(new MainMenuAdapter.ListItem(204, "Floating", -1, MenuType.SUB_HEADER));
+            items.add(new MainMenuAdapter.ListItem(205, "Panel de usuarios", -1, MenuType.SUB_HEADER));//see the users
+        }
 
 
   /*      items.add(new MainMenuAdapter.ListItem(300, "Buttons", R.drawable.ic_touch_app, MenuType.HEADER));
@@ -1045,8 +1103,10 @@ public class MainMenu extends AppCompatActivity {
 */
         //Menu eventos
         items.add(new MainMenuAdapter.ListItem(400, "Eventos", R.drawable.ic_note, MenuType.HEADER));
-        items.add(new MainMenuAdapter.ListItem(401, "Panel de eventos", -1, MenuType.SUB_HEADER));
-/*        items.add(new MainMenuAdapter.ListItem(402, "Timeline", -1, MenuType.SUB_HEADER));
+        if (result.equalsIgnoreCase("administrador"))
+            items.add(new MainMenuAdapter.ListItem(1603, "Agregar evento", -1, MenuType.SUB_HEADER));
+        items.add(new MainMenuAdapter.ListItem(401, "Ver eventos", -1, MenuType.SUB_HEADER));
+/*      items.add(new MainMenuAdapter.ListItem(402, "Timeline", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(403, "Overlap", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(404, "Wizard", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(405, "Wizard Light", -1, MenuType.SUB_HEADER));
@@ -1054,15 +1114,23 @@ public class MainMenu extends AppCompatActivity {
 
 //Menu Encuestas
         items.add(new MainMenuAdapter.ListItem(500, "Encuestas", R.drawable.ic_label, MenuType.HEADER));
-        items.add(new MainMenuAdapter.ListItem(405, "Wizard Light", -1, MenuType.SUB_HEADER));
+        if (result.equalsIgnoreCase("administrador"))
+            items.add(new MainMenuAdapter.ListItem(1604, "Agregar encuesta", -1, MenuType.SUB_HEADER));
+        items.add(new MainMenuAdapter.ListItem(604, "Ver encuestas", -1, MenuType.SUB_HEADER));
+
         //items.add(new MainMenuAdapter.ListItem(501, "Basic", -1, MenuType.SUB_HEADER));
         //items.add(new MainMenuAdapter.ListItem(502, "Tag", -1, MenuType.SUB_HEADER));
 
-      items.add(new MainMenuAdapter.ListItem(600, "Anuncios", R.drawable.ic_picture_in_picture, true, MenuType.HEADER));
+        //el 4 parametro del constructor recibe boolean para mostrar notificaciones
+        items.add(new MainMenuAdapter.ListItem(600, "Anuncios", R.drawable.ic_picture_in_picture, MenuType.HEADER));
+        if (result.equalsIgnoreCase("administrador"))
+            items.add(new MainMenuAdapter.ListItem(1602, "Agregar anuncio", -1, MenuType.SUB_HEADER));
+        items.add(new MainMenuAdapter.ListItem(405, "Ver anuncios", -1, MenuType.SUB_HEADER));
+
         //items.add(new MainMenuAdapter.ListItem(601, "Basic", -1, MenuType.SUB_HEADER));
         //items.add(new MainMenuAdapter.ListItem(602, "Fullscreen", -1, MenuType.SUB_HEADER));
         //items.add(new MainMenuAdapter.ListItem(603, "Custom", -1, MenuType.SUB_HEADER));
-        items.add(new MainMenuAdapter.ListItem(604, "Custom Info", -1, MenuType.SUB_HEADER));
+
    /*     items.add(new MainMenuAdapter.ListItem(605, "Custom Warning", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(606, "Custom Light", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(607, "Custom Dark", -1, MenuType.SUB_HEADER));
@@ -1153,13 +1221,13 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(1510, "Round", -1, MenuType.SUB_HEADER));
 */
         //this for database add new users,events, etc..etcc
-        items.add(new MainMenuAdapter.ListItem(1600, "Formularios", R.drawable.ic_assignment, MenuType.HEADER));
+       /* items.add(new MainMenuAdapter.ListItem(1600, "Formularios", R.drawable.ic_assignment, MenuType.HEADER));
         items.add(new MainMenuAdapter.ListItem(1601, "Login", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(1602, "Sign Up", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(1603, "Profile Data", -1, MenuType.SUB_HEADER));
-        items.add(new MainMenuAdapter.ListItem(1604, "With Icon", -1, MenuType.SUB_HEADER));
+        //items.add(new MainMenuAdapter.ListItem(1604, "With Icon", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(1605, "Text Area", -1, MenuType.SUB_HEADER));
-
+*/
        /* items.add(new MainMenuAdapter.ListItem(1700, "Toolbars", R.drawable.ic_web_asset, MenuType.HEADER));
         items.add(new MainMenuAdapter.ListItem(1701, "Basic", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(1702, "Collapse", -1, MenuType.SUB_HEADER));
@@ -1168,9 +1236,8 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(1705, "Dark", -1, MenuType.SUB_HEADER));*/
 
         items.add(new MainMenuAdapter.ListItem(-1, "Extra", -1, MenuType.DIVIDER));
-
         items.add(new MainMenuAdapter.ListItem(1800, "Perfil", R.drawable.ic_person, MenuType.HEADER));
-        items.add(new MainMenuAdapter.ListItem(1604, "Mi perfil", -1, MenuType.SUB_HEADER));
+        items.add(new MainMenuAdapter.ListItem(1605, "Mi perfil", -1, MenuType.SUB_HEADER));
         //toolbar basic class and activity_toolbarbasic
         items.add(new MainMenuAdapter.ListItem(1701, "Cerrar Sesion", -1, MenuType.SUB_HEADER));
         //items.add(new MainMenuAdapter.ListItem(25003, "Mi perfil", -1, MenuType.SUB_HEADER));
@@ -1329,7 +1396,7 @@ public class MainMenu extends AppCompatActivity {
 
     public void doExitApp() {
         if ((System.currentTimeMillis() - exitTime) > 2000) {
-            Toast.makeText(this, "Press again to exit app", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Presiona de nuevo para salir de la aplicación", Toast.LENGTH_SHORT).show();
             exitTime = System.currentTimeMillis();
         } else {
             finish();
@@ -1339,7 +1406,7 @@ public class MainMenu extends AppCompatActivity {
     private void showDialogAbout() {
         final Dialog dialog = new Dialog(this);
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); // before
-        dialog.setContentView(R.layout.dialog_about);
+        dialog.setContentView(R.layout.dialog_about);//view dialog about
         dialog.setCancelable(true);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
@@ -1348,28 +1415,12 @@ public class MainMenu extends AppCompatActivity {
         lp.width = WindowManager.LayoutParams.WRAP_CONTENT;
         lp.height = WindowManager.LayoutParams.WRAP_CONTENT;
 
-        ((TextView) dialog.findViewById(R.id.tv_version)).setText("Version " + BuildConfig.VERSION_NAME);
-
-        ((View) dialog.findViewById(R.id.bt_getcode)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse("https://codecanyon.net/user/dream_space/portfolio"));
-                startActivity(i);
-            }
-        });
+        ((TextView) dialog.findViewById(R.id.tv_version)).setText("Version 1.0");
 
         ((ImageButton) dialog.findViewById(R.id.bt_close)).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
-            }
-        });
-
-        ((Button) dialog.findViewById(R.id.bt_rate)).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Tools.rateAction(MainMenu.this);
             }
         });
 

@@ -1,19 +1,20 @@
 package com.material.components.activity.login
 
-import android.content.Intent
-import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import com.alejandrolora.finalapp.goToActivity
 import com.alejandrolora.finalapp.isValidEmail
 import com.alejandrolora.finalapp.toast
+import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
-
-import com.material.components.R
-import com.material.components.activity.MainMenu
-import com.material.components.utils.Tools
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.android.synthetic.main.activity_login_card_overlap.*
+import com.google.firebase.firestore.QuerySnapshot
+import com.google.android.gms.tasks.OnCompleteListener
+import android.util.Log
+import com.alejandrolora.finalapp.goToActivity
+import com.material.components.activity.MainMenu
+
 
 /**
  * @author Abraham
@@ -23,12 +24,22 @@ class LoginCardOverlap : AppCompatActivity() {
     //get instance of firebase
     private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
+    //declare val for save the collection
+    private val userCollection: CollectionReference
+
+    //init the val for get the collection the Firebase with cloud firestore
+    init {
+        FirebaseApp.initializeApp(this)
+        //save the collection marks on val maksCollection
+        userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+    }
+
     /**
      * @param savedInstanceState
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_login_card_overlap)
+        setContentView(com.material.components.R.layout.activity_login_card_overlap)
         //listener
         buttonLogIn.setOnClickListener {
             val email = txtEmail.text.toString()
@@ -39,23 +50,41 @@ class LoginCardOverlap : AppCompatActivity() {
                 toast("Completa los campos")
             }
         }//end for listener
-
     }//end for onCreate
 
     /**
      * @param email
      * @param password
+     * @return void
      */
     private fun logInByEmail(email: String, password: String) {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {//when the credentials are corrects
-                goToActivity<MainMenu> {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
+                val resultado = userCollection.whereEqualTo("email", email)
+                       //beggin with consult
+                resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            val rol = document.get("rol").toString()
+                            if (rol!! == "administrador") {
+                                goToActivity<MainMenu>{
+                                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                }
+                            } else  {
+                                goToActivity<MainMenu>{
+                                    overridePendingTransition(android.R.anim.slide_in_left, android.R.anim.slide_out_right)
+                                }
+                            }
+                        }
+                    } else {
+                        Log.w("saasas", "Error getting documents.", task.exception)
+                    }
+                })
             } else {
                 toast("Email o Contraseña incorrectas intenta de nuevo")
             }
         }
     }
+
 
 }
