@@ -49,7 +49,6 @@ class CardBasic : AppCompatActivity() {
         initToolbar()
         addMarksListener()
         // personList = getPersons()
-
     }
 
 

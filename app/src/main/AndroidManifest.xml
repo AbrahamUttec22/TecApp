@@ -12,7 +12,10 @@
         android:roundIcon="@drawable/logo_tecgurus"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.form.AgregarAnuncioActivity"></activity>
+        <activity android:name=".activity.settings.StorageActivity"></activity>
+        <activity android:name=".activity.login.SignUpActivity" />
+        <activity android:name=".activity.settings.ImagenesActivity" />
+        <activity android:name=".activity.form.AgregarAnuncioActivity" />
         <activity android:name=".activity.form.AgregarEncuestaActivity" />
         <activity android:name=".activity.dialog.EncuestaActivity" />
         <activity android:name=".activity.bottomsheet.UserActivity" /> <!-- Add Google Map Library -->

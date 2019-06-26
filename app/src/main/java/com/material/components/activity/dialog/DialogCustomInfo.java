@@ -82,4 +82,5 @@ public class DialogCustomInfo extends AppCompatActivity {
         dialog.show();
         dialog.getWindow().setAttributes(lp);
     }
+
 }

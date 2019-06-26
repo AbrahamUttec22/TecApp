@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_middle"
-            android:text="No internet !"
+            android:text="El usuario ya existe"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@android:color/white"
             android:textStyle="bold" />
@@ -46,7 +46,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_small"
-            android:text="@string/short_lorem_ipsum"
+            android:text="El usuario que intentas registrar, ya existe, intenta con uno nuevo"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:textColor="@color/grey_60" />
@@ -68,7 +68,7 @@
             android:background="@drawable/btn_rounded_red"
             android:paddingLeft="@dimen/spacing_mlarge"
             android:paddingRight="@dimen/spacing_mlarge"
-            android:text="Retry"
+            android:text="Intentar de nuevo"
             android:textColor="@android:color/white" />
 
     </LinearLayout>
