@@ -12,7 +12,9 @@
         android:roundIcon="@drawable/logo_tecgurus"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.form.AgregarAnuncioActivity"></activity>
+        <activity android:name=".activity.login.SignUpActivity"></activity>
+        <activity android:name=".activity.settings.ImagenesActivity" />
+        <activity android:name=".activity.form.AgregarAnuncioActivity" />
         <activity android:name=".activity.form.AgregarEncuestaActivity" />
         <activity android:name=".activity.dialog.EncuestaActivity" />
         <activity android:name=".activity.bottomsheet.UserActivity" /> <!-- Add Google Map Library -->
@@ -32,6 +34,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".activity.bottomnavigation.BottomNavigationBasic"
             android:screenOrientation="portrait" />
@@ -55,7 +58,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.dialog.DialogBasic"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+
+            />
         <activity
             android:name=".activity.expansionpanel.ExpansionPanelBasic"
             android:screenOrientation="portrait" />

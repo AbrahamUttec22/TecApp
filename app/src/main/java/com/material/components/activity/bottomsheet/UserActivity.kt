@@ -114,10 +114,6 @@ class UserActivity : AppCompatActivity() {
         } else if (item.itemId == R.id.action_search) {//icono de search
             //Toast.makeText(applicationContext, item.title, Toast.LENGTH_SHORT).show()
             toast("Diste click en search")
-        } else if (item.itemId == R.id.action_settings) {//icono de mas opciones para agregar usuario
-            /*val intento1 = Intent(this, FormSignUp::class.java)
-            startActivity(intento1)*/
-            startActivity(Intent(this, FormSignUp::class.java))
         }
         return super.onOptionsItemSelected(item)
     }

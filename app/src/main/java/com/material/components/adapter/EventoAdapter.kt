@@ -35,9 +35,10 @@ class EventoAdapter(val context: Context, val layout: Int, val list: List<Evento
             vh = view.tag as EventoViewHolder
         }
 
-        val fullName = "${list[position].titulo}"
-        vh.fullName.text = fullName
-        vh.age.text = "${list[position].fecha}"
+        //val fullName = "${list[position].titulo}"
+        vh.fecha.text = "${list[position].fecha}"
+        vh.description.text = "${list[position].description}"
+        vh.titulo.text = "${list[position].titulo}"
 
         return view
     }
@@ -46,6 +47,8 @@ class EventoAdapter(val context: Context, val layout: Int, val list: List<Evento
 
 
 private class EventoViewHolder(view: View) {
-    val fullName: TextView = view.textViewName
-    val age: TextView = view.textViewAge
+    val fecha: TextView = view.textFecha
+    val description: TextView = view.textDescription
+    val titulo: TextView = view.textTitulo
+
 }

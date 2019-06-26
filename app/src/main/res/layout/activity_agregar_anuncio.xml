@@ -40,6 +40,7 @@
                 android:textColorHint="@color/grey_40">
 
                 <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/txtTituloAnuncio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Titulo" />
@@ -56,6 +57,7 @@
                 android:textColorHint="@color/grey_40">
 
                 <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/txtDescriptionAnuncio"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Descripción" />
@@ -103,7 +105,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_middle" />
             <Button
-                android:id="@+id/registrarEvento"
+                android:id="@+id/registrarAnuncio"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_large"

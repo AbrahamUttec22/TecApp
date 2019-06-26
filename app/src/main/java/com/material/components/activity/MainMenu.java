@@ -191,10 +191,12 @@ import com.material.components.activity.search.SearchPrimaryBg;
 import com.material.components.activity.search.SearchStore;
 import com.material.components.activity.search.SearchToolbarDark;
 import com.material.components.activity.search.SearchToolbarLight;
+import com.material.components.activity.settings.ImagenesActivity;
 import com.material.components.activity.settings.SettingFlat;
 import com.material.components.activity.settings.SettingProfile;
 import com.material.components.activity.settings.SettingProfileLight;
 import com.material.components.activity.settings.SettingSectioned;
+import com.material.components.activity.settings.StorageExample;
 import com.material.components.activity.shopping.ShoppingCartCard;
 import com.material.components.activity.shopping.ShoppingCartCardDark;
 import com.material.components.activity.shopping.ShoppingCartSimple;
@@ -410,6 +412,7 @@ public class MainMenu extends AppCompatActivity {
                 startActivity(new Intent(this, CardTimeline.class));
                 break;
             case 403:
+                //mi perfil
                 startActivity(new Intent(this, CardOverlap.class));
                 break;
             case 404:
@@ -927,7 +930,11 @@ public class MainMenu extends AppCompatActivity {
                 startActivity(new Intent(this, SettingProfile.class));
                 break;
             case 25004:
-                startActivity(new Intent(this, SettingProfileLight.class));
+               // startActivity(new Intent(this, SettingProfileLight.class));
+                //imagenes del proyecto
+                startActivity(new Intent(this,ImagenesActivity.class));
+             //   startActivity(new Intent(this, StorageExample.class));
+
                 break;
 
             // Verification ------------------------------------------------------------------------
@@ -1322,10 +1329,12 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(24004, "Card Auto", -1, MenuType.SUB_HEADER));*/
 
         items.add(new MainMenuAdapter.ListItem(25000, "Settings", R.drawable.ic_settings, MenuType.HEADER));
-        items.add(new MainMenuAdapter.ListItem(25001, "Sectioned", -1, MenuType.SUB_HEADER));
-        items.add(new MainMenuAdapter.ListItem(25002, "Flat", -1, MenuType.SUB_HEADER));
-        items.add(new MainMenuAdapter.ListItem(25003, "Profile", -1, MenuType.SUB_HEADER));
-        items.add(new MainMenuAdapter.ListItem(25004, "Profile Light", -1, MenuType.SUB_HEADER));
+        items.add(new MainMenuAdapter.ListItem(25004, "Imagenes", -1, MenuType.SUB_HEADER));
+/*
+      // items.add(new MainMenuAdapter.ListItem(25001, "Sectioned", -1, MenuType.SUB_HEADER));
+      // items.add(new MainMenuAdapter.ListItem(25002, "Flat", -1, MenuType.SUB_HEADER));
+      // items.add(new MainMenuAdapter.ListItem(25003, "Profile", -1, MenuType.SUB_HEADER));
+      // items.add(new MainMenuAdapter.ListItem(25004, "Profile Light", -1, MenuType.SUB_HEADER));
 /*
 
         items.add(new MainMenuAdapter.ListItem(26000, "Verification", R.drawable.ic_check_circle, MenuType.HEADER));
