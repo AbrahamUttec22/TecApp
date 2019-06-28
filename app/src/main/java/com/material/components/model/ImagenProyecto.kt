@@ -1,6 +1,6 @@
 package com.material.components.model
 
-class ImagenProyecto (var ubicacion:String = "",var name:String = ""){
+class ImagenProyecto (var imagen:String = ""){
 
-    override fun toString()= "$ubicacion $name"
+    override fun toString()= "$imagen"
 }
