@@ -42,7 +42,6 @@ class SignUpActivity : AppCompatActivity() {
         val imag = 6//this is a image for default
         //on listener for the buton on register a new user
         registrarUsuario.setOnClickListener {
-
             val name = txtName.text.toString()
             val email = txtEmail.text.toString()
             val password = txtPassword.text.toString()
@@ -61,16 +60,14 @@ class SignUpActivity : AppCompatActivity() {
                     usuario.rol = "usuario"
                 //first save the user on authentication firebase, after that save the user on cloud firestore
                 signUpByEmail(email, password, usuario)
-
             } else {
                 toast("Completa los campos")
             }
-
         }//end for listner
+
         txtEmail.validate {
             txtEmail.error = if (isValidEmail(it)) null else "El email no es valido"
         }
-
         txtConfirmPassword.validate {
             txtConfirmPassword.error = if (isValidConfirmPassword(txtPassword.text.toString(), it)) null else "Las cotraseñas no coinciden"
         }

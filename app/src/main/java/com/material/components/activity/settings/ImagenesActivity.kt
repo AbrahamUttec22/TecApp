@@ -11,10 +11,15 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.AdapterView
 import android.widget.TextView
 import com.alejandrolora.finalapp.toast
+import com.google.android.gms.tasks.Continuation
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -49,26 +54,47 @@ class ImagenesActivity : AppCompatActivity() {
         registrosCollection = FirebaseFirestore.getInstance().collection("Imagenes")
 
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_imagenes)
         initToolbar()
         //Log.w("IMAGENES",""+imagenes.toList())
-
         //personImagen=getImagen()
-        adapter = ImagenAdapter(this, R.layout.list_view_imagen, imagenes)
-        listView.adapter = adapter
+        addMarksListener()
+
     }
 
-    private fun getImagen(): List<ImagenProyecto> {
-        return listOf(
-                ImagenProyecto("Alejandro"),
-                ImagenProyecto("Fernando"),
-                ImagenProyecto("Alicia"),
-                ImagenProyecto("Paula"),
-                ImagenProyecto("Alberto"),
-                ImagenProyecto("Cristian")
-        )
+    /**
+     * Listener for peopleCollection
+     */
+    private fun addMarksListener() {
+        registrosCollection.addSnapshotListener { snapshots, error ->
+            if (error == null) {
+                val changes = snapshots?.documentChanges
+                if (changes != null) {
+                    addChanges(changes)
+                }
+            } else {
+                toast("Ha ocurrido un error intenta de nuevo")
+            }
+        }
+    }
+
+    /**
+     * @param changes
+     * aqui se hace el recorrido de la coleccion de cloudfirestore
+     */
+    private fun addChanges(changes: List<DocumentChange>) {
+        val itemUsuario = ArrayList<ImagenProyecto>()//lista local de una sola instancia
+        for (change in changes) {
+            itemUsuario.add(change.document.toObject(ImagenProyecto::class.java))//ir agregando los datos a la lista
+        }//una ves agregado los campos mandar a llamar la vista
+        adapter = ImagenAdapter(this, R.layout.list_view_imagen, itemUsuario)
+        listView.adapter = adapter//
+        listView.setOnItemClickListener { parent: AdapterView<*>?, view: View?, position, id ->
+            //here for a item onclik for the images
+        }
     }
 
 
@@ -102,14 +128,32 @@ class ImagenesActivity : AppCompatActivity() {
     private fun upload() {
         //gs://tecapp-25ed3.appspot.com/uploads/image:40366
         var mReference = mStorageRef!!.child("uploads/" + uri.lastPathSegment)
+        var uploadTask = mReference.putFile(uri)
         try {
-            mReference.putFile(uri).addOnSuccessListener { taskSnapshot: UploadTask.TaskSnapshot? ->
-                var imagen = ImagenProyecto()
-                imagen.name = uri.lastPathSegment.toString()
-                imagen.ubicacion = mReference.toString()
-                saveAnuncio(imagen)
+            uploadTask.addOnProgressListener { taskSnapshot ->
+
+            }.addOnPausedListener {
+
+            }.addOnSuccessListener { taskSnapshot ->
+
+            }.continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    throw task.exception!!
+                }
+                mReference.downloadUrl
+            }.addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val downloadUrl: Uri? = task.result
+                    var imagen = ImagenProyecto()
+                    imagen.name = uri.lastPathSegment.toString()
+                    imagen.ubicacion = downloadUrl.toString()
+                    saveAnuncio(imagen)
+                } else {
+
+                }
+            }.addOnFailureListener { e ->
+
             }
-            //cons
         } catch (e: Exception) {
             toast("" + e.toString())
         }
@@ -122,6 +166,7 @@ class ImagenesActivity : AppCompatActivity() {
     private fun saveAnuncio(imagen: ImagenProyecto) {
         //add the collection and save the User, this is validated
         registrosCollection.add(imagen).addOnSuccessListener {
+            addMarksListener()
         }.addOnFailureListener {
             toast("Error guardando la imagen, intenta de nuevo")
         }

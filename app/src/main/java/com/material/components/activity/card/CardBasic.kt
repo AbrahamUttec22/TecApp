@@ -30,9 +30,9 @@ import java.util.ArrayList
  * See events
  */
 class CardBasic : AppCompatActivity() {
+
     private lateinit var adapter: EventoAdapter
     private lateinit var personList: List<Evento>
-
     //declare val for save the collection
     private val userCollection: CollectionReference
 
@@ -94,7 +94,6 @@ class CardBasic : AppCompatActivity() {
         adapter = EventoAdapter(this, R.layout.list_view_evento, itemUsuario)
         listView.adapter = adapter
     }
-
 
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar

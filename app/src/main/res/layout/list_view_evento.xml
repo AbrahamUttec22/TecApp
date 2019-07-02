@@ -65,10 +65,10 @@
                     </LinearLayout>
 
                     <ImageView
+                        android:id="@+id/imgEvento"
                         android:layout_width="match_parent"
                         android:layout_height="150dp"
-                        android:scaleType="centerCrop"
-                        android:src="@drawable/image_7" />
+                        android:scaleType="centerCrop" />
 
                     <View
                         android:layout_width="match_parent"

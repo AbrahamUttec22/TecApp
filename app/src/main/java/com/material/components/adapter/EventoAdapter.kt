@@ -5,8 +5,10 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.alejandrolora.finalapp.inflate
+import com.bumptech.glide.Glide
 import com.material.components.model.Evento
 import kotlinx.android.synthetic.main.list_view_evento.view.*
+import kotlinx.android.synthetic.main.list_view_imagen.view.*
 
 class EventoAdapter(val context: Context, val layout: Int, val list: List<Evento>) : BaseAdapter() {
 
@@ -39,16 +41,18 @@ class EventoAdapter(val context: Context, val layout: Int, val list: List<Evento
         vh.fecha.text = "${list[position].fecha}"
         vh.description.text = "${list[position].description}"
         vh.titulo.text = "${list[position].titulo}"
+        Glide
+                .with(this.context)
+                .load("${list[position].ubicacion}")
+                .into(view.imgEvento)
 
         return view
     }
 
 }
 
-
 private class EventoViewHolder(view: View) {
     val fecha: TextView = view.textFecha
     val description: TextView = view.textDescription
     val titulo: TextView = view.textTitulo
-
 }

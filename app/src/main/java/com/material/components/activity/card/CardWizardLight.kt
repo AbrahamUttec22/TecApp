@@ -15,6 +15,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.alejandrolora.finalapp.toast
+import com.bumptech.glide.Glide
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
@@ -23,6 +24,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.material.components.R
 import com.material.components.model.Anuncio
 import com.material.components.utils.Tools
+import kotlinx.android.synthetic.main.item_card_wizard_light.*
+import kotlinx.android.synthetic.main.item_card_wizard_light.view.*
+import kotlinx.android.synthetic.main.list_view_imagen.view.*
 
 /**
  * @author Abraham
@@ -36,6 +40,7 @@ class CardWizardLight : AppCompatActivity() {
     private var about_title_array = arrayOf("")
     private var about_description_array = arrayOf("")
     private var about_images_array = intArrayOf(R.drawable.img_wizard_1)
+    private var ubicacion= arrayOf("")
 
     //declare val for save the collection
     private val anuncioCollection: CollectionReference
@@ -70,19 +75,18 @@ class CardWizardLight : AppCompatActivity() {
         about_images_array= intArrayOf(0)
         about_title_array= emptyArray()
         about_description_array= emptyArray()
-        addMarksListener()
+        addMarksListener(applicationContext)
         viewPager = findViewById<View>(R.id.view_pager) as ViewPager
-        // adding bottom dots
-
     }
 
+
     //backend
-    private fun addMarksListener() {
+    private fun addMarksListener(applicationContext: Context) {
         anuncioCollection.addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
-                    addChanges(changes)
+                    addChanges(changes,applicationContext)
                 }
             } else {
                 toast("Ha ocurrido un error intenta de nuevo")
@@ -94,29 +98,32 @@ class CardWizardLight : AppCompatActivity() {
      * @param changes
      * aqui se hace el recorrido de la coleccion de cloudfirestore
      */
-    private fun addChanges(changes: List<DocumentChange>) {
+    private fun addChanges(changes: List<DocumentChange>,applicationContext: Context) {
         val itemAnuncio = ArrayList<Anuncio>()//lista local de una sola instancia
         for (change in changes) {
             itemAnuncio.add(change.document.toObject(Anuncio::class.java))//ir agregando los datos a la lista
         }//una ves agregado los campos mandar a llamar la vista
-        addToList(itemAnuncio)//vista
+        addToList(itemAnuncio,applicationContext)//vista
 
     }
 
     /**
      * @param itemAnuncio
      */
-    private fun addToList(itemAnuncio: List<Anuncio>) {
+    private fun addToList(itemAnuncio: List<Anuncio>,applicationContext: Context) {
         //set empty the data
         MAX_STEP=0
         about_title_array= emptyArray()
         about_description_array= emptyArray()
         about_images_array= intArrayOf()
+        ubicacion= emptyArray()
 
         for (item in itemAnuncio) {//recorremos la lista de usuario para agregarlo a la lista de people
             about_title_array += arrayOf(item.titulo)
             about_description_array += arrayOf(item.description)
             about_images_array+= intArrayOf(R.drawable.img_wizard_1)
+            ubicacion+=item.ubicacion
+
             MAX_STEP++
         }
         bottomProgressDots(0)//init the 0
@@ -161,7 +168,11 @@ class CardWizardLight : AppCompatActivity() {
             val view = layoutInflater!!.inflate(R.layout.item_card_wizard_light, container, false)
             (view.findViewById<View>(R.id.title) as TextView).text = about_title_array[position]
             (view.findViewById<View>(R.id.description) as TextView).text = about_description_array[position]
-            (view.findViewById<View>(R.id.image) as ImageView).setImageResource(about_images_array[position])
+            Glide
+                    .with(view.context)
+                    .load("${ubicacion[position]}")
+                    .into(view.imagenItem)
+
 
             btnNext = view.findViewById<View>(R.id.btn_next) as Button
 

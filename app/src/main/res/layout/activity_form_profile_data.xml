@@ -62,6 +62,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Descripción" />
 
+
             </android.support.design.widget.TextInputLayout>
 
             <View
@@ -84,9 +85,27 @@
 
             </android.support.design.widget.TextInputLayout>
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/spacing_middle" />
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/grey_40">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_middle" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/spacing_middle" />
+
+                <ImageButton
+                    android:id="@+id/btnImageEvento"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/overlay_light_90"
+                    android:src="@drawable/ic_imagge" />
+
+            </android.support.design.widget.TextInputLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -94,15 +113,17 @@
                 android:gravity="bottom"
                 android:orientation="horizontal">
 
-
-
                 <android.support.design.widget.TextInputLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:textColorHint="@color/grey_40">
-
-
+                    <ImageButton
+                        android:id="@+id/btnGaleriaEvento"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:background="@color/overlay_light_90" />
                 </android.support.design.widget.TextInputLayout>
 
             </LinearLayout>

@@ -932,10 +932,10 @@ public class MainMenu extends AppCompatActivity {
                 break;
             case 25004:
                // startActivity(new Intent(this, SettingProfileLight.class));
-                //imagenes del proyecto
-                //startActivity(new Intent(this,ImagenesActivity.class));
+                // imagenes del proyecto
+                startActivity(new Intent(this,ImagenesActivity.class));
               //  startActivity(new Intent(this, StorageActivity.class));
-             //   startActivity(new Intent(this, StorageExample.class));
+              //   startActivity(new Intent(this, StorageExample.class));
 
                 break;
 

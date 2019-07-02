@@ -27,10 +27,12 @@ class MainEmptyActivity : AppCompatActivity() {
             goToActivity<LoginCardOverlap> {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         } else {
             goToActivity<MainMenu> {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
         finish()//break
     }//end for onCreate()

@@ -46,19 +46,6 @@ class UserActivity : AppCompatActivity() {
         addMarksListener()
     }
 
-    private fun getPersons(): List<Usuario> {
-        return listOf(
-                Usuario("Alejandro", 5, "27", "Primero"),
-                Usuario("Fernando", 5, "27", "Primero"),
-                Usuario("Alicia", 5, "27", "Primero"),
-                Usuario("Paula", 5, "27", "Primero"),
-                Usuario("Alberto", 5, "27", "Primero"),
-                Usuario("Cristian", 5, "27", "Primero"),
-                Usuario("Octavio", 5, "27", "Primero"),
-                Usuario("Yaiza", 5, "27", "Primero"),
-                Usuario("Naomi", 5, "27", "Primero")
-        )
-    }
 
     /**
      * Listener for peopleCollection
@@ -87,6 +74,12 @@ class UserActivity : AppCompatActivity() {
         }//una ves agregado los campos mandar a llamar la vista
         adapter = UserAdapter(this, R.layout.list_view_usuario, itemUsuario)
         listView.adapter = adapter
+        listView.setOnItemClickListener { adapterView, view, i, l ->
+            if(i==0)
+            toast("click")
+            else
+                toast("not clicked")
+        }
     }
 
 

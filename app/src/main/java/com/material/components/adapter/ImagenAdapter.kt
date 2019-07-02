@@ -6,13 +6,17 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.ImageView
 import com.alejandrolora.finalapp.inflate
+import com.alejandrolora.finalapp.toast
+import com.bumptech.glide.Glide
+import com.material.components.model.ImagenProyecto
+import kotlinx.android.synthetic.main.activity_imagenes.*
 import kotlinx.android.synthetic.main.list_view_imagen.view.*
 
-class ImagenAdapter(val context: Context, val layout: Int, val imagenes: Array<String>) : BaseAdapter(){
+class ImagenAdapter(val context: Context, val layout: Int, val imagen: List<ImagenProyecto>) : BaseAdapter(){
 
 
     override fun getItem(position: Int): Any {
-        return imagenes[position]
+        return imagen[position]
      }
 
     override fun getItemId(position: Int): Long {
@@ -20,7 +24,7 @@ class ImagenAdapter(val context: Context, val layout: Int, val imagenes: Array<S
     }
 
     override fun getCount(): Int {
-        return imagenes.size
+        return imagen.size
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
@@ -35,12 +39,15 @@ class ImagenAdapter(val context: Context, val layout: Int, val imagenes: Array<S
             vh = view.tag as ImagenViewHolder
         }
         //"${list[position].imagen}"
-        vh.imagen.setImageResource(imagenes.get(position).toInt())
+        Glide
+                .with(this.context)
+                .load("${imagen[position].ubicacion}")
+                .into(view.imageView)
+
         return view
     }
 }
 
 private class ImagenViewHolder(view: View) {
-    val imagen: ImageView = view.imageView
 
 }
