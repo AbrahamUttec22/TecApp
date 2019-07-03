@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 import com.alejandrolora.finalapp.inflate
+import com.bumptech.glide.Glide
 import com.material.components.model.Usuario
 import kotlinx.android.synthetic.main.list_view_usuario.view.*
 
@@ -37,8 +38,10 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
 
         val fullName = "${list[position].name}"
         vh.fullName.text = fullName
-        vh.age.text = "${list[position].image}"
-
+        Glide
+                .with(this.context)
+                .load("${list[position].ubicacion}")
+                .into(view.imageUser)
         return view
     }
 
@@ -47,5 +50,4 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
 
 private class UserViewHolder(view: View) {
     val fullName: TextView = view.textViewName
-    val age: TextView = view.textViewAge
 }

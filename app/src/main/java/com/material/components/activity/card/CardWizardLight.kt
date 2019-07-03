@@ -20,7 +20,6 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
-
 import com.material.components.R
 import com.material.components.model.Anuncio
 import com.material.components.utils.Tools
@@ -28,12 +27,14 @@ import kotlinx.android.synthetic.main.item_card_wizard_light.*
 import kotlinx.android.synthetic.main.item_card_wizard_light.view.*
 import kotlinx.android.synthetic.main.list_view_imagen.view.*
 
+
 /**
  * @author Abraham
  * 21/06/2019
  * see the anuncios
  */
 class CardWizardLight : AppCompatActivity() {
+
 
     private var viewPager: ViewPager? = null
     private var myViewPagerAdapter: MyViewPagerAdapter? = null

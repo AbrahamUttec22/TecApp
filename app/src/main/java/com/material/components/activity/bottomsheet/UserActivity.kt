@@ -24,10 +24,12 @@ import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_user.*
 import java.util.ArrayList
 
+/**
+ * @author Abraham
+ */
 class UserActivity : AppCompatActivity() {
 
     private lateinit var adapter: UserAdapter
-    private lateinit var personList: List<Usuario>
 
     //declare val for save the collection
     private val userCollection: CollectionReference
@@ -45,7 +47,6 @@ class UserActivity : AppCompatActivity() {
         initToolbar()
         addMarksListener()
     }
-
 
     /**
      * Listener for peopleCollection
@@ -81,7 +82,6 @@ class UserActivity : AppCompatActivity() {
                 toast("not clicked")
         }
     }
-
 
     /**
      * initToolbar(header)

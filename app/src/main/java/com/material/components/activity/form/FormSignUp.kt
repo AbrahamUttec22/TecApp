@@ -41,7 +41,7 @@ class FormSignUp : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form_sign_up)
         initToolbar()
-        val imag = 6//this is a image for default
+        val imag = "https://firebasestorage.googleapis.com/v0/b/tecapp-25ed3.appspot.com/o/usuarios%2Fic_default_user.png?alt=media&token=7e64e478-9802-4149-915a-dba6d3c69c59"//this is a image for default
         //on listener for the buton on register a new user
         registrarUsuario.setOnClickListener {
 
@@ -53,7 +53,7 @@ class FormSignUp : AppCompatActivity() {
                 val usuario = Usuario()
                 usuario.name = name
                 usuario.email = email
-                usuario.image = imag
+                usuario.ubicacion = imag
                 if (radio_adminitrador.isChecked)
                     usuario.rol = "administrador"
                 if (radio_usuario.isChecked)

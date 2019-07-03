@@ -52,7 +52,6 @@ class ImagenesActivity : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         mStorageRef = FirebaseStorage.getInstance().getReference()
         registrosCollection = FirebaseFirestore.getInstance().collection("Imagenes")
-
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,7 +61,6 @@ class ImagenesActivity : AppCompatActivity() {
         //Log.w("IMAGENES",""+imagenes.toList())
         //personImagen=getImagen()
         addMarksListener()
-
     }
 
     /**

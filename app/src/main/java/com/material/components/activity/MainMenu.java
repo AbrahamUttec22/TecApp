@@ -15,9 +15,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -191,6 +193,7 @@ import com.material.components.activity.search.SearchPrimaryBg;
 import com.material.components.activity.search.SearchStore;
 import com.material.components.activity.search.SearchToolbarDark;
 import com.material.components.activity.search.SearchToolbarLight;
+import com.material.components.activity.settings.ClaveActivity;
 import com.material.components.activity.settings.ImagenesActivity;
 import com.material.components.activity.settings.SettingFlat;
 import com.material.components.activity.settings.SettingProfile;
@@ -273,6 +276,8 @@ public class MainMenu extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
     private CollectionReference userCollection;
+    private String imgUser = "";
+    private ImageView view;
 
 
     public void init() {
@@ -288,13 +293,25 @@ public class MainMenu extends AppCompatActivity {
                     if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String rol = document.get("rol").toString();
+                            imgUser = document.get("ubicacion").toString();
+
                             if (rol.equalsIgnoreCase("administrador")) {
                                 result = "administrador";
                                 setContentView(R.layout.activity_main);
+                                view = (ImageView)findViewById(R.id.imageView);
+                                Glide
+                                        .with(getApplicationContext())
+                                        .load(imgUser)
+                                        .into(view);
                                 initComponentMenu();
                             } else if (rol.equalsIgnoreCase("usuario")) {
                                 result = "usuario";
                                 setContentView(R.layout.activity_main);
+                                view = (ImageView)findViewById(R.id.imageView);
+                                Glide
+                                        .with(getApplicationContext())
+                                        .load(imgUser)
+                                        .into(view);
                                 initComponentMenu();
                             }
                         }
@@ -308,16 +325,15 @@ public class MainMenu extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
-        //setContentView(R.layout.activity_main);
         sharedPref = new SharedPref(this);
         //  initComponentMenu();
         Tools.setSystemBarColor(this, R.color.grey_1000);
     }
 
     private void initComponentMenu() {
-
-
+        //here the views
         recycler = (RecyclerView) findViewById(R.id.main_recycler);
+
         adapter = new MainMenuAdapter(this, generateMenuItems(), new MainMenuAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(View view, int itemId) {
@@ -445,7 +461,7 @@ public class MainMenu extends AppCompatActivity {
                 startActivity(new Intent(this, DialogCustom.class));
                 break;
             case 604:
-               // startActivity(new Intent(this, DialogCustomInfo.class));
+                // startActivity(new Intent(this, DialogCustomInfo.class));
                 startActivity(new Intent(this, EncuestaActivity.class));
                 break;
             case 605:
@@ -928,14 +944,15 @@ public class MainMenu extends AppCompatActivity {
                 startActivity(new Intent(this, SettingFlat.class));
                 break;
             case 25003:
-                startActivity(new Intent(this, SettingProfile.class));
+                //startActivity(new Intent(this, SettingProfile.class));
+                startActivity(new Intent(this, ClaveActivity.class));
                 break;
             case 25004:
-               // startActivity(new Intent(this, SettingProfileLight.class));
+                // startActivity(new Intent(this, SettingProfileLight.class));
                 // imagenes del proyecto
-                startActivity(new Intent(this,ImagenesActivity.class));
-              //  startActivity(new Intent(this, StorageActivity.class));
-              //   startActivity(new Intent(this, StorageExample.class));
+                startActivity(new Intent(this, ImagenesActivity.class));
+                //  startActivity(new Intent(this, StorageActivity.class));
+                //   startActivity(new Intent(this, StorageExample.class));
 
                 break;
 
@@ -1330,9 +1347,14 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(24002, "Header Auto", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(24003, "Card", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(24004, "Card Auto", -1, MenuType.SUB_HEADER));*/
+        if (result.equalsIgnoreCase("administrador")) {
+            items.add(new MainMenuAdapter.ListItem(25000, "Settings", R.drawable.ic_settings, MenuType.HEADER));
+            items.add(new MainMenuAdapter.ListItem(25004, "Imagenes", -1, MenuType.SUB_HEADER));
+            items.add(new MainMenuAdapter.ListItem(25003, "Clave de acceso", -1, MenuType.SUB_HEADER));
+        }
 
-        items.add(new MainMenuAdapter.ListItem(25000, "Settings", R.drawable.ic_settings, MenuType.HEADER));
-        items.add(new MainMenuAdapter.ListItem(25004, "Imagenes", -1, MenuType.SUB_HEADER));
+        //add a new line 03/09/2019
+
 /*
       // items.add(new MainMenuAdapter.ListItem(25001, "Sectioned", -1, MenuType.SUB_HEADER));
       // items.add(new MainMenuAdapter.ListItem(25002, "Flat", -1, MenuType.SUB_HEADER));

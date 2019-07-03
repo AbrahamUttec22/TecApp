@@ -102,7 +102,7 @@ class BottomSheetFull : AppCompatActivity() {
         for (item in itemUsuario) {//recorremos la lista de usuario para agregarlo a la lista de people
             var obj = People()//instancia de la clase People
             //Almacenar las variables de peopleCollection a la de itemPeople
-            obj.image = drw_arr.getResourceId(item.image, -1)
+           // obj.image = drw_arr.getResourceId(item.image, -1)
             obj.imageDrw = this.getResources().getDrawable(obj.image)
             obj.name = item.name
             obj.email = item.email

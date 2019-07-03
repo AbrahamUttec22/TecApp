@@ -20,9 +20,9 @@ import java.util.*
  * add a new encuesta
  */
 class AgregarEncuestaActivity : AppCompatActivity() {
+
     var calendario = Calendar.getInstance()
     private var array_states: Array<String>? = null
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,4 +69,5 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

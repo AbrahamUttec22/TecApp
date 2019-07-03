@@ -13,12 +13,8 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.material.components.R
 import com.material.components.adapter.EncuestaAdapter
-import com.material.components.adapter.EventoAdapter
 import com.material.components.model.Encuesta
-import com.material.components.model.Evento
 import com.material.components.utils.Tools
-import kotlinx.android.synthetic.main.activity_card_basic.*
-import kotlinx.android.synthetic.main.activity_encuesta.*
 import kotlinx.android.synthetic.main.activity_encuesta.listView
 import java.util.ArrayList
 
@@ -29,6 +25,7 @@ class EncuestaActivity : AppCompatActivity() {
 
     private lateinit var adapter: EncuestaAdapter
     private lateinit var encuestaList: List<Encuesta>
+
 
     //declare val for save the collection
     private val userCollection: CollectionReference
@@ -46,8 +43,6 @@ class EncuestaActivity : AppCompatActivity() {
         initToolbar()
         addMarksListener()
        // encuestaList = getPersons()
-
-
     }
 
     /**
@@ -80,19 +75,7 @@ class EncuestaActivity : AppCompatActivity() {
     }
 
 
-    private fun getPersons(): List<Encuesta> {
-        return listOf(
-                Encuesta("Alejandro", "Lora"),
-                Encuesta("Fernando", "Vega"),
-                Encuesta("Alicia", "Gómez"),
-                Encuesta("Paula", "Escobar"),
-                Encuesta("Alberto", "Parada"),
-                Encuesta("Cristian", "Romero"),
-                Encuesta("Octavio", "Hernández"),
-                Encuesta("Yaiza", "Costi"),
-                Encuesta("Naomi", "Fernandexz")
-        )
-    }
+
 
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar

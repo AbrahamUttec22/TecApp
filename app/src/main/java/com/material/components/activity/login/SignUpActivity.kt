@@ -39,7 +39,8 @@ class SignUpActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sign_up)
-        val imag = 6//this is a image for default
+        //the image for default
+        val imag = "https://firebasestorage.googleapis.com/v0/b/tecapp-25ed3.appspot.com/o/usuarios%2Fic_default_user.png?alt=media&token=7e64e478-9802-4149-915a-dba6d3c69c59"//this is a image for default
         //on listener for the buton on register a new user
         registrarUsuario.setOnClickListener {
             val name = txtName.text.toString()
@@ -50,7 +51,7 @@ class SignUpActivity : AppCompatActivity() {
                 val usuario = Usuario()
                 usuario.name = name
                 usuario.email = email
-                usuario.image = imag
+                usuario.ubicacion = imag
                 usuario.edad = ""
                 usuario.telefono = ""
                 usuario.direccion = ""
