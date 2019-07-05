@@ -11,7 +11,10 @@
     <string name="step_of">Step %1$d of %2$d</string>
     <string name="section_format">Section : %1$d</string>
 
-    <string name="about_text">TecApp was created on 17/06/2019
-    </string>
-
+    <string name="about_text">TecApp was created on 17/06/2019</string>
+    <string-array name="respuestas_array">
+        <item>Selecciona</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>

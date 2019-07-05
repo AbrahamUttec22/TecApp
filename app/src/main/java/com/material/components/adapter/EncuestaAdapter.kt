@@ -46,14 +46,23 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
             vh.respuesta.text = "${list[position].respuestas?.get(0)}"
             vh.respuestatwo.text = "${list[position].respuestas?.get(1)}"
             vh.respuestathree.text = "${list[position].respuestas?.get(2)}"
+            vh.respuesta.setVisibility(View.VISIBLE)
+            vh.respuestatwo.setVisibility(View.VISIBLE)
+            vh.respuestathree.setVisibility(View.VISIBLE)
             con==0
         }else if (con==2){
             vh.respuesta.text = "${list[position].respuestas?.get(0)}"
             vh.respuestatwo.text = "${list[position].respuestas?.get(1)}"
+            vh.respuesta.setVisibility(View.VISIBLE)
+            vh.respuestatwo.setVisibility(View.VISIBLE)
+            vh.respuestathree.setVisibility(View.INVISIBLE)
             con==0
         }else if (con==1){
             vh.respuesta.text = "${list[position].respuestas?.get(0)}"
             con==0
+            vh.respuesta.setVisibility(View.VISIBLE)
+            vh.respuestatwo.setVisibility(View.VISIBLE)
+            vh.respuestathree.setVisibility(View.VISIBLE)
         }
         return view
     }

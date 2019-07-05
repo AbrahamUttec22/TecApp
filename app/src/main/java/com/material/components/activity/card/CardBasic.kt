@@ -51,7 +51,6 @@ class CardBasic : AppCompatActivity() {
         // personList = getPersons()
     }
 
-
     private fun getPersons(): List<Evento> {
         return listOf(
                 Evento("Alejandro", "Lora", "27", "Primero"),

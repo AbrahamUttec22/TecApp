@@ -40,45 +40,10 @@
                 android:textColorHint="@color/grey_40">
 
                 <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/txtPregunta"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Titulo" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/spacing_middle" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/grey_40">
-
-                <android.support.v7.widget.AppCompatEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Descripción" />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/spacing_middle" />
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColorHint="@color/grey_40">
-
-
-                <EditText
-                    android:id="@+id/etBirthday"
-                    android:hint="Fecha de cierre"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:focusable="false"/>
+                    android:hint="Pregunta" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -87,47 +52,76 @@
                 android:layout_height="@dimen/spacing_middle" />
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="bottom"
-                android:orientation="horizontal">
+                android:textColorHint="@color/grey_40">
 
-
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_width="0dp"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:textColorHint="@color/grey_40">
+                    android:text="Numero de respuestas" />
 
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="@dimen/spacing_middle" />
 
-                </android.support.design.widget.TextInputLayout>
+                <android.support.v7.widget.AppCompatSpinner
+                    android:id="@+id/Respuestas"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"/>
 
             </LinearLayout>
 
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_middle" />
-            <Button
-                android:id="@+id/registrarEvento"
+            <View
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/spacing_large"
-                android:background="@drawable/btn_rounded_accent"
-                android:text="REGISTRAR"
-                android:textColor="@android:color/white" />
-            <android.support.design.widget.TextInputLayout
+                android:layout_height="@dimen/spacing_middle" />
+            <View
                 android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_middle" />
+            <LinearLayout android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColorHint="@color/grey_40">
+                android:orientation="horizontal">
+                <EditText
+                    android:id="@+id/txtRespuestas"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"
+                    android:visibility="invisible"
+                    android:padding="10dp" />
 
 
+                <EditText
+                    android:id="@+id/txtRespuestas2"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"
+                    android:visibility="invisible"
+                    android:padding="10dp" />
 
-            </android.support.design.widget.TextInputLayout>
+                <EditText
+                    android:id="@+id/txtRespuestas3"
+                    android:layout_width="120dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="50"
+                    android:visibility="invisible"
+                    android:padding="10dp" />
+            </LinearLayout>
+
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/spacing_mxlarge" />
+                android:layout_height="@dimen/spacing_middle" />
+            <Button
+                android:id="@+id/btnRegistrarEncuesta"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/spacing_large"
+                android:background="@drawable/btn_rounded_orange"
+                android:text="REGISTRAR"
+                android:textColor="@android:color/white" />
 
         </LinearLayout>
 
