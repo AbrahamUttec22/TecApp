@@ -92,7 +92,6 @@ class SignUpActivity : AppCompatActivity() {
      */
     private fun signUpByEmail(email: String, password: String, usuario: Usuario) {
         //get instance of firebase
-
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {
                 //save the user on cloud firestore

@@ -100,6 +100,7 @@ import com.material.components.activity.expansionpanel.ExpansionPanelInvoice;
 import com.material.components.activity.expansionpanel.ExpansionPanelTicket;
 import com.material.components.activity.form.AgregarAnuncioActivity;
 import com.material.components.activity.form.AgregarEncuestaActivity;
+import com.material.components.activity.form.EstadisticaActivity;
 import com.material.components.activity.form.FormLogin;
 import com.material.components.activity.form.FormProfileData;
 import com.material.components.activity.form.FormSignUp;
@@ -298,7 +299,7 @@ public class MainMenu extends AppCompatActivity {
                             if (rol.equalsIgnoreCase("administrador")) {
                                 result = "administrador";
                                 setContentView(R.layout.activity_main);
-                                view = (ImageView)findViewById(R.id.imageView);
+                                view = (ImageView) findViewById(R.id.imageView);
                                 Glide
                                         .with(getApplicationContext())
                                         .load(imgUser)
@@ -307,7 +308,7 @@ public class MainMenu extends AppCompatActivity {
                             } else if (rol.equalsIgnoreCase("usuario")) {
                                 result = "usuario";
                                 setContentView(R.layout.activity_main);
-                                view = (ImageView)findViewById(R.id.imageView);
+                                view = (ImageView) findViewById(R.id.imageView);
                                 Glide
                                         .with(getApplicationContext())
                                         .load(imgUser)
@@ -321,11 +322,62 @@ public class MainMenu extends AppCompatActivity {
         }
     }
 
+    public void initTwo() {
+        FirebaseApp.initializeApp(this);
+        //save the collection marks on val maksCollection
+        userCollection = FirebaseFirestore.getInstance().collection("Usuarios");
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+        if (user != null) {
+            String email = user.getEmail();
+            userCollection.whereEqualTo("email", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            String rol = document.get("rol").toString();
+                            imgUser = document.get("ubicacion").toString();
+
+                            if (rol.equalsIgnoreCase("administrador")) {
+                                result = "administrador";
+                                setContentView(R.layout.activity_main);
+                                view = (ImageView) findViewById(R.id.imageView);
+                                Glide
+                                        .with(getApplicationContext())
+                                        .load(imgUser)
+                                        .into(view);
+                            } else if (rol.equalsIgnoreCase("usuario")) {
+                                result = "usuario";
+                                setContentView(R.layout.activity_main);
+                                view = (ImageView) findViewById(R.id.imageView);
+                                Glide
+                                        .with(getApplicationContext())
+                                        .load(imgUser)
+                                        .into(view);
+                            }
+                        }
+                    }
+                }
+            });
+        }
+    }
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         init();
         sharedPref = new SharedPref(this);
+        view = (ImageView) findViewById(R.id.imageView);
+        //  initComponentMenu();
+        Tools.setSystemBarColor(this, R.color.grey_1000);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        init();
+        sharedPref = new SharedPref(this);
+        view = (ImageView) findViewById(R.id.imageView);
         //  initComponentMenu();
         Tools.setSystemBarColor(this, R.color.grey_1000);
     }
@@ -689,10 +741,10 @@ public class MainMenu extends AppCompatActivity {
                 startActivity(new Intent(this, TabsRound.class));
                 break;
 
+            //case for the encuestas
             // Form --------------------------------------------------------------------------------
             case 1601:
                 //startActivity(new Intent(this, FormLogin.class));
-
                 break;
             case 1602:
                 //startActivity(new Intent(this, FormSignUp.class));
@@ -707,7 +759,9 @@ public class MainMenu extends AppCompatActivity {
                 break;
             case 1605:
                 //startActivity(new Intent(this, FormTextArea.class));
-                startActivity(new Intent(this, FormWithIcon.class));
+                // startActivity(new Intent(this, FormWithIcon.class));
+                //for the see stadistics
+                startActivity(new Intent(this, EstadisticaActivity.class));
                 break;
 
             // Toolbars ----------------------------------------------------------------------------
@@ -1142,6 +1196,8 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(500, "Encuestas", R.drawable.ic_label, MenuType.HEADER));
         if (result.equalsIgnoreCase("administrador"))
             items.add(new MainMenuAdapter.ListItem(1604, "Agregar encuesta", -1, MenuType.SUB_HEADER));
+        if (result.equalsIgnoreCase("administrador"))
+            items.add(new MainMenuAdapter.ListItem(1605, "Ver estadisticas", 5 - 1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(604, "Ver encuestas", -1, MenuType.SUB_HEADER));
 
         //items.add(new MainMenuAdapter.ListItem(501, "Basic", -1, MenuType.SUB_HEADER));

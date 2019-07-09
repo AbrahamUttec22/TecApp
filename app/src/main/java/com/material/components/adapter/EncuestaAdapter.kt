@@ -1,16 +1,34 @@
 package com.material.components.adapter
 
 import android.content.Context
+import android.os.Handler
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
 import com.alejandrolora.finalapp.inflate
+import com.alejandrolora.finalapp.toast
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
+import com.material.components.R
+import com.material.components.activity.dialog.EncuestaActivity
 import com.material.components.model.Encuesta
 import com.material.components.model.Evento
+import com.material.components.model.Votacion
 import kotlinx.android.synthetic.main.list_view_encuesta.view.*
 
+/**
+ * @author Abraham
+ * this source I send the voto for the encuesta
+ */
 class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encuesta>) : BaseAdapter() {
 
     override fun getItem(position: Int): Any {
@@ -39,37 +57,190 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
         val fullName = "${list[position].pregunta}"
         vh.pregunta.text = fullName
         // vh.respuesta.text = "${list[position].respuestas?.get(position)}"
-
-        var con= list[position].respuestas?.size
-        Log.w("CONTADOR",""+con)
-        if ( con== 3) {
+        var con = list[position].respuestas?.size
+        Log.w("CONTADOR", "" + con)
+        if (con == 3) {
             vh.respuesta.text = "${list[position].respuestas?.get(0)}"
             vh.respuestatwo.text = "${list[position].respuestas?.get(1)}"
             vh.respuestathree.text = "${list[position].respuestas?.get(2)}"
             vh.respuesta.setVisibility(View.VISIBLE)
             vh.respuestatwo.setVisibility(View.VISIBLE)
             vh.respuestathree.setVisibility(View.VISIBLE)
-            con==0
-        }else if (con==2){
+            con == 0
+        } else if (con == 2) {
             vh.respuesta.text = "${list[position].respuestas?.get(0)}"
             vh.respuestatwo.text = "${list[position].respuestas?.get(1)}"
             vh.respuesta.setVisibility(View.VISIBLE)
             vh.respuestatwo.setVisibility(View.VISIBLE)
             vh.respuestathree.setVisibility(View.INVISIBLE)
-            con==0
-        }else if (con==1){
+            con == 0
+        } else if (con == 1) {
             vh.respuesta.text = "${list[position].respuestas?.get(0)}"
-            con==0
+            con == 0
             vh.respuesta.setVisibility(View.VISIBLE)
             vh.respuestatwo.setVisibility(View.VISIBLE)
             vh.respuestathree.setVisibility(View.VISIBLE)
         }
+
+        vh.respuesta.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(position: View?) {
+                val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+                val pregunta = vh.pregunta.text.toString()
+                val resp = vh.respuesta.text.toString()
+                val correo = mAuth.currentUser!!.email.toString()
+                val voto = Votacion()
+                voto.id_pregunta = pregunta
+                voto.respuesta = resp
+                voto.correo = correo
+                sentVoto(voto)
+            }
+            private fun sentVoto(voto: Votacion) {
+                FirebaseApp.initializeApp(context)
+                val userCollection: CollectionReference
+                userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
+                val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
+                //beggin with consult
+
+                resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                    if (task.isSuccessful) {
+                        var respuestaBD=""
+                        var documentId=""
+                        var con = 0
+                        for (document in task.result!!) {
+                            respuestaBD = document.get("respuesta").toString()
+                            documentId=document.id
+                            con++
+                        }
+                        //I need validated the type of the voto
+                        if (con == 0) {
+                            userCollection.add(voto).addOnSuccessListener {
+                                Toast.makeText(context, "Se ha postulado tu voto", Toast.LENGTH_SHORT).show()
+                            }.addOnFailureListener {}
+                        }
+
+                        if (con==1&&respuestaBD!=voto.respuesta) {
+                            userCollection.document(documentId).update("respuesta", voto.respuesta).addOnSuccessListener {
+                                Toast.makeText(context, "Se ha cambiado tu respuesta", Toast.LENGTH_LONG).show()
+                            }.addOnFailureListener { }
+                        }else if(con==1){
+                            Toast.makeText(context, "Ya se ha votado por esa opcion", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Log.w("EXCEPTION", "Error getting documents.", task.exception)
+                    }
+                })//end for expression lambdas this very cool
+
+            }//end for hanlder
+        })//first question
+
+        vh.respuestatwo.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(position: View?) {
+                val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+                val pregunta = vh.pregunta.text.toString()
+                val resp = vh.respuestatwo.text.toString()
+                val correo = mAuth.currentUser!!.email.toString()
+                val voto = Votacion()
+                voto.id_pregunta = pregunta
+                voto.respuesta = resp
+                voto.correo = correo
+                sentVoto(voto)
+            }
+            private fun sentVoto(voto: Votacion) {
+                FirebaseApp.initializeApp(context)
+                val userCollection: CollectionReference
+                userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
+                val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
+                //beggin with consult
+
+                resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                    if (task.isSuccessful) {
+                        var respuestaBD=""
+                        var documentId=""
+                        var con = 0
+                        for (document in task.result!!) {
+                            respuestaBD = document.get("respuesta").toString()
+                            documentId=document.id
+                            con++
+                        }
+                        //I need validated the type of the voto
+                        if (con == 0) {
+                            userCollection.add(voto).addOnSuccessListener {
+                                Toast.makeText(context, "Se ha postulado tu voto", Toast.LENGTH_SHORT).show()
+                            }.addOnFailureListener {}
+                        }
+
+                        if (con==1&&respuestaBD!=voto.respuesta) {
+                            userCollection.document(documentId).update("respuesta", voto.respuesta).addOnSuccessListener {
+                                Toast.makeText(context, "Se ha cambiado tu respuesta", Toast.LENGTH_LONG).show()
+                            }.addOnFailureListener { }
+                        }else if(con==1){
+                            Toast.makeText(context, "Ya se ha votado por esa opcion", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Log.w("EXCEPTION", "Error getting documents.", task.exception)
+                    }
+                })//end for expression lambdas this very cool
+
+            }//end for hanlder
+        })
+
+        vh.respuestathree.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(position: View?) {
+                val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+                val pregunta = vh.pregunta.text.toString()
+                val resp = vh.respuestathree.text.toString()
+                val correo = mAuth.currentUser!!.email.toString()
+                val voto = Votacion()
+                voto.id_pregunta = pregunta
+                voto.respuesta = resp
+                voto.correo = correo
+                sentVoto(voto)
+            }
+            private fun sentVoto(voto: Votacion) {
+                FirebaseApp.initializeApp(context)
+                val userCollection: CollectionReference
+                userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
+                val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
+                //beggin with consult
+
+                resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                    if (task.isSuccessful) {
+                        var respuestaBD=""
+                        var documentId=""
+                        var con = 0
+                        for (document in task.result!!) {
+                            respuestaBD = document.get("respuesta").toString()
+                            documentId=document.id
+                            con++
+                        }
+                        //I need validated the type of the voto
+                        if (con == 0) {
+                            userCollection.add(voto).addOnSuccessListener {
+                                Toast.makeText(context, "Se ha postulado tu voto", Toast.LENGTH_SHORT).show()
+                            }.addOnFailureListener {}
+                        }
+
+                        if (con==1&&respuestaBD!=voto.respuesta) {
+                            userCollection.document(documentId).update("respuesta", voto.respuesta).addOnSuccessListener {
+                                Toast.makeText(context, "Se ha cambiado tu respuesta", Toast.LENGTH_LONG).show()
+                            }.addOnFailureListener { }
+                        }else if(con==1){
+                            Toast.makeText(context, "Ya se ha votado por esa opcion", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Log.w("EXCEPTION", "Error getting documents.", task.exception)
+                    }
+                })//end for expression lambdas this very cool
+
+            }//end for hanlder
+        })
         return view
     }
 }
-    private class EncuestaViewHolder(view: View) {
-        val pregunta: TextView = view.txtPregunta
-        val respuesta: TextView = view.txtRespuestas
-        val respuestatwo: TextView = view.txtRespuestas2
-        val respuestathree: TextView = view.txtRespuestas3
-    }
+
+class EncuestaViewHolder(view: View) {
+    val pregunta: TextView = view.txtPregunta
+    val respuesta: Button = view.txtRespuestas
+    val respuestatwo: Button = view.txtRespuestas2
+    val respuestathree: Button = view.txtRespuestas3
+}

@@ -92,6 +92,7 @@ class ImagenesActivity : AppCompatActivity() {
         listView.adapter = adapter//
         listView.setOnItemClickListener { parent: AdapterView<*>?, view: View?, position, id ->
             //here for a item onclik for the images
+
         }
     }
 

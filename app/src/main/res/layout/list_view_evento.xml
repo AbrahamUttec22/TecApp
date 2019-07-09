@@ -33,6 +33,7 @@
                     android:layout_height="wrap_content"
                     android:orientation="vertical">
 
+
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -63,7 +64,6 @@
                         </LinearLayout>
 
                     </LinearLayout>
-
                     <ImageView
                         android:id="@+id/imgEvento"
                         android:layout_width="match_parent"
