@@ -202,7 +202,6 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                 userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
                 val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
                 //beggin with consult
-
                 resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                     if (task.isSuccessful) {
                         var respuestaBD=""
@@ -231,7 +230,6 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                         Log.w("EXCEPTION", "Error getting documents.", task.exception)
                     }
                 })//end for expression lambdas this very cool
-
             }//end for hanlder
         })
         return view

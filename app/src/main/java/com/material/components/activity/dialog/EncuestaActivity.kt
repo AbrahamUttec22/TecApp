@@ -59,7 +59,7 @@ class EncuestaActivity : AppCompatActivity() {
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        userCollection.addSnapshotListener { snapshots, error ->
+        userCollection.whereEqualTo("status","1").addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
@@ -83,7 +83,6 @@ class EncuestaActivity : AppCompatActivity() {
         adapter = EncuestaAdapter(this, R.layout.list_view_encuesta, itemUsuario)
         listView.adapter = adapter
     }
-
 
     //front end
     private fun initToolbar() {

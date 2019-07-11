@@ -10,17 +10,57 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="vertical">
+
         <TextView
             android:id="@+id/txtPregunta"
             android:layout_width="411dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Name"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/grey_80" />
 
+        <View
+            android:layout_width="25dp"
+            android:layout_height="25dp" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnCerrarEncuesta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="20"
+                android:text="Cerrar"
+                android:background="@drawable/btn_rounded_orange"
+                android:padding="10dp"
+                android:textColor="@color/red_50" />
+
+            <Button
+                android:id="@+id/btnActualizarEncuesta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="20"
+                android:text="Actualizar"
+                android:background="@drawable/btn_rounded_green"
+                android:padding="10dp"
+                android:textColor="@color/red_50" />
+
+            <Button
+                android:id="@+id/btnEliminarEncuesta"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="20"
+                android:background="@drawable/btn_rounded_signup"
+                android:padding="10dp"
+                android:text="Eliminar"
+                android:textColor="@color/red_50" />
+
+        </LinearLayout>
     </LinearLayout>
 </com.balysv.materialripple.MaterialRippleLayout>

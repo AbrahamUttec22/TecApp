@@ -58,7 +58,6 @@ class AgregarEncuestaActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
-
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //with the objective the show the editText for answers
                if (position == 1) {
@@ -89,6 +88,7 @@ class AgregarEncuestaActivity : AppCompatActivity() {
                         if (!txtRespuestas.text.isNullOrEmpty()&&!txtRespuestas2.text.isNullOrEmpty()) {
                             var encuesta=Encuesta()//this isn´t global because the instance
                             encuesta.pregunta=pregunta
+                            encuesta.status="1"
                             encuesta.respuestas= listOf(txtRespuestas.text.toString(),txtRespuestas2.text.toString())
                             saveEncuesta(encuesta)
                         } else
@@ -98,18 +98,15 @@ class AgregarEncuestaActivity : AppCompatActivity() {
                         if (!txtRespuestas.text.isNullOrEmpty()&&!txtRespuestas2.text.isNullOrEmpty()&&!txtRespuestas3.text.isNullOrEmpty()) {
                             var encuesta=Encuesta()//this isn´t global because the instance
                             encuesta.pregunta=pregunta
+                            encuesta.status="1"
                             encuesta.respuestas= listOf(txtRespuestas.text.toString(),txtRespuestas2.text.toString(),txtRespuestas3.text.toString())
                             saveEncuesta(encuesta)
                         } else
                             toast("Completa los campos")
                     }
-                    else -> { // Opción default
-
-                    }
+                    else -> {  }//default
                 }
-            } else {
-                toast("Completa los campos ")
-            }
+            } else { toast("Completa los campos ") }
         }
     }
 
@@ -120,7 +117,6 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         actualizarInput()
     }
-
     //backend
     private fun isValid(pregunta: String): Boolean {
         return !pregunta.isNullOrEmpty()
@@ -162,5 +158,4 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 }

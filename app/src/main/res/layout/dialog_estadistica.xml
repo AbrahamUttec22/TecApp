@@ -30,7 +30,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:minWidth="@dimen/spacing_xmlarge"
-                android:text="Television"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
             <android.support.v7.widget.AppCompatSeekBar
@@ -38,8 +37,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:max="255"
-                android:progress="127" />
+                 />
 
             <TextView
                 android:id="@+id/txtRS1"
@@ -47,7 +45,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:minWidth="@dimen/spacing_xmlarge"
-                android:text="127"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
         </LinearLayout>
@@ -64,7 +61,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:minWidth="@dimen/spacing_xmlarge"
-                android:text="Futbolito"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
             <android.support.v7.widget.AppCompatSeekBar
@@ -72,8 +68,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:max="255"
-                android:progress="127" />
+                 />
 
             <TextView
                 android:id="@+id/txtRS2"
@@ -81,7 +76,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:minWidth="@dimen/spacing_xmlarge"
-                android:text="127"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
         </LinearLayout>
@@ -98,7 +92,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:minWidth="@dimen/spacing_xmlarge"
-                android:text="Boliche"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
             <android.support.v7.widget.AppCompatSeekBar
@@ -106,8 +99,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:max="255"
-                android:progress="210" />
+               />
 
             <TextView
                 android:id="@+id/txtRS3"
@@ -115,7 +107,6 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:minWidth="@dimen/spacing_xmlarge"
-                android:text="127"
                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Title" />
 
         </LinearLayout>
@@ -133,17 +124,11 @@
             android:layout_height="0dp"
             android:layout_weight="1" />
 
-        <Button
-            android:id="@+id/bt_cancel"
-            style="@style/Widget.AppCompat.Button.Borderless"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/CANCEL" />
+
 
         <Button
             android:id="@+id/bt_ok"
-            style="@style/Button.Accent.Borderless"
+            style="@style/Button.Primary.Borderless"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"

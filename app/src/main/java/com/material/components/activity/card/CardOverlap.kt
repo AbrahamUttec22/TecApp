@@ -140,7 +140,7 @@ class CardOverlap : AppCompatActivity() {
     private fun updateInformation(name: String, edad: String, direccion: String, telefono: String) {
         userCollection.document(idDocument).update("name", name, "edad", edad, "direccion", direccion, "telefono", telefono).addOnSuccessListener {
             Toast.makeText(this, "Informacion actulizada", Toast.LENGTH_LONG).show()
-            onBackPressed()
+          //  onBackPressed()
         }.addOnFailureListener {
             Toast.makeText(this, "Error actualizando la informacion, intenta de nuevo", Toast.LENGTH_LONG).show()
         }
