@@ -49,7 +49,6 @@ class AgregarAnuncioActivity : AppCompatActivity() {
         marksCollection = FirebaseFirestore.getInstance().collection("Anuncios")
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_anuncio)
@@ -146,7 +145,8 @@ class AgregarAnuncioActivity : AppCompatActivity() {
     private fun saveAnuncio(anuncio: Anuncio) {
         //add the collection and save the User, this is validated
         marksCollection.add(anuncio).addOnSuccessListener {
-           toast("Anuncio registrado con exito")
+            marksCollection.document(it.id).update("id",it.id).addOnSuccessListener {}.addOnFailureListener { }
+            toast("Anuncio registrado con exito")
             onBackPressed()
         }.addOnFailureListener {
             toast("Error guardando el evento, intenta de nuevo")

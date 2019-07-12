@@ -10,6 +10,9 @@ import com.material.components.model.Evento
 import kotlinx.android.synthetic.main.list_view_evento.view.*
 import kotlinx.android.synthetic.main.list_view_imagen.view.*
 
+/**
+ * @author aBRAHAM
+ */
 class EventoAdapter(val context: Context, val layout: Int, val list: List<Evento>) : BaseAdapter() {
 
 

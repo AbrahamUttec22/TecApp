@@ -5,28 +5,30 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.support.v7.widget.AppCompatSeekBar
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.*
 import com.alejandrolora.finalapp.inflate
-import com.bumptech.glide.Glide
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.R
+import com.material.components.model.Encuesta
 import com.material.components.model.Evento
-import com.material.components.model.Usuario
+import kotlinx.android.synthetic.main.activity_form_profile_data.*
 import kotlinx.android.synthetic.main.list_view_administrar_eveto.view.*
-import kotlinx.android.synthetic.main.list_view_usuario.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
 /**
  * @author Abraham
  */
-class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>) : BaseAdapter() {
+class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: List<Evento>) : BaseAdapter() {
+
     override fun getItem(position: Int): Any {
         return list[position]
     }
@@ -41,58 +43,57 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View
-        val vh: UserViewHolder
+        val vh: AdministrarEventoViewHolder
         if (convertView == null) {
             view = parent!!.inflate(layout)
-            vh = UserViewHolder(view)
+            vh = AdministrarEventoViewHolder(view)
             view.tag = vh
         } else {
             view = convertView
-            vh = view.tag as UserViewHolder
+            vh = view.tag as AdministrarEventoViewHolder
         }
-
-        val fullName = "${list[position].name}"
-        vh.fullName.text = fullName
-        Glide
-                .with(this.context)
-                .load("${list[position].ubicacion}")
-                .into(view.imageUser)
+        val titulo = "${list[position].titulo}"
+        val description = "${list[position].description}"
+        val fecha = "${list[position].fecha}"
+        vh.titulo.text = titulo
         val id = "${list[position].id}"
         vh.eliminar.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
-                val usuario = Usuario()
-                usuario.id = id
+                val evento = Evento()
+                evento.id = id
                 val builder = AlertDialog.Builder(context)
                 builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
-                    deleteUsuario(usuario)
+                    sentVoto(evento)
                 }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
                         .show()
-
             }
-            private fun deleteUsuario(usuario: Usuario) {
+
+            private fun sentVoto(evento: Evento) {
                 FirebaseApp.initializeApp(context)
                 val eventoCollection: CollectionReference
-                eventoCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+                eventoCollection = FirebaseFirestore.getInstance().collection("Eventos")
                 //only this source I update the status,
-                eventoCollection.document(usuario.id).delete().addOnSuccessListener {
-                    Toast.makeText(context, "El usuario se ha eliminado correctamente", Toast.LENGTH_LONG).show()
-                }.addOnFailureListener { Toast.makeText(context, "Error  elimando al usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
+                eventoCollection.document(evento.id).delete().addOnSuccessListener {
+                    Toast.makeText(context, "El evento se ha eliminado correctamente", Toast.LENGTH_LONG).show()
+                }.addOnFailureListener { Toast.makeText(context, "Error  elimando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
         })
-        var usuario = Usuario()
-        usuario.rol = "${list[position].id}"
-
-      /*  vh.actualizar.setOnClickListener(object : View.OnClickListener {
+        vh.actualizar.setOnClickListener(object : View.OnClickListener {
             var calendario = Calendar.getInstance()
             override fun onClick(position: View?) {
-                usuario.id = id
-                showDialog(usuario)
+                var evento = Evento()
+                evento.id = id
+                evento.titulo = titulo
+                evento.description = description
+                evento.fecha = fecha
+                showDialog(evento)
             }
-            private fun showDialog(usuario: Usuario) {
+
+            private fun showDialog(eveto: Evento) {
                 //the header from dialog
                 val dialog = Dialog(context)
                 dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
-                dialog.setContentView(R.layout.dialog_actualizar_usuario)
+                dialog.setContentView(R.layout.dialog_actualizar_evento)
                 dialog.setCancelable(true)
                 val lp = WindowManager.LayoutParams()
                 lp.copyFrom(dialog.window!!.attributes)
@@ -106,7 +107,21 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 var txt2 = (dialog.findViewById<View>(R.id.txtDescriptionEvento) as TextView)
                 var txt3 = (dialog.findViewById<View>(R.id.txtFechaEvento) as EditText)
 
-
+                //see views front end
+                 var date: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                    // TODO Auto-generated method stub
+                    calendario.set(Calendar.YEAR, year)
+                    calendario.set(Calendar.MONTH, monthOfYear)
+                    calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                     val formatoDeFecha = "MM/dd/yy" //In which you need put here
+                     val sdf = SimpleDateFormat(formatoDeFecha, Locale.US)
+                     txt3.setText(sdf.format(calendario.time))
+                }
+                txt3.setOnClickListener {
+                    DatePickerDialog(context, date, calendario
+                            .get(Calendar.YEAR), calendario.get(Calendar.MONTH),
+                            calendario.get(Calendar.DAY_OF_MONTH)).show()
+                }
                 (dialog.findViewById<View>(R.id.btnActualizarEvento2) as Button).setOnClickListener {
                     //after that I get the data
                     var tituloNuevo = txt1.text.toString()
@@ -116,9 +131,9 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                         eveto.titulo=tituloNuevo
                         eveto.description=descriptionNuevo
                         eveto.fecha=fechaNuevo
-                        updateUsuario(eveto)
+                         updateEvent(eveto)
                         dialog.dismiss()
-                        Toast.makeText(context, "El usuario se ha actualizado correctamente", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "El evento se ha actualizado correctamente", Toast.LENGTH_LONG).show()
                     } else {
                         Toast.makeText(context, "Completa los campos", Toast.LENGTH_SHORT).show()
                     }
@@ -126,22 +141,25 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 dialog.show()
                 dialog.window!!.attributes = lp
             }
-            private fun updateUsuario(usuario: Usuario) {
+
+            private fun updateEvent(evento: Evento) {
                 FirebaseApp.initializeApp(context)
                 val eventoCollection: CollectionReference
-                eventoCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+                eventoCollection = FirebaseFirestore.getInstance().collection("Eventos")
                 //only this source I update the status,
-                eventoCollection.document(usuario.id).update("rol", usuario.rol).addOnSuccessListener {
-                }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
+                eventoCollection.document(evento.id).update("titulo", evento.titulo,
+                        "description", evento.description, "fecha", evento.fecha).addOnSuccessListener {
+                }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
 
         })
-       */ return view
-    }
+
+        return view
+    }//end for handler
 }
 
-private class UserViewHolder(view: View) {
-    val fullName: TextView = view.textViewName
-    val actualizar: Button = view.btnActualizarUsuario
-    val eliminar: Button = view.btnEliminarUsuario
+class AdministrarEventoViewHolder(view: View) {
+    val titulo: TextView = view.txtTitulo
+    val actualizar: Button = view.btnActualizarEvento
+    val eliminar: Button = view.btnEliminarEvento
 }

@@ -1,49 +1,49 @@
-package com.material.components.activity.bottomsheet
+package com.material.components.activity.form
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.Toast
+import android.widget.AdapterView
 import com.alejandrolora.finalapp.toast
-import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.R
-import com.material.components.activity.form.FormSignUp
-import com.material.components.adapter.UserAdapter
-import com.material.components.model.Usuario
+import com.material.components.adapter.AdministrarEventoAdapter
+import com.material.components.adapter.EstadisticaAdapter
+import com.material.components.model.Encuesta
+import com.material.components.model.Evento
 import com.material.components.utils.Tools
-import kotlinx.android.synthetic.main.activity_user.*
+import kotlinx.android.synthetic.main.activity_encuesta.*
+import kotlinx.android.synthetic.main.list_view_estadistica.view.*
 import java.util.ArrayList
 
 /**
  * @author Abraham
+ * this admin for the events
  */
-class UserActivity : AppCompatActivity() {
+class AdministrarEventoActivity : AppCompatActivity() {
 
-    private lateinit var adapter: UserAdapter
+    private lateinit var adapter: AdministrarEventoAdapter
+    private lateinit var eventoList: List<Evento>
 
     //declare val for save the collection
-    private val userCollection: CollectionReference
+    private val eventosCollection: CollectionReference
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
         FirebaseApp.initializeApp(this)
         //save the collection marks on val maksCollection
-        userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+        eventosCollection = FirebaseFirestore.getInstance().collection("Eventos")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_user)
+        setContentView(R.layout.activity_administrar_evento)
         initToolbar()
         addMarksListener()
     }
@@ -52,14 +52,14 @@ class UserActivity : AppCompatActivity() {
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        userCollection.addSnapshotListener { snapshots, error ->
+        eventosCollection.addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
                     addChanges(changes)
                 }
             } else {
-                Toast.makeText(this, "Ha ocurrido un error intenta de nuevo", Toast.LENGTH_SHORT).show()
+                toast("Ha ocurrido un error intente de nuevo")
             }
         }
     }
@@ -69,46 +69,36 @@ class UserActivity : AppCompatActivity() {
      * aqui se hace el recorrido de la coleccion de cloudfirestore
      */
     private fun addChanges(changes: List<DocumentChange>) {
-        val itemUsuario = ArrayList<Usuario>()//lista local de una sola instancia
+        val itemEvento = ArrayList<Evento>()//lista local de una sola instancia
         for (change in changes) {
-            itemUsuario.add(change.document.toObject(Usuario::class.java))//ir agregando los datos a la lista
+            itemEvento.add(change.document.toObject(Evento::class.java))//ir agregando los datos a la lista
         }//una ves agregado los campos mandar a llamar la vista
-        adapter = UserAdapter(this, R.layout.list_view_usuario, itemUsuario)
+        eventoList = itemEvento
+        adapter = AdministrarEventoAdapter(this, R.layout.list_view_administrar_eveto, eventoList)
+        //listView.btnCerrarEncuesta
         listView.adapter = adapter
-        listView.setOnItemClickListener { adapterView, view, i, l ->
-            if(i==0)
-            toast("click")
-            else
-                toast("not clicked")
-        }
-    }
+    }//end for handler
 
-    /**
-     * initToolbar(header)
-     */
+    //front end only
+    //here the front end
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_menu)
         setSupportActionBar(toolbar)
-        val actionBar = supportActionBar
-        actionBar!!.title = "Usuarios"
+        supportActionBar!!.setTitle("Administrar Eventos")
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_basic, menu)//menu de las opciones del toolbar, menu basic
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_search_setting, menu)
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        if (item!!.itemId == android.R.id.home) {
             finish()
-        } else if (item.itemId == R.id.action_search) {//icono de search
-            //Toast.makeText(applicationContext, item.title, Toast.LENGTH_SHORT).show()
-            toast("Diste click en search")
         }
         return super.onOptionsItemSelected(item)
     }
-
 }

@@ -65,6 +65,7 @@ import com.material.components.activity.button.ButtonInUtilities;
 import com.material.components.activity.button.FabMiddle;
 import com.material.components.activity.button.FabMore;
 import com.material.components.activity.button.FabMoreText;
+import com.material.components.activity.card.AdministrarAnunciosActivity;
 import com.material.components.activity.card.CardBasic;
 import com.material.components.activity.card.CardOverlap;
 import com.material.components.activity.card.CardTimeline;
@@ -98,6 +99,7 @@ import com.material.components.activity.dialog.EncuestaActivity;
 import com.material.components.activity.expansionpanel.ExpansionPanelBasic;
 import com.material.components.activity.expansionpanel.ExpansionPanelInvoice;
 import com.material.components.activity.expansionpanel.ExpansionPanelTicket;
+import com.material.components.activity.form.AdministrarEventoActivity;
 import com.material.components.activity.form.AgregarAnuncioActivity;
 import com.material.components.activity.form.AgregarEncuestaActivity;
 import com.material.components.activity.form.EstadisticaActivity;
@@ -361,7 +363,6 @@ public class MainMenu extends AppCompatActivity {
         }
     }
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -477,8 +478,8 @@ public class MainMenu extends AppCompatActivity {
             case 401://see events
                 startActivity(new Intent(this, CardBasic.class));
                 break;
-            case 402:
-                startActivity(new Intent(this, CardTimeline.class));
+            case 402://this I use to for administrar Anuncios
+                startActivity(new Intent(this, AdministrarAnunciosActivity.class));
                 break;
             case 403:
                 //mi perfil, that is  possible but for the moment not!
@@ -741,16 +742,17 @@ public class MainMenu extends AppCompatActivity {
                 startActivity(new Intent(this, TabsRound.class));
                 break;
 
-            //case for the encuestas
+            //case for the eventos
             // Form --------------------------------------------------------------------------------
-            case 1601:
+            case 1601://administrar eventos
                 //startActivity(new Intent(this, FormLogin.class));
+                startActivity(new Intent(this, AdministrarEventoActivity.class));
                 break;
             case 1602:
                 //startActivity(new Intent(this, FormSignUp.class));
                 startActivity(new Intent(this, AgregarAnuncioActivity.class));
                 break;
-            case 1603:
+            case 1603://add a new event
                 startActivity(new Intent(this, FormProfileData.class));
                 break;
             case 1604:
@@ -1185,6 +1187,8 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(400, "Eventos", R.drawable.ic_note, MenuType.HEADER));
         if (result.equalsIgnoreCase("administrador"))
             items.add(new MainMenuAdapter.ListItem(1603, "Agregar evento", -1, MenuType.SUB_HEADER));
+        if (result.equalsIgnoreCase("administrador"))
+            items.add(new MainMenuAdapter.ListItem(1601, "Administrar eventos", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(401, "Ver eventos", -1, MenuType.SUB_HEADER));
 /*      items.add(new MainMenuAdapter.ListItem(402, "Timeline", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(403, "Overlap", -1, MenuType.SUB_HEADER));
@@ -1207,6 +1211,8 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(600, "Anuncios", R.drawable.ic_picture_in_picture, MenuType.HEADER));
         if (result.equalsIgnoreCase("administrador"))
             items.add(new MainMenuAdapter.ListItem(1602, "Agregar anuncio", -1, MenuType.SUB_HEADER));
+        if (result.equalsIgnoreCase("administrador"))
+            items.add(new MainMenuAdapter.ListItem(402, "Administrar anuncios", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(405, "Ver anuncios", -1, MenuType.SUB_HEADER));
 
         //items.add(new MainMenuAdapter.ListItem(601, "Basic", -1, MenuType.SUB_HEADER));

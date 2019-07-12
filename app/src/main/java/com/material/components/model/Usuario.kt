@@ -6,7 +6,7 @@ class Usuario(var email:String = "",
               var rol:String="",//direccion,edad,telefono campos nuevos
               var direccion:String="",
               var edad:String="",
-              var telefono:String=""){
+              var telefono:String="", var id:String=""){
 
-    override fun toString()= "$email  $name $ubicacion $rol $direccion $edad $telefono"
+    override fun toString()= "$email  $name $ubicacion $rol $direccion $edad $telefono $id"
 }

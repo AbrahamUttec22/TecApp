@@ -77,6 +77,7 @@ class FormProfileData : AppCompatActivity() {
                 evento.description = description
                 evento.fecha = fecha
                 evento.titulo = titulo
+                evento.id=""
                 //agregar linea del valor de la imagen
                 val builder = AlertDialog.Builder(this)
                 val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
@@ -140,6 +141,7 @@ class FormProfileData : AppCompatActivity() {
     private fun saveEvento(evento: Evento) {
         //add the collection and save the User, this is validated
         marksCollection.add(evento).addOnSuccessListener {
+            marksCollection.document(it.id).update("id",it.id).addOnSuccessListener {}.addOnFailureListener { }
             Toast.makeText(this, "Evento registrado con exito", Toast.LENGTH_LONG).show()
             onBackPressed()
         }.addOnFailureListener {

@@ -41,15 +41,7 @@
                 android:padding="10dp"
                 android:textColor="@color/red_50" />
 
-            <Button
-                android:id="@+id/btnActualizarEncuesta"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="20"
-                android:text="Actualizar"
-                android:background="@drawable/btn_rounded_green"
-                android:padding="10dp"
-                android:textColor="@color/red_50" />
+
 
             <Button
                 android:id="@+id/btnEliminarEncuesta"

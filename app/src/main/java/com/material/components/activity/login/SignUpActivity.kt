@@ -111,6 +111,7 @@ class SignUpActivity : AppCompatActivity() {
     private fun saveUser(usuario: Usuario) {
         //add the collection and save the User, this is validated
         marksCollection.add(usuario).addOnSuccessListener {
+            marksCollection.document(it.id).update("id",it.id).addOnSuccessListener {}.addOnFailureListener { }
             showConfirmDialog()
         }.addOnFailureListener {
             Toast.makeText(this, "Error guardando el usuario, intenta de nuevo", Toast.LENGTH_LONG).show()
