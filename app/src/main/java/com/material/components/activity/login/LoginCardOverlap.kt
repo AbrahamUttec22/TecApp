@@ -1,6 +1,7 @@
 package com.material.components.activity.login
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -30,6 +31,7 @@ import com.material.components.activity.MainMenu
 import com.material.components.activity.dialog.*
 import kotlinx.android.synthetic.main.activity_expansion_panel_basic.*
 import kotlinx.android.synthetic.main.dialog_code.*
+import android.content.SharedPreferences as SharedPreferences1
 
 
 /**
@@ -45,6 +47,9 @@ class LoginCardOverlap : AppCompatActivity() {
 
     //declare val for save the collection
     private val codeCollection: CollectionReference
+    //declare val for save the collection
+    private val empresaCollection: CollectionReference
+
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -52,6 +57,7 @@ class LoginCardOverlap : AppCompatActivity() {
         //save the collection marks on val maksCollection
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
         codeCollection = FirebaseFirestore.getInstance().collection("registros")
+        empresaCollection = FirebaseFirestore.getInstance().collection("Empresas")
     }
 
     /**
@@ -77,6 +83,73 @@ class LoginCardOverlap : AppCompatActivity() {
         }// end for listener register
     }//end for onCreate
 
+    /**
+     * @param email
+     * @param password
+     * @return void
+     */
+    private fun logInByEmail(email: String, password: String) {
+        //primero inicio sesion con las credenciales, despues valido si es empresa o empleado
+        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
+            if (task.isSuccessful) {//when the credentials are corrects
+                val empleado = userCollection.whereEqualTo("email", email)
+                //beggin with consult
+                empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            val rol = document.get("rol").toString()
+                            val id_empresa= document.get("id_empresa").toString()
+                            if (rol!! == "administrador") {
+                                val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                                var sesion = sharedPreference.edit()
+                                sesion.putString("id_empresa", id_empresa)
+                                sesion.commit()
+                                goToActivity<MainMenu> {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                }
+                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                            } else {
+                                val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                                var sesion = sharedPreference.edit()
+                                sesion.putString("id_empresa", id_empresa)
+                                sesion.commit()
+                                goToActivity<MainMenu> {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                }
+                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                            }
+                        }
+                    } else {
+                        Log.w("saasas", "Error getting documents.", task.exception)
+                    }
+                })//end for expression lambdas this very cool
+                //case for empresa
+                val empresa = empresaCollection.whereEqualTo("correo", email)
+                empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            //here i send the id_empresa
+                            val id_empresa= document.get("id_empresa").toString()
+                            val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                            var sesion = sharedPreference.edit()
+                            sesion.putString("id_empresa", id_empresa)
+                            sesion.commit()
+                            goToActivity<MainMenu> {
+                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                            }
+                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+                        }
+                    } else {
+                        Log.w("saasas", "Error getting documents.", task.exception)
+                    }
+                })//end for expression lambdas this very cool
+            } else {
+                toast("Email o Contraseña incorrectas intenta de nuevo")
+            }
+        }
+    }
+
     //I need valid the access
     private fun showDialogAbout() {
         val dialog = Dialog(this)
@@ -93,11 +166,11 @@ class LoginCardOverlap : AppCompatActivity() {
 
         (dialog.findViewById<View>(R.id.bt_Accept) as AppCompatButton).setOnClickListener { v ->
             val code = (dialog.findViewById<View>(R.id.txtCodeAccess) as EditText).text.toString()
-            val editText= (dialog.findViewById<View>(R.id.txtCodeAccess) as EditText)
+            val editText = (dialog.findViewById<View>(R.id.txtCodeAccess) as EditText)
             if (code.isNullOrEmpty()) {
                 editText?.error = "Ingresa el codigo"
-            }else{
-                validCode(code,dialog)
+            } else {
+                validCode(code, dialog)
             }
 
         }
@@ -106,16 +179,11 @@ class LoginCardOverlap : AppCompatActivity() {
 
     }
 
-    private fun isValid(code: String): Boolean {
-        return !code.isNullOrEmpty()
-    }
-
-
     /**
      * @param code
      * @return void
      */
-    private fun validCode(code: String,dialog:Dialog) {
+    private fun validCode(code: String, dialog: Dialog) {
         val resultado = codeCollection.whereEqualTo("acceso", code)
         //beggin with consult
         resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
@@ -128,8 +196,8 @@ class LoginCardOverlap : AppCompatActivity() {
                         }
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     } else {
-                        val editText= (dialog.findViewById<View>(R.id.txtCodeAccess) as EditText)
-                            editText?.error = "Codigo incorrecto"
+                        val editText = (dialog.findViewById<View>(R.id.txtCodeAccess) as EditText)
+                        editText?.error = "Codigo incorrecto"
                     }
                 }
             } else {
@@ -137,44 +205,5 @@ class LoginCardOverlap : AppCompatActivity() {
             }
         })//end for expression lambdas this very cool
     }
-
-
-
-    /**
-     * @param email
-     * @param password
-     * @return void
-     */
-    private fun logInByEmail(email: String, password: String) {
-        mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
-            if (task.isSuccessful) {//when the credentials are corrects
-                val resultado = userCollection.whereEqualTo("email", email)
-                //beggin with consult
-                resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                    if (task.isSuccessful) {
-                        for (document in task.result!!) {
-                            val rol = document.get("rol").toString()
-                            if (rol!! == "administrador") {
-                                goToActivity<MainMenu> {
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                }
-                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                            } else {
-                                goToActivity<MainMenu> {
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                }
-                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                            }
-                        }
-                    } else {
-                        Log.w("saasas", "Error getting documents.", task.exception)
-                    }
-                })//end for expression lambdas this very cool
-            } else {
-                toast("Email o Contraseña incorrectas intenta de nuevo")
-            }
-        }
-    }
-
 
 }

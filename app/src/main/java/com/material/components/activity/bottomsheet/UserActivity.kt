@@ -1,8 +1,10 @@
 package com.material.components.activity.bottomsheet
 
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.Menu
@@ -33,6 +35,8 @@ class UserActivity : AppCompatActivity() {
 
     //declare val for save the collection
     private val userCollection: CollectionReference
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
+
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -46,13 +50,21 @@ class UserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user)
         initToolbar()
         addMarksListener()
+        swipeRefreshLayout = findViewById(R.id.swipeUsuario)
+        swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            addMarksListener()
+            swipeRefreshLayout!!.setRefreshing(false);
+
+        })
     }
 
     /**
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        userCollection.addSnapshotListener { snapshots, error ->
+        var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa=sharedPreference.getString ("id_empresa","")
+        userCollection.whereEqualTo("id_empresa",id_empresa).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {

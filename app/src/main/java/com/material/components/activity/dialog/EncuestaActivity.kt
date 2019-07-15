@@ -1,5 +1,6 @@
 package com.material.components.activity.dialog
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
@@ -23,6 +24,7 @@ import kotlinx.android.synthetic.main.list_view_encuesta.view.*
 import java.util.ArrayList
 import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.content.Intent
+import android.support.v4.widget.SwipeRefreshLayout
 import android.widget.Button
 import android.widget.TextView
 import com.alejandrolora.finalapp.inflate
@@ -31,11 +33,13 @@ import com.material.components.adapter.EncuestaViewHolder
 
 /**
  * @author Abraham
+ * see the encuests
  */
 class EncuestaActivity : AppCompatActivity() {
 
     private lateinit var adapter: EncuestaAdapter
     private lateinit var encuestaList: List<Encuesta>
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
 
     //declare val for save the collection
     private val userCollection: CollectionReference
@@ -52,6 +56,11 @@ class EncuestaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_encuesta)
         initToolbar()
         addMarksListener()
+        swipeRefreshLayout = findViewById(R.id.swipeVerEncuestas)
+        swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            addMarksListener()
+            swipeRefreshLayout!!.setRefreshing(false);
+        })
         //end for click listener a second boton
     }
 
@@ -59,7 +68,9 @@ class EncuestaActivity : AppCompatActivity() {
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        userCollection.whereEqualTo("status","1").addSnapshotListener { snapshots, error ->
+        var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa=sharedPreference.getString ("id_empresa","")
+        userCollection.whereEqualTo("status","1").whereEqualTo("id_empresa",id_empresa).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {

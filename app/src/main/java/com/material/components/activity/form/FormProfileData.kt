@@ -29,6 +29,7 @@ import java.text.SimpleDateFormat
 import android.provider.MediaStore
 import android.graphics.Bitmap
 import android.R.attr.data
+import android.content.Context
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.IOException
@@ -39,7 +40,6 @@ import java.io.IOException
  * add a new event
  */
 class FormProfileData : AppCompatActivity() {
-
 
     var calendario = Calendar.getInstance()
     private var array_states: Array<String>? = null
@@ -73,22 +73,25 @@ class FormProfileData : AppCompatActivity() {
             val fecha = etBirthday.text.toString()
             val titulo = txtTitulo.text.toString()
             if (isValid(description, fecha, titulo) && btnGaleriaEvento.getDrawable() != null) {
-                val evento = Evento()
-                evento.description = description
-                evento.fecha = fecha
-                evento.titulo = titulo
-                evento.id=""
                 //agregar linea del valor de la imagen
                 val builder = AlertDialog.Builder(this)
                 val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
                 val message = dialogView.findViewById<TextView>(R.id.mensaje)
-                message.text = "Subiendo..."
+                message.text = "Registrando..."
                 builder.setView(dialogView)
+                val evento = Evento()
+                val sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
+                sharedPreference.getString ("id_empresa","")
+                evento.id_empresa=sharedPreference.getString ("id_empresa","").toString()
+                evento.description = description
+                evento.fecha = fecha
+                evento.titulo = titulo
+                evento.id=""
                 upload(evento)
                 builder.setCancelable(false)
                 val dialog = builder.create()
                 dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1000)
+                Handler().postDelayed({ dialog.dismiss() }, 1500)
             } else {
                 toast("Completa los campos")
             }
@@ -132,7 +135,6 @@ class FormProfileData : AppCompatActivity() {
             toast("" + e.toString())
         }
     }
-
 
     /**
      * @param evento
@@ -210,4 +212,5 @@ class FormProfileData : AppCompatActivity() {
                 !fecha.isNullOrEmpty() &&
                 !titulo.isNullOrEmpty()
     }
+
 }

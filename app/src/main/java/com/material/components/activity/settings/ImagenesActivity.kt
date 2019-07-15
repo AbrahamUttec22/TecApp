@@ -96,7 +96,6 @@ class ImagenesActivity : AppCompatActivity() {
         }
     }
 
-
     private fun abrirFotoGaleria() {
         val intent = Intent()
         intent.type = "image/*"

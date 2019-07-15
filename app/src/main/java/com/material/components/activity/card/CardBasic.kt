@@ -1,7 +1,9 @@
 package com.material.components.activity.card
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
@@ -35,6 +37,8 @@ class CardBasic : AppCompatActivity() {
     private lateinit var personList: List<Evento>
     //declare val for save the collection
     private val userCollection: CollectionReference
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
+
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -48,28 +52,21 @@ class CardBasic : AppCompatActivity() {
         setContentView(R.layout.activity_card_basic)
         initToolbar()
         addMarksListener()
-        // personList = getPersons()
-    }
+        swipeRefreshLayout = findViewById(R.id.swipeEventoUsuario)
+        swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            addMarksListener()
+            swipeRefreshLayout!!.setRefreshing(false);
 
-    private fun getPersons(): List<Evento> {
-        return listOf(
-                Evento("Alejandro", "Lora", "27", "Primero"),
-                Evento("Fernando", "Vega", "27", "Primero"),
-                Evento("Alicia", "Gómez", "27", "Primero"),
-                Evento("Paula", "Escobar", "27", "Primero"),
-                Evento("Alberto", "Parada", "27", "Primero"),
-                Evento("Cristian", "Romero", "27", "Primero"),
-                Evento("Octavio", "Hernández", "27", "Primero"),
-                Evento("Yaiza", "Costi", "27", "Primero"),
-                Evento("Naomi", "Fernandexz", "27", "Primero")
-        )
+        })
     }
 
     /**
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        userCollection.addSnapshotListener { snapshots, error ->
+        var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa=sharedPreference.getString ("id_empresa","")
+        userCollection.whereEqualTo("id_empresa",id_empresa).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
@@ -89,6 +86,7 @@ class CardBasic : AppCompatActivity() {
         val itemUsuario = ArrayList<Evento>()//lista local de una sola instancia
         for (change in changes) {
             itemUsuario.add(change.document.toObject(Evento::class.java))//ir agregando los datos a la lista
+
         }//una ves agregado los campos mandar a llamar la vista
         adapter = EventoAdapter(this, R.layout.list_view_evento, itemUsuario)
         listView.adapter = adapter

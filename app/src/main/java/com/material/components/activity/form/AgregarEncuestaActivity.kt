@@ -1,8 +1,11 @@
 package com.material.components.activity.form
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
@@ -19,6 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -58,9 +62,10 @@ class AgregarEncuestaActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
+
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 //with the objective the show the editText for answers
-               if (position == 1) {
+                if (position == 1) {
                     txtRespuestas.setVisibility(View.VISIBLE)
                     txtRespuestas2.setVisibility(View.VISIBLE)
                     txtRespuestas3.setVisibility(View.INVISIBLE)
@@ -85,28 +90,57 @@ class AgregarEncuestaActivity : AppCompatActivity() {
                 //this switch for know which val I save on Cloud firestore
                 when (valorRespuestas) {
                     1 -> {
-                        if (!txtRespuestas.text.isNullOrEmpty()&&!txtRespuestas2.text.isNullOrEmpty()) {
-                            var encuesta=Encuesta()//this isn´t global because the instance
-                            encuesta.pregunta=pregunta
-                            encuesta.status="1"
-                            encuesta.respuestas= listOf(txtRespuestas.text.toString(),txtRespuestas2.text.toString())
+                        if (!txtRespuestas.text.isNullOrEmpty() && !txtRespuestas2.text.isNullOrEmpty()) {
+                          val builder = AlertDialog.Builder(this)
+                            val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
+                            val message = dialogView.findViewById<TextView>(R.id.mensaje)
+                            message.text = "Registrando..."
+                            builder.setView(dialogView)
+                            var encuesta = Encuesta()//this isn´t global because the instance
+                            var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
+                            var id_empresa=sharedPreference.getString ("id_empresa","")
+                            encuesta.id_empresa=id_empresa
+                            encuesta.pregunta = pregunta
+                            encuesta.status = "1"
+                            encuesta.respuestas = listOf(txtRespuestas.text.toString(), txtRespuestas2.text.toString())
+
                             saveEncuesta(encuesta)
+                            builder.setCancelable(false)
+                            val dialog = builder.create()
+                            dialog.show()
+                            Handler().postDelayed({ dialog.dismiss() }, 1500)
                         } else
                             toast("Completa los campos")
                     }
                     2 -> {
-                        if (!txtRespuestas.text.isNullOrEmpty()&&!txtRespuestas2.text.isNullOrEmpty()&&!txtRespuestas3.text.isNullOrEmpty()) {
-                            var encuesta=Encuesta()//this isn´t global because the instance
-                            encuesta.pregunta=pregunta
-                            encuesta.status="1"
-                            encuesta.respuestas= listOf(txtRespuestas.text.toString(),txtRespuestas2.text.toString(),txtRespuestas3.text.toString())
+                        if (!txtRespuestas.text.isNullOrEmpty() && !txtRespuestas2.text.isNullOrEmpty() && !txtRespuestas3.text.isNullOrEmpty()) {
+                          val builder = AlertDialog.Builder(this)
+                            val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
+                            val message = dialogView.findViewById<TextView>(R.id.mensaje)
+                            message.text = "Registrando..."
+                            builder.setView(dialogView)
+                            var encuesta = Encuesta()//this isn´t global because the instance
+                            var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
+                            var id_empresa=sharedPreference.getString ("id_empresa","")
+                            encuesta.id_empresa=id_empresa
+                            encuesta.pregunta = pregunta
+                            encuesta.status = "1"
+                            encuesta.respuestas = listOf(txtRespuestas.text.toString(), txtRespuestas2.text.toString(), txtRespuestas3.text.toString())
+
                             saveEncuesta(encuesta)
+                            builder.setCancelable(false)
+                            val dialog = builder.create()
+                            dialog.show()
+                            Handler().postDelayed({ dialog.dismiss() }, 1500)
                         } else
                             toast("Completa los campos")
                     }
-                    else -> {  }//default
+                    else -> {
+                    }//default
                 }
-            } else { toast("Completa los campos ") }
+            } else {
+                toast("Completa los campos ")
+            }
         }
     }
 
@@ -117,6 +151,7 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         actualizarInput()
     }
+
     //backend
     private fun isValid(pregunta: String): Boolean {
         return !pregunta.isNullOrEmpty()
@@ -158,4 +193,5 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

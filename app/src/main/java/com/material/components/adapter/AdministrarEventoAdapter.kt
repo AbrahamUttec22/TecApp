@@ -26,6 +26,7 @@ import java.util.*
 
 /**
  * @author Abraham
+ * Update Delete
  */
 class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: List<Evento>) : BaseAdapter() {
 
@@ -55,8 +56,11 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
         val titulo = "${list[position].titulo}"
         val description = "${list[position].description}"
         val fecha = "${list[position].fecha}"
+        val id_empresa="${list[position].id_empresa}"
         vh.titulo.text = titulo
         val id = "${list[position].id}"
+
+        //only delete
         vh.eliminar.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
                 val evento = Evento()
@@ -78,17 +82,19 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                 }.addOnFailureListener { Toast.makeText(context, "Error  elimando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
         })
+
+        //only update
         vh.actualizar.setOnClickListener(object : View.OnClickListener {
             var calendario = Calendar.getInstance()
             override fun onClick(position: View?) {
                 var evento = Evento()
                 evento.id = id
+                evento.id_empresa=id_empresa
                 evento.titulo = titulo
                 evento.description = description
                 evento.fecha = fecha
                 showDialog(evento)
             }
-
             private fun showDialog(eveto: Evento) {
                 //the header from dialog
                 val dialog = Dialog(context)
@@ -122,6 +128,7 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                             .get(Calendar.YEAR), calendario.get(Calendar.MONTH),
                             calendario.get(Calendar.DAY_OF_MONTH)).show()
                 }
+                //update the event
                 (dialog.findViewById<View>(R.id.btnActualizarEvento2) as Button).setOnClickListener {
                     //after that I get the data
                     var tituloNuevo = txt1.text.toString()
@@ -153,7 +160,6 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
             }//end for hanlder
 
         })
-
         return view
     }//end for handler
 }

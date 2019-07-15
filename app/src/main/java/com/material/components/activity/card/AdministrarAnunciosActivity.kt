@@ -1,7 +1,9 @@
 package com.material.components.activity.card
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
@@ -20,11 +22,15 @@ import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_encuesta.*
 import java.util.ArrayList
 
+/**
+ * @author Abraham Casas Aguilar
+ * admin anuncios
+ */
 class AdministrarAnunciosActivity : AppCompatActivity() {
 
     private lateinit var adapter: AdministrarAnuncioAdapter
     private lateinit var eventoList: List<Anuncio>
-
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
     //declare val for save the collection
     private val anunciosCollection: CollectionReference
     //init the val for get the collection the Firebase with cloud firestore
@@ -39,13 +45,20 @@ class AdministrarAnunciosActivity : AppCompatActivity() {
         setContentView(R.layout.activity_administrar_anuncios)
         initToolbar()
         addMarksListener()
+        swipeRefreshLayout = findViewById(R.id.swipeAdministrarAnuncios)
+        swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            addMarksListener()
+            swipeRefreshLayout!!.setRefreshing(false);
+        })
     }
 
     /**
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        anunciosCollection.addSnapshotListener { snapshots, error ->
+        var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa=sharedPreference.getString ("id_empresa","")
+        anunciosCollection.whereEqualTo("id_empresa",id_empresa).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {

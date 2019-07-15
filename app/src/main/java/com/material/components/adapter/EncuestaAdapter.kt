@@ -55,6 +55,7 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
             vh = view.tag as EncuestaViewHolder
         }
         val fullName = "${list[position].pregunta}"
+        val id_empresa="${list[position].id_empresa}"
         vh.pregunta.text = fullName
         // vh.respuesta.text = "${list[position].respuestas?.get(position)}"
         var con = list[position].respuestas?.size
@@ -90,6 +91,7 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                 val correo = mAuth.currentUser!!.email.toString()
                 val voto = Votacion()
                 voto.id_pregunta = pregunta
+                voto.id_empresa=id_empresa
                 voto.respuesta = resp
                 voto.correo = correo
                 sentVoto(voto)
@@ -142,6 +144,7 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                 val voto = Votacion()
                 voto.id_pregunta = pregunta
                 voto.respuesta = resp
+                voto.id_empresa=id_empresa
                 voto.correo = correo
                 sentVoto(voto)
             }
@@ -192,6 +195,7 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                 val correo = mAuth.currentUser!!.email.toString()
                 val voto = Votacion()
                 voto.id_pregunta = pregunta
+                voto.id_empresa=id_empresa
                 voto.respuesta = resp
                 voto.correo = correo
                 sentVoto(voto)

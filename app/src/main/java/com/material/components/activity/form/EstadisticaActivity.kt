@@ -1,9 +1,11 @@
 package com.material.components.activity.form
 
 import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.AppCompatSeekBar
 import android.support.v7.widget.Toolbar
@@ -38,7 +40,7 @@ class EstadisticaActivity : AppCompatActivity() {
 
     private lateinit var adapter: EstadisticaAdapter
     private lateinit var encuestaList: List<Encuesta>
-
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
     //declare val for save the collection
     private val encuestasCollection: CollectionReference
     private val estadisticasCollection: CollectionReference
@@ -56,13 +58,21 @@ class EstadisticaActivity : AppCompatActivity() {
         setContentView(R.layout.activity_estadistica)
         initToolbar()
         addMarksListener()
+        swipeRefreshLayout = findViewById(R.id.swipeVerStadisticas)
+        swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
+            addMarksListener()
+            swipeRefreshLayout!!.setRefreshing(false);
+
+        })
     }
 
     /**
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        encuestasCollection.addSnapshotListener { snapshots, error ->
+        var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa=sharedPreference.getString ("id_empresa","")
+        encuestasCollection.whereEqualTo("id_empresa",id_empresa).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {

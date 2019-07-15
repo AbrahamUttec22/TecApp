@@ -1,7 +1,9 @@
 package com.material.components.activity;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -279,6 +281,7 @@ public class MainMenu extends AppCompatActivity {
     FirebaseFirestore db = FirebaseFirestore.getInstance();
     private FirebaseAuth mAuth;
     private CollectionReference userCollection;
+    private CollectionReference empresaCollection;
     private String imgUser = "";
     private ImageView view;
 
@@ -287,13 +290,15 @@ public class MainMenu extends AppCompatActivity {
         FirebaseApp.initializeApp(this);
         //save the collection marks on val maksCollection
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios");
+        empresaCollection = FirebaseFirestore.getInstance().collection("Empresas");
+
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if (user != null) {
             String email = user.getEmail();
             userCollection.whereEqualTo("email", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                    if (task.isSuccessful()) {
+                   if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String rol = document.get("rol").toString();
                             imgUser = document.get("ubicacion").toString();
@@ -317,6 +322,25 @@ public class MainMenu extends AppCompatActivity {
                                         .into(view);
                                 initComponentMenu();
                             }
+                        }
+                    }
+                }
+            });
+            empresaCollection.whereEqualTo("correo", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                    if (task.isSuccessful()) {
+
+                        for (QueryDocumentSnapshot document : task.getResult()) {
+                            imgUser = document.get("foto").toString();
+                            result = "empresa";
+                            setContentView(R.layout.activity_main);
+                            view = (ImageView) findViewById(R.id.imageView);
+                            Glide
+                                    .with(getApplicationContext())
+                                    .load(imgUser)
+                                    .into(view);
+                            initComponentMenu();
                         }
                     }
                 }
@@ -405,10 +429,6 @@ public class MainMenu extends AppCompatActivity {
     }
 
     public String result = "";
-
-    private void whatUserIs() {
-
-    }
 
     private void onMenuItemSelected(int itemId) {
         if (sharedPref.actionClickOffer()) {
@@ -1165,7 +1185,7 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(106, "Primary", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(107, "Map Blue", -1, MenuType.SUB_HEADER));
         */
-        if (result.equalsIgnoreCase("administrador")) {
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa")) {
             //I used to for the user its a nice view
             items.add(new MainMenuAdapter.ListItem(200, "Usuarios", R.drawable.ic_call_to_actio, MenuType.HEADER));
             // items.add(new MainMenuAdapter.ListItem(201, "Basic", -1, MenuType.SUB_HEADER));
@@ -1185,9 +1205,9 @@ public class MainMenu extends AppCompatActivity {
 */
         //Menu eventos
         items.add(new MainMenuAdapter.ListItem(400, "Eventos", R.drawable.ic_note, MenuType.HEADER));
-        if (result.equalsIgnoreCase("administrador"))
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa"))
             items.add(new MainMenuAdapter.ListItem(1603, "Agregar evento", -1, MenuType.SUB_HEADER));
-        if (result.equalsIgnoreCase("administrador"))
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa"))
             items.add(new MainMenuAdapter.ListItem(1601, "Administrar eventos", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(401, "Ver eventos", -1, MenuType.SUB_HEADER));
 /*      items.add(new MainMenuAdapter.ListItem(402, "Timeline", -1, MenuType.SUB_HEADER));
@@ -1196,11 +1216,11 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(405, "Wizard Light", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(406, "Wizard Overlap", -1, MenuType.SUB_HEADER));*/
 
-//Menu Encuestas
+         //Menu Encuestas
         items.add(new MainMenuAdapter.ListItem(500, "Encuestas", R.drawable.ic_label, MenuType.HEADER));
-        if (result.equalsIgnoreCase("administrador"))
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa"))
             items.add(new MainMenuAdapter.ListItem(1604, "Agregar encuesta", -1, MenuType.SUB_HEADER));
-        if (result.equalsIgnoreCase("administrador"))
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa"))
             items.add(new MainMenuAdapter.ListItem(1605, "Ver estadisticas", 5 - 1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(604, "Ver encuestas", -1, MenuType.SUB_HEADER));
 
@@ -1209,9 +1229,9 @@ public class MainMenu extends AppCompatActivity {
 
         //el 4 parametro del constructor recibe boolean para mostrar notificaciones
         items.add(new MainMenuAdapter.ListItem(600, "Anuncios", R.drawable.ic_picture_in_picture, MenuType.HEADER));
-        if (result.equalsIgnoreCase("administrador"))
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa"))
             items.add(new MainMenuAdapter.ListItem(1602, "Agregar anuncio", -1, MenuType.SUB_HEADER));
-        if (result.equalsIgnoreCase("administrador"))
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa"))
             items.add(new MainMenuAdapter.ListItem(402, "Administrar anuncios", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(405, "Ver anuncios", -1, MenuType.SUB_HEADER));
 
@@ -1409,7 +1429,7 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(24002, "Header Auto", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(24003, "Card", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(24004, "Card Auto", -1, MenuType.SUB_HEADER));*/
-        if (result.equalsIgnoreCase("administrador")) {
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa")) {
             items.add(new MainMenuAdapter.ListItem(25000, "Settings", R.drawable.ic_settings, MenuType.HEADER));
             items.add(new MainMenuAdapter.ListItem(25004, "Imagenes", -1, MenuType.SUB_HEADER));
             items.add(new MainMenuAdapter.ListItem(25003, "Clave de acceso", -1, MenuType.SUB_HEADER));

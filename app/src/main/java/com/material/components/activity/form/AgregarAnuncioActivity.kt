@@ -1,6 +1,7 @@
 package com.material.components.activity.form
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -34,7 +35,6 @@ import java.util.*
  */
 class AgregarAnuncioActivity : AppCompatActivity() {
 
-
     //declare val for save the collection
     private val marksCollection: CollectionReference
     private var mStorageRef: StorageReference? = null
@@ -57,23 +57,26 @@ class AgregarAnuncioActivity : AppCompatActivity() {
             val description=txtDescriptionAnuncio.text.toString()
             val titulo=txtTituloAnuncio.text.toString()
             if (isValid(description,titulo) && imgAnuncio.getDrawable() != null){
+                val builder = AlertDialog.Builder(this)
+                val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
+                val message = dialogView.findViewById<TextView>(R.id.mensaje)
+                message.text = "Registrando..."
                 val obj=Anuncio()
+                var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
+                var id_empresa=sharedPreference.getString ("id_empresa","")
+                obj.id_empresa=id_empresa
                 obj.description=description
                 obj.titulo=titulo
                 val c = Calendar.getInstance()
                 val df = SimpleDateFormat("dd/MM/yyyy")
                 val formattedDate = df.format(c.getTime()).toString()
                 obj.fecha=formattedDate
-                val builder = AlertDialog.Builder(this)
-                val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
-                val message = dialogView.findViewById<TextView>(R.id.mensaje)
-                message.text = "Subiendo..."
                 upload(obj)
                 builder.setView(dialogView)
                 builder.setCancelable(false)
                 val dialog = builder.create()
                 dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1200)
+                Handler().postDelayed({ dialog.dismiss() }, 1600)
             }else{
                 toast("Completa los campos")
             }
@@ -178,6 +181,5 @@ class AgregarAnuncioActivity : AppCompatActivity() {
      return !description.isNullOrEmpty() &&
              !titulo.isNullOrEmpty()
     }
-
 
 }

@@ -83,7 +83,9 @@ class CardWizardLight : AppCompatActivity() {
 
     //backend
     private fun addMarksListener(applicationContext: Context) {
-        anuncioCollection.addSnapshotListener { snapshots, error ->
+        var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa=sharedPreference.getString ("id_empresa","")
+        anuncioCollection.whereEqualTo("id_empresa",id_empresa).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
