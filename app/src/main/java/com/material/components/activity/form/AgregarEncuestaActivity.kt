@@ -126,7 +126,6 @@ class AgregarEncuestaActivity : AppCompatActivity() {
                             encuesta.pregunta = pregunta
                             encuesta.status = "1"
                             encuesta.respuestas = listOf(txtRespuestas.text.toString(), txtRespuestas2.text.toString(), txtRespuestas3.text.toString())
-
                             saveEncuesta(encuesta)
                             builder.setCancelable(false)
                             val dialog = builder.create()

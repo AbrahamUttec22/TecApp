@@ -1,5 +1,4 @@
 package com.material.components.activity.login
-
 import android.app.Dialog
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -65,14 +64,12 @@ class SignUpActivity : AppCompatActivity() {
                 toast("Completa los campos")
             }
         }//end for listner
-
         txtEmail.validate {
             txtEmail.error = if (isValidEmail(it)) null else "El email no es valido"
         }
         txtConfirmPassword.validate {
             txtConfirmPassword.error = if (isValidConfirmPassword(txtPassword.text.toString(), it)) null else "Las cotraseñas no coinciden"
         }
-
         buttonBackLogin.setOnClickListener {
             goToActivity<LoginCardOverlap> {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -118,6 +115,10 @@ class SignUpActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * @param name
+     * @param email
+     */
     private fun isValid(name: String, email: String): Boolean {
         return !name.isNullOrEmpty() &&
                 !email.isNullOrEmpty() &&
@@ -189,6 +190,4 @@ class SignUpActivity : AppCompatActivity() {
 
     fun doExitApp() {
     }
-
-
 }

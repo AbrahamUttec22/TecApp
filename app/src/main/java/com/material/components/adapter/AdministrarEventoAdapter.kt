@@ -160,6 +160,7 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
             }//end for hanlder
 
         })
+
         return view
     }//end for handler
 }

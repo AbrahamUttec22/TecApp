@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.support.v7.widget.AppCompatRadioButton
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -50,14 +51,24 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
             view = convertView
             vh = view.tag as UserViewHolder
         }
-
-        val fullName = "${list[position].name}"
+        //get data the user
+        var email = "${list[position].email}"//email
+        var ubicacion = "${list[position].ubicacion}"//ubicacion
+        val fullName = "${list[position].name}"//nombre
         vh.fullName.text = fullName
+        var rol = "${list[position].rol}"//rol
+        var direccion = "${list[position].direccion}"//direccion
+        var edad = "${list[position].edad}"//edad
+        var telefono = "${list[position].telefono}"//telefono
+        val id = "${list[position].id}"
+        var id_empresa = "${list[position].id_empresa}"//id_empresa
+
         Glide
                 .with(this.context)
                 .load("${list[position].ubicacion}")
                 .into(view.imageUser)
-        val id = "${list[position].id}"
+
+
         vh.eliminar.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
                 val usuario = Usuario()
@@ -69,6 +80,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                         .show()
 
             }
+
             private fun deleteUsuario(usuario: Usuario) {
                 FirebaseApp.initializeApp(context)
                 val eventoCollection: CollectionReference
@@ -79,15 +91,23 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 }.addOnFailureListener { Toast.makeText(context, "Error  elimando al usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
         })
-        var usuario = Usuario()
-        usuario.rol = "${list[position].id}"
 
-      /*  vh.actualizar.setOnClickListener(object : View.OnClickListener {
+        vh.actualizar.setOnClickListener(object : View.OnClickListener {
             var calendario = Calendar.getInstance()
             override fun onClick(position: View?) {
+                var usuario = Usuario()
+                usuario.email = email
+                usuario.ubicacion = ubicacion
+                usuario.name = fullName
+                usuario.rol = rol
+                usuario.direccion = direccion
+                usuario.edad = edad
+                usuario.telefono = telefono
                 usuario.id = id
+                usuario.id_empresa = id
                 showDialog(usuario)
             }
+
             private fun showDialog(usuario: Usuario) {
                 //the header from dialog
                 val dialog = Dialog(context)
@@ -99,44 +119,40 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 lp.width = WindowManager.LayoutParams.WRAP_CONTENT
                 lp.height = WindowManager.LayoutParams.WRAP_CONTENT
                 //in this code I get the information on cloud firestore
-                (dialog.findViewById<View>(R.id.txtTituloEvento) as TextView).text=eveto.titulo
-                (dialog.findViewById<View>(R.id.txtDescriptionEvento) as TextView).text=eveto.description
-                (dialog.findViewById<View>(R.id.txtFechaEvento) as EditText).setText(eveto.fecha)
-                var txt1 = (dialog.findViewById<View>(R.id.txtTituloEvento) as TextView)
-                var txt2 = (dialog.findViewById<View>(R.id.txtDescriptionEvento) as TextView)
-                var txt3 = (dialog.findViewById<View>(R.id.txtFechaEvento) as EditText)
+                if (usuario.rol.equals("administrador")) {
+                    (dialog.findViewById<View>(R.id.ac_radio_adminitrador) as AppCompatRadioButton).isChecked = true
+                    (dialog.findViewById<View>(R.id.ac_radio_usuario) as AppCompatRadioButton).isChecked = false
+                } else {
+                    (dialog.findViewById<View>(R.id.ac_radio_adminitrador) as AppCompatRadioButton).isChecked = false
+                    (dialog.findViewById<View>(R.id.ac_radio_usuario) as AppCompatRadioButton).isChecked = true
+                }
 
-
-                (dialog.findViewById<View>(R.id.btnActualizarEvento2) as Button).setOnClickListener {
+                (dialog.findViewById<View>(R.id.btnActualizarUsuario) as Button).setOnClickListener {
                     //after that I get the data
-                    var tituloNuevo = txt1.text.toString()
-                    var descriptionNuevo = txt2.text.toString()
-                    var fechaNuevo = txt3.text.toString()
-                    if (!tituloNuevo.isNullOrEmpty() && !descriptionNuevo.isNullOrEmpty() && !fechaNuevo.isNullOrEmpty()) {
-                        eveto.titulo=tituloNuevo
-                        eveto.description=descriptionNuevo
-                        eveto.fecha=fechaNuevo
-                        updateUsuario(eveto)
-                        dialog.dismiss()
-                        Toast.makeText(context, "El usuario se ha actualizado correctamente", Toast.LENGTH_LONG).show()
-                    } else {
-                        Toast.makeText(context, "Completa los campos", Toast.LENGTH_SHORT).show()
-                    }
+                    if ((dialog.findViewById<View>(R.id.ac_radio_adminitrador) as AppCompatRadioButton).isChecked)
+                        usuario.rol = "administrador"
+                    if ( (dialog.findViewById<View>(R.id.ac_radio_usuario) as AppCompatRadioButton).isChecked)
+                        usuario.rol = "usuario"
+                    //first save the user on authe
+                    updateUsuario(usuario)
+                    dialog.dismiss()
                 }
                 dialog.show()
                 dialog.window!!.attributes = lp
             }
+
             private fun updateUsuario(usuario: Usuario) {
                 FirebaseApp.initializeApp(context)
                 val eventoCollection: CollectionReference
                 eventoCollection = FirebaseFirestore.getInstance().collection("Usuarios")
                 //only this source I update the status,
                 eventoCollection.document(usuario.id).update("rol", usuario.rol).addOnSuccessListener {
+                    Toast.makeText(context, "El rol se ha actualizado correctamente", Toast.LENGTH_LONG).show()
                 }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
 
         })
-       */ return view
+        return view
     }
 }
 

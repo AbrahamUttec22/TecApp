@@ -58,7 +58,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/imgPerfil"
+                    android:id="@+id/imgPerfilEmpresa"
                     android:layout_width="85dp"
                     android:layout_height="85dp"/>
 
@@ -125,14 +125,14 @@
                             android:layout_height="@dimen/spacing_xmlarge"
                             android:background="@android:color/transparent"
                             android:tint="@color/grey_40"
-                            app:srcCompat="@drawable/ic_account_circle"/>
+                            app:srcCompat="@drawable/ic_account_circle" />
 
                         <View
                             android:layout_width="@dimen/spacing_middle"
                             android:layout_height="0dp" />
 
                         <EditText
-                            android:id="@+id/txtNombre"
+                            android:id="@+id/txtNombreEmpresa"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -154,19 +154,19 @@
                             android:layout_height="@dimen/spacing_xmlarge"
                             android:background="@android:color/transparent"
                             android:tint="@color/grey_40"
-                            app:srcCompat="@drawable/ic_adjust" />
+                            app:srcCompat="@drawable/ic_accessibility" />
 
                         <View
                             android:layout_width="@dimen/spacing_middle"
                             android:layout_height="0dp" />
 
                         <EditText
-                            android:id="@+id/txtEdad"
+                            android:id="@+id/txtGiroEmpresa"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:minHeight="@dimen/spacing_xmlarge"
-                            android:hint="Edad"
+                            android:hint="Giro de la empresa"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             android:textColor="@color/grey_40" />
 
@@ -190,7 +190,7 @@
                             android:layout_height="0dp" />
 
                         <EditText
-                            android:id="@+id/txtTelefono"
+                            android:id="@+id/txtTelefonoEmpresa"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -212,14 +212,14 @@
                             android:layout_height="@dimen/spacing_xmlarge"
                             android:background="@android:color/transparent"
                             android:tint="@color/grey_40"
-                            app:srcCompat="@drawable/ic_email"  />
+                            app:srcCompat="@drawable/ic_email" />
 
                         <View
-                            android:layout_width="@dimen/spacing_middle"
-                            android:layout_height="0dp" />
+                        android:layout_width="@dimen/spacing_middle"
+                        android:layout_height="0dp" />
 
                         <TextView
-                            android:id="@+id/txtEmail"
+                            android:id="@+id/txtEmailEmpresa"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
@@ -228,7 +228,39 @@
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             android:textColor="@color/grey_40" />
 
+
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="@dimen/spacing_xmlarge"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="@dimen/spacing_xmlarge"
+                            android:background="@android:color/transparent"
+                            android:tint="@color/grey_40"
+                            app:srcCompat="@drawable/ic_apps" />
+
+                        <View
+                            android:layout_width="@dimen/spacing_middle"
+                            android:layout_height="0dp" />
+
+                        <TextView
+                            android:id="@+id/txtIdEmpresa"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:minHeight="@dimen/spacing_xmlarge"
+                            android:hint=""
+                            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+                            android:textColor="@color/grey_40" />
+
+
+                    </LinearLayout>
+
 
 
                 </LinearLayout>
@@ -265,7 +297,7 @@
                         android:textColor="@color/grey_80" />
 
                     <EditText
-                        android:id="@+id/txtDireccion"
+                        android:id="@+id/txtDireccionEmpresa"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
@@ -277,7 +309,7 @@
 
             </android.support.v7.widget.CardView>
             <Button
-                android:id="@+id/btnUpdateInformation"
+                android:id="@+id/btnUpdateInformationEmpresa"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/spacing_xlarge"
@@ -288,7 +320,6 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_large" />
-
 
         </LinearLayout>
 

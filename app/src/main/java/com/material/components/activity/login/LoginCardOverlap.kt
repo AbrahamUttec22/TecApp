@@ -7,6 +7,8 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatButton
 import com.alejandrolora.finalapp.isValidEmail
 import com.alejandrolora.finalapp.toast
@@ -29,10 +31,12 @@ import com.alejandrolora.finalapp.validate
 import com.material.components.R
 import com.material.components.activity.MainMenu
 import com.material.components.activity.dialog.*
+import com.material.components.model.Encuesta
+import com.material.components.register.RegistrosActivity
+import kotlinx.android.synthetic.main.activity_agregar_encuesta.*
 import kotlinx.android.synthetic.main.activity_expansion_panel_basic.*
 import kotlinx.android.synthetic.main.dialog_code.*
 import android.content.SharedPreferences as SharedPreferences1
-
 
 /**
  * @author Abraham
@@ -49,7 +53,6 @@ class LoginCardOverlap : AppCompatActivity() {
     private val codeCollection: CollectionReference
     //declare val for save the collection
     private val empresaCollection: CollectionReference
-
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -71,7 +74,16 @@ class LoginCardOverlap : AppCompatActivity() {
             val email = txtEmail.text.toString()
             val password = txtPassword.text.toString()
             if (isValidEmail(email) && !password.isNullOrEmpty()) {//valid the params
+                val builder = AlertDialog.Builder(this)
+                val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
+                val message = dialogView.findViewById<TextView>(R.id.mensaje)
+                message.text = ""
+                builder.setView(dialogView)
                 logInByEmail(email, password)
+                builder.setCancelable(false)
+                val dialog = builder.create()
+                dialog.show()
+                Handler().postDelayed({ dialog.dismiss() }, 1700)
             } else {
                 toast("Completa los campos")
             }
@@ -79,7 +91,12 @@ class LoginCardOverlap : AppCompatActivity() {
 
         //this I need validated a code of access, this code the admin can update later
         buttonSignUp.setOnClickListener {
-            showDialogAbout()
+            //showDialogAbout()
+            goToActivity<RegistrosActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
         }// end for listener register
     }//end for onCreate
 
@@ -98,7 +115,7 @@ class LoginCardOverlap : AppCompatActivity() {
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
                             val rol = document.get("rol").toString()
-                            val id_empresa= document.get("id_empresa").toString()
+                            val id_empresa = document.get("id_empresa").toString()
                             if (rol!! == "administrador") {
                                 val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                                 var sesion = sharedPreference.edit()
@@ -129,7 +146,7 @@ class LoginCardOverlap : AppCompatActivity() {
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
                             //here i send the id_empresa
-                            val id_empresa= document.get("id_empresa").toString()
+                            val id_empresa = document.get("id_empresa").toString()
                             val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                             var sesion = sharedPreference.edit()
                             sesion.putString("id_empresa", id_empresa)

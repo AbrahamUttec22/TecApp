@@ -39,7 +39,6 @@ class EventoAdapter(val context: Context, val layout: Int, val list: List<Evento
             view = convertView
             vh = view.tag as EventoViewHolder
         }
-
         //val fullName = "${list[position].titulo}"
         vh.fecha.text = "${list[position].fecha}"
         vh.description.text = "${list[position].description}"
@@ -48,7 +47,6 @@ class EventoAdapter(val context: Context, val layout: Int, val list: List<Evento
                 .with(this.context)
                 .load("${list[position].ubicacion}")
                 .into(view.imgEvento)
-
         return view
     }
 

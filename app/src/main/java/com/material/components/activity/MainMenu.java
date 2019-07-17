@@ -74,6 +74,7 @@ import com.material.components.activity.card.CardTimeline;
 import com.material.components.activity.card.CardWizard;
 import com.material.components.activity.card.CardWizardLight;
 import com.material.components.activity.card.CardWizardOverlap;
+import com.material.components.activity.card.PerfilEmpresaActivity;
 import com.material.components.activity.chip.ChipBasic;
 import com.material.components.activity.chip.ChipTag;
 import com.material.components.activity.dashboard.DashboardCryptocurrency;
@@ -298,11 +299,10 @@ public class MainMenu extends AppCompatActivity {
             userCollection.whereEqualTo("email", email).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                   if (task.isSuccessful()) {
+                    if (task.isSuccessful()) {
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             String rol = document.get("rol").toString();
                             imgUser = document.get("ubicacion").toString();
-
                             if (rol.equalsIgnoreCase("administrador")) {
                                 result = "administrador";
                                 setContentView(R.layout.activity_main);
@@ -330,7 +330,6 @@ public class MainMenu extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<QuerySnapshot> task) {
                     if (task.isSuccessful()) {
-
                         for (QueryDocumentSnapshot document : task.getResult()) {
                             imgUser = document.get("foto").toString();
                             result = "empresa";
@@ -346,6 +345,7 @@ public class MainMenu extends AppCompatActivity {
                 }
             });
         }
+
     }
 
     public void initTwo() {
@@ -505,8 +505,8 @@ public class MainMenu extends AppCompatActivity {
                 //mi perfil, that is  possible but for the moment not!
                 startActivity(new Intent(this, CardOverlap.class));
                 break;
-            case 404:
-                startActivity(new Intent(this, CardWizard.class));
+            case 404://mi perfil empresa
+                startActivity(new Intent(this, PerfilEmpresaActivity.class));
                 break;
             case 405:
                 startActivity(new Intent(this, CardWizardLight.class));
@@ -1216,7 +1216,7 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(405, "Wizard Light", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(406, "Wizard Overlap", -1, MenuType.SUB_HEADER));*/
 
-         //Menu Encuestas
+        //Menu Encuestas
         items.add(new MainMenuAdapter.ListItem(500, "Encuestas", R.drawable.ic_label, MenuType.HEADER));
         if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa"))
             items.add(new MainMenuAdapter.ListItem(1604, "Agregar encuesta", -1, MenuType.SUB_HEADER));
@@ -1346,7 +1346,10 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(-1, "Extra", -1, MenuType.DIVIDER));
         items.add(new MainMenuAdapter.ListItem(1800, "Perfil", R.drawable.ic_person, MenuType.HEADER));
         //items.add(new MainMenuAdapter.ListItem(1605, "Mi perfil", -1, MenuType.SUB_HEADER));
-        items.add(new MainMenuAdapter.ListItem(403, "Mi perfil", -1, MenuType.SUB_HEADER));
+        if (result.equalsIgnoreCase("administrador"))
+            items.add(new MainMenuAdapter.ListItem(403, "Mi perfil", -1, MenuType.SUB_HEADER));
+        if (result.equalsIgnoreCase("empresa"))
+            items.add(new MainMenuAdapter.ListItem(404, "Mi perfil", -1, MenuType.SUB_HEADER));
         //toolbar basic class and activity_toolbarbasic
         items.add(new MainMenuAdapter.ListItem(1701, "Cerrar Sesion", -1, MenuType.SUB_HEADER));
         //items.add(new MainMenuAdapter.ListItem(25003, "Mi perfil", -1, MenuType.SUB_HEADER));

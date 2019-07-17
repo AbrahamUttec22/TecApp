@@ -12,7 +12,9 @@
         android:roundIcon="@drawable/logo_tecgurus"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.card.AdministrarAnunciosActivity"></activity>
+        <activity android:name=".register.RegistrosActivity"></activity>
+        <activity android:name=".activity.card.PerfilEmpresaActivity" />
+        <activity android:name=".activity.card.AdministrarAnunciosActivity" />
         <activity android:name=".activity.form.AdministrarEventoActivity" />
         <activity android:name=".activity.form.EstadisticaActivity" />
         <activity android:name=".activity.settings.ClaveActivity" />
@@ -28,10 +30,7 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
-        <activity
-            android:name=".activity.MainMenu"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait" />
+        <activity android:name=".activity.MainMenu" android:label="@string/app_name" android:screenOrientation="portrait" />
         <activity android:name=".activity.MainEmptyActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,6 +38,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+
+
+
         <activity
             android:name=".activity.bottomnavigation.BottomNavigationBasic"
             android:screenOrientation="portrait" />

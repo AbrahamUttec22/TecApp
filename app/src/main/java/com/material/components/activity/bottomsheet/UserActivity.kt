@@ -1,5 +1,4 @@
 package com.material.components.activity.bottomsheet
-
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -28,15 +27,14 @@ import java.util.ArrayList
 
 /**
  * @author Abraham
+ * admin for empleados
  */
 class UserActivity : AppCompatActivity() {
 
     private lateinit var adapter: UserAdapter
-
     //declare val for save the collection
     private val userCollection: CollectionReference
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
-
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -53,7 +51,7 @@ class UserActivity : AppCompatActivity() {
         swipeRefreshLayout = findViewById(R.id.swipeUsuario)
         swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
             addMarksListener()
-            swipeRefreshLayout!!.setRefreshing(false);
+            swipeRefreshLayout!!.setRefreshing(false)
 
         })
     }
@@ -122,5 +120,4 @@ class UserActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 }
