@@ -264,6 +264,8 @@ import com.material.components.activity.verification.VerificationOrange;
 import com.material.components.activity.verification.VerificationPhone;
 import com.material.components.adapter.ExpandableRecyclerAdapter;
 import com.material.components.adapter.MainMenuAdapter;
+import com.material.components.checador.CheckActivity;
+import com.material.components.checador.GenerarQRActivity;
 import com.material.components.data.SharedPref;
 import com.material.components.model.MenuType;
 import com.material.components.utils.Tools;
@@ -1016,12 +1018,15 @@ public class MainMenu extends AppCompatActivity {
             case 25001:
                 startActivity(new Intent(this, SettingSectioned.class));
                 break;
-            case 25002:
-                startActivity(new Intent(this, SettingFlat.class));
+            case 25002://checador
+                //startActivity(new Intent(this, SettingFlat.class));
+                startActivity(new Intent(this, CheckActivity.class));
+
                 break;
             case 25003:
                 //startActivity(new Intent(this, SettingProfile.class));
-                startActivity(new Intent(this, ClaveActivity.class));
+                //startActivity(new Intent(this, ClaveActivity.class));
+                startActivity(new Intent(this, GenerarQRActivity.class));
                 break;
             case 25004:
                 // startActivity(new Intent(this, SettingProfileLight.class));
@@ -1346,7 +1351,7 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(-1, "Extra", -1, MenuType.DIVIDER));
         items.add(new MainMenuAdapter.ListItem(1800, "Perfil", R.drawable.ic_person, MenuType.HEADER));
         //items.add(new MainMenuAdapter.ListItem(1605, "Mi perfil", -1, MenuType.SUB_HEADER));
-        if (result.equalsIgnoreCase("administrador"))
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("usuario"))
             items.add(new MainMenuAdapter.ListItem(403, "Mi perfil", -1, MenuType.SUB_HEADER));
         if (result.equalsIgnoreCase("empresa"))
             items.add(new MainMenuAdapter.ListItem(404, "Mi perfil", -1, MenuType.SUB_HEADER));
@@ -1432,21 +1437,20 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(24002, "Header Auto", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(24003, "Card", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(24004, "Card Auto", -1, MenuType.SUB_HEADER));*/
-        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa")) {
-            items.add(new MainMenuAdapter.ListItem(25000, "Settings", R.drawable.ic_settings, MenuType.HEADER));
-            items.add(new MainMenuAdapter.ListItem(25004, "Imagenes", -1, MenuType.SUB_HEADER));
-            items.add(new MainMenuAdapter.ListItem(25003, "Clave de acceso", -1, MenuType.SUB_HEADER));
+        items.add(new MainMenuAdapter.ListItem(25000, "Settings", R.drawable.ic_settings, MenuType.HEADER));
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("usuario")) {
+            items.add(new MainMenuAdapter.ListItem(25002, "Checador", -1, MenuType.SUB_HEADER));
         }
-
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa")) {
+            items.add(new MainMenuAdapter.ListItem(25003, "Generar QR", -1, MenuType.SUB_HEADER));
+        }
         //add a new line 03/09/2019
-
 /*
       // items.add(new MainMenuAdapter.ListItem(25001, "Sectioned", -1, MenuType.SUB_HEADER));
       // items.add(new MainMenuAdapter.ListItem(25002, "Flat", -1, MenuType.SUB_HEADER));
       // items.add(new MainMenuAdapter.ListItem(25003, "Profile", -1, MenuType.SUB_HEADER));
       // items.add(new MainMenuAdapter.ListItem(25004, "Profile Light", -1, MenuType.SUB_HEADER));
 /*
-
         items.add(new MainMenuAdapter.ListItem(26000, "Verification", R.drawable.ic_check_circle, MenuType.HEADER));
         items.add(new MainMenuAdapter.ListItem(26001, "Phone", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(26002, "Code", -1, MenuType.SUB_HEADER));

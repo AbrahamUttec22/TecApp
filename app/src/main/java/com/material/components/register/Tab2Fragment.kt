@@ -1,5 +1,6 @@
 package com.material.components.register
 
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -21,6 +22,7 @@ import kotlinx.android.synthetic.main.tab1_fragment.view.btnRegistrarEmpresa
 import kotlinx.android.synthetic.main.tab2_fragment.view.*
 import java.util.regex.Pattern
 import android.content.Context
+import android.os.Handler
 import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QuerySnapshot
@@ -28,6 +30,7 @@ import com.material.components.activity.MainMenu
 
 /**
  * @author Abraham
+ * Empresa
  */
 class Tab2Fragment : Fragment() {
     //declare val for save the collection
@@ -36,6 +39,7 @@ class Tab2Fragment : Fragment() {
     //declare val for save the collection
     private val empresasCollection: CollectionReference
     private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private var status: Boolean = false
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -46,14 +50,14 @@ class Tab2Fragment : Fragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.tab2_fragment, container, false)
+        return inflater.inflate(R.layout.tab2_fragment, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //the image for default
         val imag = "https://firebasestorage.googleapis.com/v0/b/tecapp-25ed3.appspot.com/o/usuarios%2Fic_default_user.png?alt=media&token=7e64e478-9802-4149-915a-dba6d3c69c59"//this is a image for default
         //on listener for the buton on register a new user
-        view.btnRegistrarEmpresa.setOnClickListener {
+        view.btnRegistrarEmpleado.setOnClickListener {
             //direction foto and id_empresa is empty first
             val name = view.txtNombreEmpleado.text.toString()
             val codigo = view.txtCodigoEmpresa.text.toString()
@@ -63,6 +67,12 @@ class Tab2Fragment : Fragment() {
             if (isValid(name, codigo, email, password, confirmpassword)) {
                 if (isValidEmail(email)) {
                     if (isValidConfirmPassword(password, confirmpassword)) {
+                        var nDialog = ProgressDialog(this!!.activity) //Here I get an error: The constructor ProgressDialog(PFragment) is undefined
+                        nDialog.setMessage("Loading..")
+                        nDialog.setTitle("Registrando")
+                        nDialog.isIndeterminate = false
+                        nDialog.setCancelable(true)
+                        nDialog.show()
                         val usuario = Usuario()
                         usuario.name = name
                         usuario.id_empresa = codigo
@@ -74,7 +84,8 @@ class Tab2Fragment : Fragment() {
                         usuario.edad
                         usuario.telefono = ""
                         //first save the user on authentication firebase, after that save the user on cloud firestore
-                        signUpByEmail(email, password, usuario, view)
+                        validCode(email, password, usuario, view)
+                        Handler().postDelayed({ nDialog.dismiss() }, 1000)
                     } else {
                         view.txtConfirmPasswordEmplead.error = "Las contraseñas no coinciden"
                     }
@@ -124,11 +135,18 @@ class Tab2Fragment : Fragment() {
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(requireActivity()) { task ->
             if (task.isSuccessful) {
                 //save the user on cloud firestore
-                mAuth.signOut()//this is necesary because the val is in general
-                saveUsuario(usuario, view)
+                mAuth.currentUser!!.sendEmailVerification().addOnCompleteListener(requireActivity()) {
+                    //save the user on cloud firestore
+                    saveUsuario(usuario, view)
+                    status=true
+                    val intent = Intent(context, LoginCardOverlap::class.java)
+                    startActivityForResult(intent, 0)
+                    mAuth.signOut()//this is necesary because the val is in general
+                    Toast.makeText(context, "Se ha enviado un correo de confirmacion", Toast.LENGTH_LONG).show()
+                }
             } else {
                 // toast("Los Datos ingresados ya estan registrados,intenta con uno nuevo")
-                Toast.makeText(context, "Error guardando el usuario, intenta de nuevo", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Los Datos ingresados ya estan registrados,intenta con uno nuevo", Toast.LENGTH_LONG).show()
             }
         }
     }
@@ -139,6 +157,16 @@ class Tab2Fragment : Fragment() {
      */
     private fun saveUsuario(usuario: Usuario, view: View) {
         //the first case is Valid if the id_empresa already exists
+        usuariosCollection.add(usuario).addOnSuccessListener {
+            usuariosCollection.document(it.id).update("id", it.id).addOnSuccessListener {
+            }.addOnFailureListener { }
+        }.addOnFailureListener {
+            Toast.makeText(context, "Error guardando el usuario, intenta de nuevo", Toast.LENGTH_LONG).show()
+        }
+    }
+//handler
+
+    private fun validCode(email: String, password: String, usuario: Usuario, view: View) {
         val resultado = empresasCollection.whereEqualTo("id_empresa", usuario.id_empresa)
         //beggin with consult
         resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
@@ -146,30 +174,18 @@ class Tab2Fragment : Fragment() {
                 var con = 0
                 for (document in task.result!!) {
                     con++
-                    //add the collection and save the User, this is validated
-                    usuariosCollection.add(usuario).addOnSuccessListener {
-                        usuariosCollection.document(it.id).update("id", it.id).addOnSuccessListener {
-                            //i send the login
-                            //val preferences = this.activity!!.getSharedPreferences("pref", Context.MODE_PRIVATE)
-                            val sharedPreference = this.activity!!.getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-                            var sesion = sharedPreference.edit()
-                            sesion.putString("id_empresa", usuario.id_empresa)
-                            sesion.commit()
-                            val intent = Intent(context, MainMenu::class.java)
-                            startActivityForResult(intent, 0)
-                        }.addOnFailureListener { }
-                    }.addOnFailureListener {
-                        Toast.makeText(context, "Error guardando el usuario, intenta de nuevo", Toast.LENGTH_LONG).show()
-                    }
                 }
                 if (con == 0) {
+                    status=true
                     view.txtCodigoEmpresa.error = "Codigo incorrecto"
+                } else {
+                    signUpByEmail(email, password, usuario, view)
                 }
             } else {
                 Log.w("EXCEPTION", "Error getting documents.", task.exception)
             }
         })//end for expression lambdas this very cool
-    }//handler
+    }
 
     /**
      * @param name

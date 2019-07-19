@@ -1,5 +1,4 @@
 package com.material.components.activity.settings
-
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
@@ -99,7 +98,6 @@ class ClaveActivity : AppCompatActivity() {
         claveAcceso = "${itemClave[0].acceso}"
         valorClaveAcceso.text = claveAcceso
     }
-
 
     private fun isValidConfirmClave(clave: String, confirmClave: String): Boolean {
         return clave == confirmClave

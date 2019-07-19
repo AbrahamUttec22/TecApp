@@ -25,12 +25,13 @@ import kotlinx.android.synthetic.main.tab1_fragment.view.txtTelefonoEmpresa
 import java.util.regex.Pattern
 import kotlin.random.Random
 import android.content.Intent
+import android.os.Handler
 import com.alejandrolora.finalapp.isValidEmail
 import com.material.components.activity.MainMenu
 
 /**
  * @author Abraham
- * Company
+ * Usuario
  */
 class Tab1Fragment : Fragment(), View.OnClickListener {
 
@@ -73,6 +74,12 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
             if (isValid(name, giro, email, telefono, password, confirmpassword)) {
                 if (isValidEmail(email)) {
                     if (isValidConfirmPassword(password, confirmpassword)) {
+                        var nDialog = ProgressDialog(this!!.activity) //Here I get an error: The constructor ProgressDialog(PFragment) is undefined
+                        nDialog.setMessage("Loading..")
+                        nDialog.setTitle("Registrando")
+                        nDialog.setIndeterminate(false)
+                        nDialog.setCancelable(true)
+                        nDialog.show()
                         val empresa = Empresa()
                         empresa.nombre = name
                         empresa.correo = email
@@ -83,6 +90,7 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
                         empresa.id_empresa = ""
                         //first save the user on authentication firebase, after that save the user on cloud firestore
                         signUpByEmail(email, password, empresa)
+                        Handler().postDelayed({ nDialog.dismiss() }, 1000)
                     } else {
                         view.txtConfirmPasswordEmpresa.error = "Ingresa un correo valido"
                     }
@@ -92,6 +100,7 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
             } else {
                 Toast.makeText(context, "Completa los campos", Toast.LENGTH_SHORT).show()
             }
+
         }//end for listner
 
         view.txtCorreoEmpresa.addTextChangedListener(object : TextWatcher {
@@ -132,16 +141,24 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
      */
     private fun signUpByEmail(email: String, password: String, empresa: Empresa) {
         //get instance of firebase
+        val randomValues = Random.nextInt(10000, 200000)
+        empresa.id_empresa = empresa.nombre + randomValues.toString()//save the company
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(requireActivity()) { task ->
             if (task.isSuccessful) {
-                //save the user on cloud firestore
-                mAuth.signOut()//this is necesary because the val is in general
-                saveEmpresa(empresa)
+                mAuth.currentUser!!.sendEmailVerification().addOnCompleteListener(requireActivity()) {
+                    //save the user on cloud firestore
+                    saveEmpresa(empresa)
+                    val intent = Intent(context, LoginCardOverlap::class.java)
+                    startActivityForResult(intent, 0)
+                    Toast.makeText(context, "Se ha enviado un correo de confirmacion", Toast.LENGTH_LONG).show()
+                    mAuth.signOut()//this is necesary because the val is in general
+
+                }
             } else {
-                // toast("Los Datos ingresados ya estan registrados,intenta con uno nuevo")
-                Toast.makeText(context, "Error guardando la empresa, intenta de nuevo", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "Los Datos ingresados ya estan registrados,intenta con uno nuevo", Toast.LENGTH_LONG).show()
             }
         }
+
     }
 
     /**
@@ -150,17 +167,9 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
      */
     private fun saveEmpresa(empresa: Empresa) {
         //add the collection and save the User, this is validated
-        val randomValues = List(1) { Random.nextInt(1000, 20000) }
-        empresa.id_empresa = empresa.nombre + randomValues//save the company
-        marksCollection.document(empresa.id_empresa).set(empresa).addOnSuccessListener {
-            val sharedPreference =this.activity!!.getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-            var sesion = sharedPreference.edit()
-            sesion.putString("id_empresa", empresa.id_empresa)
-            sesion.commit()
-            val intent = Intent(context, MainMenu::class.java)
-            startActivityForResult(intent, 0)
+        marksCollection.add(empresa).addOnSuccessListener {
         }.addOnFailureListener {
-            Toast.makeText(context, "Error guardando el usuario, intenta de nuevo", Toast.LENGTH_LONG).show()
+            Toast.makeText(context, "Error guardando la empresa, intenta de nuevo", Toast.LENGTH_LONG).show()
         }
     }
 

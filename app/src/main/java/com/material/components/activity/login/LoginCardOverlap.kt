@@ -83,7 +83,7 @@ class LoginCardOverlap : AppCompatActivity() {
                 builder.setCancelable(false)
                 val dialog = builder.create()
                 dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1700)
+                Handler().postDelayed({ dialog.dismiss() }, 1000)
             } else {
                 toast("Completa los campos")
             }
@@ -109,58 +109,64 @@ class LoginCardOverlap : AppCompatActivity() {
         //primero inicio sesion con las credenciales, despues valido si es empresa o empleado
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {//when the credentials are corrects
-                val empleado = userCollection.whereEqualTo("email", email)
-                //beggin with consult
-                empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                    if (task.isSuccessful) {
-                        for (document in task.result!!) {
-                            val rol = document.get("rol").toString()
-                            val id_empresa = document.get("id_empresa").toString()
-                            if (rol!! == "administrador") {
-                                val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-                                var sesion = sharedPreference.edit()
-                                sesion.putString("id_empresa", id_empresa)
-                                sesion.commit()
-                                goToActivity<MainMenu> {
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                if (mAuth.currentUser!!.isEmailVerified) {
+                    val empleado = userCollection.whereEqualTo("email", email)
+                    //beggin with consult
+                    empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                        if (task.isSuccessful) {
+                            for (document in task.result!!) {
+                                val rol = document.get("rol").toString()
+                                val id_empresa = document.get("id_empresa").toString()
+                                if (rol!! == "administrador") {
+                                    val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                                    var sesion = sharedPreference.edit()
+                                    sesion.putString("id_empresa", id_empresa)
+                                    sesion.commit()
+                                    goToActivity<MainMenu> {
+                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    }
+                                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                                } else {
+                                    val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                                    var sesion = sharedPreference.edit()
+                                    sesion.putString("id_empresa", id_empresa)
+                                    sesion.commit()
+                                    goToActivity<MainMenu> {
+                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                    }
+                                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                                 }
-                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                            } else {
-                                val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-                                var sesion = sharedPreference.edit()
-                                sesion.putString("id_empresa", id_empresa)
-                                sesion.commit()
-                                goToActivity<MainMenu> {
-                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                }
-                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                             }
+                        } else {
+                            Log.w("saasas", "Error getting documents.", task.exception)
                         }
-                    } else {
-                        Log.w("saasas", "Error getting documents.", task.exception)
-                    }
-                })//end for expression lambdas this very cool
-                //case for empresa
-                val empresa = empresaCollection.whereEqualTo("correo", email)
-                empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                    if (task.isSuccessful) {
-                        for (document in task.result!!) {
-                            //here i send the id_empresa
-                            val id_empresa = document.get("id_empresa").toString()
-                            val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-                            var sesion = sharedPreference.edit()
-                            sesion.putString("id_empresa", id_empresa)
-                            sesion.commit()
-                            goToActivity<MainMenu> {
-                                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                            }
-                            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    })//end for expression lambdas this very cool
+                    //case for empresa
+                    val empresa = empresaCollection.whereEqualTo("correo", email)
+                    empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                        if (task.isSuccessful) {
+                            for (document in task.result!!) {
+                                //here i send the id_empresa
+                                val id_empresa = document.get("id_empresa").toString()
+                                val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                                var sesion = sharedPreference.edit()
+                                sesion.putString("id_empresa", id_empresa)
+                                sesion.commit()
+                                goToActivity<MainMenu> {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                }
+                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 
+                            }
+                        } else {
+                            Log.w("saasas", "Error getting documents.", task.exception)
                         }
-                    } else {
-                        Log.w("saasas", "Error getting documents.", task.exception)
-                    }
-                })//end for expression lambdas this very cool
+                    })//end for expression lambdas this very cool
+
+                } else {
+                    toast("Confirma tu cuenta, se envio un correo con el que te registraste a tu bandeja")
+                }
+
             } else {
                 toast("Email o Contraseña incorrectas intenta de nuevo")
             }

@@ -48,7 +48,7 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         marksCollection = FirebaseFirestore.getInstance().collection("Encuestas")
     }
 
-    //in this part the source is long because i Need validations
+    //in this parshat the source is long because i Need validations
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_encuesta)
