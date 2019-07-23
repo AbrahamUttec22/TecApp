@@ -1,70 +1,63 @@
-package com.material.components.activity.dialog
-
+package com.material.components.activity.button
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.NotificationCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.AdapterView
 import android.widget.Toast
-import com.alejandrolora.finalapp.toast
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.material.components.R
+import com.material.components.activity.dialog.EncuestaActivity
+import com.material.components.adapter.ActividadesAdapter
 import com.material.components.adapter.EncuestaAdapter
+import com.material.components.adapter.EventoAdapter
+import com.material.components.model.Actividades
 import com.material.components.model.Encuesta
+import com.material.components.model.Evento
 import com.material.components.utils.Tools
-import kotlinx.android.synthetic.main.activity_encuesta.listView
-import kotlinx.android.synthetic.main.list_view_encuesta.*
-import kotlinx.android.synthetic.main.list_view_encuesta.view.*
+import kotlinx.android.synthetic.main.activity_encuesta.*
 import java.util.ArrayList
-import android.provider.AlarmClock.EXTRA_MESSAGE
-import android.content.Intent
-import android.support.v4.app.NotificationCompat
-import android.support.v4.widget.SwipeRefreshLayout
-import android.widget.Button
-import android.widget.TextView
-import com.alejandrolora.finalapp.inflate
-import com.material.components.activity.MainMenu
-import com.material.components.adapter.EncuestaViewHolder
-
 
 /**
- * @author Abraham
- * see the encuests
+ * @author Abraham Casas Aguilar
  */
-class EncuestaActivity : AppCompatActivity() {
+class ActividadesActivity : AppCompatActivity() {
 
-    private lateinit var adapter: EncuestaAdapter
-    private lateinit var encuestaList: List<Encuesta>
-    private var swipeRefreshLayout: SwipeRefreshLayout? = null
-    private val channelId = "com.example.vicky.notificationexample"
+    private lateinit var adapter: ActividadesAdapter
     //declare val for save the collection
-    private val userCollection: CollectionReference
+    private val actividadesCollection: CollectionReference
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
+   // private val channelId = "com.material.components.activity"
+    private val channelId = "com.example.vicky.notificationexample"
+    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
         FirebaseApp.initializeApp(this)
         //save the collection marks on val maksCollection
-        userCollection = FirebaseFirestore.getInstance().collection("Encuestas")
-
+        actividadesCollection = FirebaseFirestore.getInstance().collection("Actividades")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_encuesta)
+        setContentView(R.layout.activity_actividades)
         initToolbar()
         addMarksListener()
-        swipeRefreshLayout = findViewById(R.id.swipeVerEncuestas)
+        swipeRefreshLayout = findViewById(R.id.swipeActividades)
         swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
             addMarksListener()
-            swipeRefreshLayout!!.setRefreshing(false);
+            swipeRefreshLayout!!.setRefreshing(false)
         })
         //end for click listener a second boton
     }
@@ -73,13 +66,13 @@ class EncuestaActivity : AppCompatActivity() {
         val mBuilder: NotificationCompat.Builder
         val mNotifyMgr = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         val icono = R.mipmap.ic_launcher
-        val i = Intent(this, EncuestaActivity::class.java)
+        val i = Intent(this, ActividadesActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(this, 0, i, 0)
         mBuilder = NotificationCompat.Builder(applicationContext, channelId)
                 .setContentIntent(pendingIntent)
                 .setSmallIcon(icono)
-                .setContentTitle("Encuestas")
-                .setContentText("Se ha agregado una nueva encuesta")
+                .setContentTitle("Actividades")
+                .setContentText("Se te asigno una nueva actividad")
                 .setVibrate(longArrayOf(100, 250, 100, 500))
                 .setAutoCancel(true)
         mNotifyMgr.notify(1, mBuilder.build())
@@ -89,9 +82,10 @@ class EncuestaActivity : AppCompatActivity() {
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
-        var id_empresa=sharedPreference.getString ("id_empresa","")
-        userCollection.whereEqualTo("status","1").whereEqualTo("id_empresa",id_empresa).addSnapshotListener { snapshots, error ->
+        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa = sharedPreference.getString("id_empresa", "")
+        var email = mAuth.currentUser!!.email.toString()
+        actividadesCollection.whereEqualTo("correo", email).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
@@ -108,12 +102,12 @@ class EncuestaActivity : AppCompatActivity() {
      * aqui se hace el recorrido de la coleccion de cloudfirestore
      */
     private fun addChanges(changes: List<DocumentChange>) {
-        val itemUsuario = ArrayList<Encuesta>()//lista local de una sola instancia
+        val itemActividad = ArrayList<Actividades>()//lista local de una sola instancia
         for (change in changes) {
-            itemUsuario.add(change.document.toObject(Encuesta::class.java))//ir agregando los datos a la lista
-            notifi()
+            itemActividad.add(change.document.toObject(Actividades::class.java))//ir agregando los datos a la lista
+           // notifi()
         }//una ves agregado los campos mandar a llamar la vista
-        adapter = EncuestaAdapter(this, R.layout.list_view_encuesta, itemUsuario)
+        adapter = ActividadesAdapter(this, R.layout.list_view_actividades, itemActividad)
         listView.adapter = adapter
     }
 
@@ -122,7 +116,7 @@ class EncuestaActivity : AppCompatActivity() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_menu)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setTitle("Encuestas")
+        supportActionBar!!.setTitle("Actividades")
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
     }
@@ -138,5 +132,4 @@ class EncuestaActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
-
 }

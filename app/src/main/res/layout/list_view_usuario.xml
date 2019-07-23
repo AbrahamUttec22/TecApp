@@ -57,6 +57,16 @@
                 android:text="Eliminar"
                 android:textColor="@color/red_50" />
 
+            <Button
+                android:id="@+id/btnAsignarActividad"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="20"
+                android:background="@drawable/btn_rounded_orange"
+                android:padding="10dp"
+                android:text="Actividad"
+                android:textColor="@color/red_50" />
+
         </LinearLayout>
     </LinearLayout>
 </com.balysv.materialripple.MaterialRippleLayout>

@@ -1,9 +1,13 @@
 package com.material.components.activity.card
 
+import android.app.NotificationManager
+import android.app.PendingIntent
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Bundle
+import android.support.v4.app.NotificationCompat
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
@@ -21,6 +25,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.material.components.R
+import com.material.components.activity.MainMenu
 import com.material.components.model.Anuncio
 import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.item_card_wizard_light.*
@@ -34,14 +39,13 @@ import kotlinx.android.synthetic.main.list_view_imagen.view.*
  * see the anuncios
  */
 class CardWizardLight : AppCompatActivity() {
-
-
     private var viewPager: ViewPager? = null
     private var myViewPagerAdapter: MyViewPagerAdapter? = null
     private var about_title_array = arrayOf("")
     private var about_description_array = arrayOf("")
     private var about_images_array = intArrayOf(R.drawable.img_wizard_1)
     private var ubicacion= arrayOf("")
+    private val channelId = "com.example.vicky.notificationexample"
 
     //declare val for save the collection
     private val anuncioCollection: CollectionReference
@@ -80,6 +84,21 @@ class CardWizardLight : AppCompatActivity() {
         viewPager = findViewById<View>(R.id.view_pager) as ViewPager
     }
 
+    private fun notifi() {
+        val mBuilder: NotificationCompat.Builder
+        val mNotifyMgr = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val icono = R.mipmap.ic_launcher
+        val i = Intent(this, CardWizardLight::class.java)
+        val pendingIntent = PendingIntent.getActivity(this, 0, i, 0)
+        mBuilder = NotificationCompat.Builder(applicationContext, channelId)
+                .setContentIntent(pendingIntent)
+                .setSmallIcon(icono)
+                .setContentTitle("Anuncios")
+                .setContentText("Se ha agregado un nuevo aviso")
+                .setVibrate(longArrayOf(100, 250, 100, 500))
+                .setAutoCancel(true)
+        mNotifyMgr.notify(1, mBuilder.build())
+    }
 
     //backend
     private fun addMarksListener(applicationContext: Context) {
@@ -105,6 +124,7 @@ class CardWizardLight : AppCompatActivity() {
         val itemAnuncio = ArrayList<Anuncio>()//lista local de una sola instancia
         for (change in changes) {
             itemAnuncio.add(change.document.toObject(Anuncio::class.java))//ir agregando los datos a la lista
+            notifi()
         }//una ves agregado los campos mandar a llamar la vista
         addToList(itemAnuncio,applicationContext)//vista
 

@@ -62,6 +62,7 @@ import com.material.components.activity.bottomsheet.BottomSheetFull;
 import com.material.components.activity.bottomsheet.BottomSheetList;
 import com.material.components.activity.bottomsheet.BottomSheetMap;
 import com.material.components.activity.bottomsheet.UserActivity;
+import com.material.components.activity.button.ActividadesActivity;
 import com.material.components.activity.button.ButtonBasic;
 import com.material.components.activity.button.ButtonInUtilities;
 import com.material.components.activity.button.FabMiddle;
@@ -267,6 +268,7 @@ import com.material.components.adapter.MainMenuAdapter;
 import com.material.components.checador.CheckActivity;
 import com.material.components.checador.GenerarQRActivity;
 import com.material.components.data.SharedPref;
+import com.material.components.message.NotificacionActivity;
 import com.material.components.model.MenuType;
 import com.material.components.utils.Tools;
 
@@ -480,8 +482,10 @@ public class MainMenu extends AppCompatActivity {
                 break;
 
             // Buttons -----------------------------------------------------------------------------
+            //Actividades
             case 301:
-                startActivity(new Intent(this, ButtonBasic.class));
+                //startActivity(new Intent(this, ButtonBasic.class));
+                startActivity(new Intent(this, ActividadesActivity.class));
                 break;
             case 302:
                 startActivity(new Intent(this, ButtonInUtilities.class));
@@ -1021,6 +1025,7 @@ public class MainMenu extends AppCompatActivity {
             case 25002://checador
                 //startActivity(new Intent(this, SettingFlat.class));
                 startActivity(new Intent(this, CheckActivity.class));
+                //startActivity(new Intent(this, NotificacionActivity.class));
 
                 break;
             case 25003:
@@ -1189,7 +1194,7 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(105, "Icon", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(106, "Primary", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(107, "Map Blue", -1, MenuType.SUB_HEADER));
-        */
+        *///MENU USUARIOS
         if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa")) {
             //I used to for the user its a nice view
             items.add(new MainMenuAdapter.ListItem(200, "Usuarios", R.drawable.ic_call_to_actio, MenuType.HEADER));
@@ -1198,6 +1203,12 @@ public class MainMenu extends AppCompatActivity {
             // items.add(new MainMenuAdapter.ListItem(203, "Map", -1, MenuType.SUB_HEADER));
             //items.add(new MainMenuAdapter.ListItem(204, "Floating", -1, MenuType.SUB_HEADER));
             items.add(new MainMenuAdapter.ListItem(205, "Panel de usuarios", -1, MenuType.SUB_HEADER));//see the users
+        }
+        //MENU ACTIVIDADES
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("usuario")) {
+            //I used to for the user its a nice view
+            items.add(new MainMenuAdapter.ListItem(300, "Actividades", R.drawable.ic_touch_app, MenuType.HEADER));
+            items.add(new MainMenuAdapter.ListItem(301, "Ver mis actividades", -1, MenuType.SUB_HEADER));//see the users
         }
 
 

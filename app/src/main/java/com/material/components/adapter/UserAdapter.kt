@@ -17,6 +17,7 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.material.components.R
+import com.material.components.model.Actividades
 import com.material.components.model.Evento
 import com.material.components.model.Usuario
 import kotlinx.android.synthetic.main.list_view_administrar_eveto.view.*
@@ -62,12 +63,10 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
         var telefono = "${list[position].telefono}"//telefono
         val id = "${list[position].id}"
         var id_empresa = "${list[position].id_empresa}"//id_empresa
-
         Glide
                 .with(this.context)
                 .load("${list[position].ubicacion}")
                 .into(view.imageUser)
-
 
         vh.eliminar.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
@@ -91,7 +90,6 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 }.addOnFailureListener { Toast.makeText(context, "Error  elimando al usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
         })
-
         vh.actualizar.setOnClickListener(object : View.OnClickListener {
             var calendario = Calendar.getInstance()
             override fun onClick(position: View?) {
@@ -131,7 +129,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                     //after that I get the data
                     if ((dialog.findViewById<View>(R.id.ac_radio_adminitrador) as AppCompatRadioButton).isChecked)
                         usuario.rol = "administrador"
-                    if ( (dialog.findViewById<View>(R.id.ac_radio_usuario) as AppCompatRadioButton).isChecked)
+                    if ((dialog.findViewById<View>(R.id.ac_radio_usuario) as AppCompatRadioButton).isChecked)
                         usuario.rol = "usuario"
                     //first save the user on authe
                     updateUsuario(usuario)
@@ -152,6 +150,67 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
             }//end for hanlder
 
         })
+        vh.actividad.setOnClickListener(object : View.OnClickListener {
+            var calendario = Calendar.getInstance()
+            override fun onClick(position: View?) {
+                var usuario = Usuario()
+                usuario.email = email
+                usuario.ubicacion = ubicacion
+                usuario.name = fullName
+                usuario.rol = rol
+                usuario.direccion = direccion
+                usuario.edad = edad
+                usuario.telefono = telefono
+                usuario.id = id
+                usuario.id_empresa = id
+                showDialog(usuario)
+            }
+
+            private fun showDialog(usuario: Usuario) {
+                //the header from dialog
+                val dialog = Dialog(context)
+                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+                dialog.setContentView(R.layout.dialog_actividad_usuario)
+                dialog.setCancelable(true)
+                val lp = WindowManager.LayoutParams()
+                lp.copyFrom(dialog.window!!.attributes)
+                lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+                lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                //in this code I get the information on cloud firestore
+                var txt1 = (dialog.findViewById<View>(R.id.txtDescriptionActividad) as EditText)
+                (dialog.findViewById<View>(R.id.btnSaveActividad) as Button).setOnClickListener {
+                    var dactividad = txt1.text.toString()
+                    if (!dactividad.isNullOrEmpty()) {
+                       var actividad = Actividades()
+                        actividad.actividad = dactividad//get the field for the view
+                        actividad.correo = usuario.email
+                        actividad.estatus = "pendiente"
+                        actividad.id = ""
+                        actividad.id_usuario = usuario.id
+                        //first save the user on authe
+                        saveActividad(actividad)
+                        dialog.dismiss()
+                    } else {
+                        Toast.makeText(context, "Completa los campos", Toast.LENGTH_LONG).show()
+                    }
+                }
+                dialog.show()
+                dialog.window!!.attributes = lp
+            }
+            private fun saveActividad(actividad: Actividades) {
+                FirebaseApp.initializeApp(context)
+                val actividadCollection: CollectionReference
+                actividadCollection = FirebaseFirestore.getInstance().collection("Actividades")
+                //save the activity
+                actividadCollection.add(actividad).addOnSuccessListener {
+                    actividadCollection.document(it.id).update("id", it.id).addOnSuccessListener {}.addOnFailureListener { }
+                    Toast.makeText(context, "Se ha asignado correctamente la actividad", Toast.LENGTH_LONG).show()
+                }.addOnFailureListener {
+                    Toast.makeText(context, "Error asignando la actividad", Toast.LENGTH_LONG).show()
+                }
+            }//end for hanlder
+        })
+
         return view
     }
 }
@@ -160,4 +219,5 @@ private class UserViewHolder(view: View) {
     val fullName: TextView = view.textViewName
     val actualizar: Button = view.btnActualizarUsuario
     val eliminar: Button = view.btnEliminarUsuario
+    val actividad: Button = view.btnAsignarActividad
 }
