@@ -24,8 +24,13 @@ import com.material.components.model.Evento
 import java.text.SimpleDateFormat
 import android.provider.MediaStore
 import android.content.Context
+import android.util.Log
+import com.alejandrolora.finalapp.goToActivity
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
+import com.material.components.activity.MainMenu
 import java.io.IOException
 
 import com.material.components.message.ApiClient
@@ -52,6 +57,8 @@ class FormProfileData : AppCompatActivity() {
     lateinit var uri: Uri
     //declare val for save the collection
     private val marksCollection: CollectionReference
+    private val userCollection: CollectionReference
+
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -59,6 +66,7 @@ class FormProfileData : AppCompatActivity() {
         //save the collection marks on val maksCollection
         mStorageRef = FirebaseStorage.getInstance().getReference()
         marksCollection = FirebaseFirestore.getInstance().collection("Eventos")
+        userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -148,7 +156,19 @@ class FormProfileData : AppCompatActivity() {
         //add the collection and save the User, this is validated
         marksCollection.add(evento).addOnSuccessListener {
             marksCollection.document(it.id).update("id", it.id).addOnSuccessListener {
-                sendNotificationToPatner()
+                val empleado = userCollection.whereEqualTo("id_empresa", evento.id_empresa)
+                //beggin with consult
+                empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            val  token= document.get("token").toString()
+                           sendNotificationToPatner(token)
+                        }
+                    } else {
+                        Log.w("saasas", "Error getting documents.", task.exception)
+                    }
+                })//end for expression lambdas this very cool
+
             }.addOnFailureListener { }
             Toast.makeText(this, "Evento registrado con exito", Toast.LENGTH_LONG).show()
             onBackPressed()
@@ -157,11 +177,10 @@ class FormProfileData : AppCompatActivity() {
         }
     }
 
-    private fun sendNotificationToPatner() {
-        val notification = Notification("check", "i miss you")
+    private fun sendNotificationToPatner(token:String) {
+        val notification = Notification("Se ha agregado un nuevo evento", "Eventos")
         val requestNotificaton = RequestNotificaton()
         //token is id , whom you want to send notification ,
-        val token = "daEU6FTj5tc:APA91bHHZQ8kKztxEunn8Yz6-n1cOxXwAZeLTH3gkRBaTPxuW6eQIDPxZaP31rR7bnIT8zoy6MhUSJHIOYjcdnKyp1ADGVbjDeBuAi7Cdnq3yjF3lUbZG9F84uLA9suMRqi6qHZ0ubqN"
         requestNotificaton.token = token
         requestNotificaton.notification = notification
         val apiService = ApiClient.getClient().create(ApiInter::class.java!!)

@@ -8,14 +8,17 @@ import android.os.Handler
 import android.provider.MediaStore
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import com.alejandrolora.finalapp.toast
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.material.components.R
@@ -47,6 +50,7 @@ class AgregarAnuncioActivity : AppCompatActivity() {
     private val marksCollection: CollectionReference
     private var mStorageRef: StorageReference? = null
     private val PICK_PHOTO = 1
+    private val userCollection: CollectionReference
     lateinit var uri: Uri
 
     //init the val for get the collection the Firebase with cloud firestore
@@ -55,6 +59,8 @@ class AgregarAnuncioActivity : AppCompatActivity() {
         //save the collection marks on val maksCollection
         mStorageRef = FirebaseStorage.getInstance().getReference()
         marksCollection = FirebaseFirestore.getInstance().collection("Anuncios")
+        userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -157,7 +163,19 @@ class AgregarAnuncioActivity : AppCompatActivity() {
         //add the collection and save the User, this is validated
         marksCollection.add(anuncio).addOnSuccessListener {
             marksCollection.document(it.id).update("id",it.id).addOnSuccessListener {
-                sendNotificationToPatner()
+                val empleado = userCollection.whereEqualTo("id_empresa", anuncio.id_empresa)
+                //beggin with consult
+                empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                    if (task.isSuccessful) {
+                        for (document in task.result!!) {
+                            val  token= document.get("token").toString()
+                            sendNotificationToPatner(token)
+                        }
+                    } else {
+                        Log.w("saasas", "Error getting documents.", task.exception)
+                    }
+                })//end for expression lambdas this very cool
+
             }.addOnFailureListener { }
             toast("Anuncio registrado con exito")
             onBackPressed()
@@ -166,11 +184,11 @@ class AgregarAnuncioActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendNotificationToPatner() {
-        val notification = Notification("check", "i miss you")
+
+    private fun sendNotificationToPatner(token:String) {
+        val notification = Notification("Se ha agregado una nueva encuesta", "Encuestas")
         val requestNotificaton = RequestNotificaton()
         //token is id , whom you want to send notification ,
-        val token = "daEU6FTj5tc:APA91bHHZQ8kKztxEunn8Yz6-n1cOxXwAZeLTH3gkRBaTPxuW6eQIDPxZaP31rR7bnIT8zoy6MhUSJHIOYjcdnKyp1ADGVbjDeBuAi7Cdnq3yjF3lUbZG9F84uLA9suMRqi6qHZ0ubqN"
         requestNotificaton.token = token
         requestNotificaton.notification = notification
         val apiService = ApiClient.getClient().create(ApiInter::class.java!!)
@@ -182,6 +200,7 @@ class AgregarAnuncioActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
         })
     }
+
 
     //see views not back
     private fun initToolbar() {

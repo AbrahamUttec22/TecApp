@@ -162,11 +162,9 @@ class LoginCardOverlap : AppCompatActivity() {
                             Log.w("saasas", "Error getting documents.", task.exception)
                         }
                     })//end for expression lambdas this very cool
-
                 } else {
                     toast("Confirma tu cuenta, se envio un correo con el que te registraste a tu bandeja")
                 }
-
             } else {
                 toast("Email o Contraseña incorrectas intenta de nuevo")
             }

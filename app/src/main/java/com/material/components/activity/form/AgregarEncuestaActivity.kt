@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -23,9 +24,11 @@ import java.util.*
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.material.components.model.Evento
 
@@ -50,12 +53,15 @@ class AgregarEncuestaActivity : AppCompatActivity() {
     private var array_states: Array<String>? = null
     private var spiner: Spinner? = null
     private var valorRespuestas = 0
+    private val userCollection: CollectionReference
+
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
         FirebaseApp.initializeApp(this)
         //save the collection marks on val maksCollection
         marksCollection = FirebaseFirestore.getInstance().collection("Encuestas")
+        userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
     }
 
     //in this parshat the source is long because i Need validations
@@ -169,7 +175,18 @@ class AgregarEncuestaActivity : AppCompatActivity() {
     private fun saveEncuesta(encuesta: Encuesta) {
         //add the collection and save the User, this is validated
         marksCollection.document(encuesta.pregunta).set(encuesta).addOnSuccessListener {
-            sendNotificationToPatner()
+            val empleado = userCollection.whereEqualTo("id_empresa", encuesta.id_empresa)
+            //beggin with consult
+            empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result!!) {
+                        val  token= document.get("token").toString()
+                        sendNotificationToPatner(token)
+                    }
+                } else {
+                    Log.w("saasas", "Error getting documents.", task.exception)
+                }
+            })//end for expression lambdas this very cool
             toast("Encuesta registrado con exito")
             onBackPressed()
         }.addOnFailureListener {
@@ -177,11 +194,10 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendNotificationToPatner() {
-        val notification = Notification("check", "i miss you")
+    private fun sendNotificationToPatner(token:String) {
+        val notification = Notification("Se ha agregado una nueva encuesta", "Encuestas")
         val requestNotificaton = RequestNotificaton()
         //token is id , whom you want to send notification ,
-        val token = "daEU6FTj5tc:APA91bHHZQ8kKztxEunn8Yz6-n1cOxXwAZeLTH3gkRBaTPxuW6eQIDPxZaP31rR7bnIT8zoy6MhUSJHIOYjcdnKyp1ADGVbjDeBuAi7Cdnq3yjF3lUbZG9F84uLA9suMRqi6qHZ0ubqN"
         requestNotificaton.token = token
         requestNotificaton.notification = notification
         val apiService = ApiClient.getClient().create(ApiInter::class.java!!)

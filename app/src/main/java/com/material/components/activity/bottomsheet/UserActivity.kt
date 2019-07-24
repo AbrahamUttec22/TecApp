@@ -88,10 +88,6 @@ class UserActivity : AppCompatActivity() {
         adapter = UserAdapter(this, R.layout.list_view_usuario, itemUsuario)
         listView.adapter = adapter
         listView.setOnItemClickListener { adapterView, view, i, l ->
-            if(i==0)
-            toast("click")
-            else
-                toast("not clicked")
         }
     }
 

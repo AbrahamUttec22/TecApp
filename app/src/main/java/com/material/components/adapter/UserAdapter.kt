@@ -6,6 +6,7 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.support.v7.widget.AppCompatRadioButton
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -13,9 +14,11 @@ import android.view.WindowManager
 import android.widget.*
 import com.alejandrolora.finalapp.inflate
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.R
 import com.material.components.model.Actividades
 import com.material.components.model.Evento
@@ -24,6 +27,18 @@ import kotlinx.android.synthetic.main.list_view_administrar_eveto.view.*
 import kotlinx.android.synthetic.main.list_view_usuario.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+
+import com.material.components.message.ApiClient
+import com.material.components.message.ApiInter
+import com.material.components.message.Notification
+import com.material.components.message.RequestNotificaton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import okhttp3.ResponseBody
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+
 
 /**
  * @author Abraham
@@ -77,7 +92,6 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                     deleteUsuario(usuario)
                 }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
                         .show()
-
             }
 
             private fun deleteUsuario(usuario: Usuario) {
@@ -200,17 +214,48 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
             private fun saveActividad(actividad: Actividades) {
                 FirebaseApp.initializeApp(context)
                 val actividadCollection: CollectionReference
+                val userCollection: CollectionReference
                 actividadCollection = FirebaseFirestore.getInstance().collection("Actividades")
+                userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
                 //save the activity
                 actividadCollection.add(actividad).addOnSuccessListener {
-                    actividadCollection.document(it.id).update("id", it.id).addOnSuccessListener {}.addOnFailureListener { }
+                    actividadCollection.document(it.id).update("id", it.id).addOnSuccessListener {
+                    }.addOnFailureListener { }
+                    val empleado = userCollection.whereEqualTo("id", actividad.id_usuario)
+                    //beggin with consult
+                    empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                        if (task.isSuccessful) {
+                            for (document in task.result!!) {
+                                val  token= document.get("token").toString()
+                                sendNotificationToPatner(token)
+                            }
+                        } else {
+                            Log.w("saasas", "Error getting documents.", task.exception)
+                        }
+                    })//end for expression lambdas this very cool
+
                     Toast.makeText(context, "Se ha asignado correctamente la actividad", Toast.LENGTH_LONG).show()
                 }.addOnFailureListener {
                     Toast.makeText(context, "Error asignando la actividad", Toast.LENGTH_LONG).show()
                 }
             }//end for hanlder
-        })
+            private fun sendNotificationToPatner(token:String) {
+                val notification = Notification("Se te asigno una actividad", "Actividad")
+                val requestNotificaton = RequestNotificaton()
+                //token is id , whom you want to send notification ,
+                requestNotificaton.token = token
+                requestNotificaton.notification = notification
+                val apiService = ApiClient.getClient().create(ApiInter::class.java!!)
+                val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+                responseBodyCall.enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    }
 
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+                })
+            }
+
+        })
         return view
     }
 }
