@@ -26,6 +26,7 @@ import android.os.Handler
 import android.util.Log
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.activity.MainMenu
 
 /**
@@ -156,6 +157,8 @@ class Tab2Fragment : Fragment() {
      * in this handler the save user on cloud firestore on the collection with name Empresa
      */
     private fun saveUsuario(usuario: Usuario, view: View) {
+        val token= FirebaseInstanceId.getInstance().token
+        usuario.token= token.toString()
         //the first case is Valid if the id_empresa already exists
         usuariosCollection.add(usuario).addOnSuccessListener {
             usuariosCollection.document(it.id).update("id", it.id).addOnSuccessListener {

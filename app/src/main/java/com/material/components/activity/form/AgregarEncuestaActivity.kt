@@ -29,6 +29,16 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.material.components.model.Evento
 
+import com.material.components.message.ApiClient
+import com.material.components.message.ApiInter
+import com.material.components.message.Notification
+import com.material.components.message.RequestNotificaton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import okhttp3.ResponseBody
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 /**
  * @author abraham
  * add a new encuesta
@@ -159,11 +169,29 @@ class AgregarEncuestaActivity : AppCompatActivity() {
     private fun saveEncuesta(encuesta: Encuesta) {
         //add the collection and save the User, this is validated
         marksCollection.document(encuesta.pregunta).set(encuesta).addOnSuccessListener {
+            sendNotificationToPatner()
             toast("Encuesta registrado con exito")
             onBackPressed()
         }.addOnFailureListener {
             toast("Error guardando la encuesta, intenta de nuevo")
         }
+    }
+
+    private fun sendNotificationToPatner() {
+        val notification = Notification("check", "i miss you")
+        val requestNotificaton = RequestNotificaton()
+        //token is id , whom you want to send notification ,
+        val token = "daEU6FTj5tc:APA91bHHZQ8kKztxEunn8Yz6-n1cOxXwAZeLTH3gkRBaTPxuW6eQIDPxZaP31rR7bnIT8zoy6MhUSJHIOYjcdnKyp1ADGVbjDeBuAi7Cdnq3yjF3lUbZG9F84uLA9suMRqi6qHZ0ubqN"
+        requestNotificaton.token = token
+        requestNotificaton.notification = notification
+        val apiService = ApiClient.getClient().create(ApiInter::class.java!!)
+        val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+        responseBodyCall.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+        })
     }
 
     //front end

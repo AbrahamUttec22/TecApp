@@ -23,6 +23,11 @@ import android.support.v4.app.NotificationCompat
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import java.util.concurrent.atomic.AtomicInteger
+import com.squareup.okhttp.Callback
+import okhttp3.ResponseBody
+import com.squareup.okhttp.ResponseBody as ResponseBody1
+
 
 /**
  * @author Abraham
@@ -31,29 +36,16 @@ class NotificacionActivity : AppCompatActivity() {
 
     lateinit var notificationManager: NotificationManager
     lateinit var notificationChannel: NotificationChannel
-    lateinit var builder: Notification.Builder
+   // lateinit var builder: Notification.Builder
     private val channelId = "com.example.vicky.notificationexample"
     private val description = "Test notification"
     private val sender_id = "343421504665"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_notificacion)
+        setContentView(com.material.components.R.layout.activity_notificacion)
         //  notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         btn_notify.setOnClickListener {
-            val mBuilder: NotificationCompat.Builder
-            val mNotifyMgr = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            val icono = R.mipmap.ic_launcher
-            val i = Intent(this, MainMenu::class.java)
-            val pendingIntent = PendingIntent.getActivity(this, 0, i, 0)
-            mBuilder = NotificationCompat.Builder(applicationContext,channelId)
-                    .setContentIntent(pendingIntent)
-                    .setSmallIcon(icono)
-                    .setContentTitle("Titulo")
-                    .setContentText("Hola que tal?")
-                    .setVibrate(longArrayOf(100, 250, 100, 500))
-                    .setAutoCancel(true)
-            mNotifyMgr.notify(1, mBuilder.build())
 
         }
         /* val fm = FirebaseMessaging.getInstance()
@@ -71,4 +63,21 @@ class NotificacionActivity : AppCompatActivity() {
          }
          fm.send(message)*/
     }
+
+    private fun sendNotificationToPatner() {
+
+
+
+        /*responseBodyCall.enqueue(object : Callback<ResponseBody1>() {
+            fun onResponse(call: retrofit2.Call<ResponseBody1>, response: retrofit2.Response<ResponseBody1>) {
+                Log.d("kkkk", "done")
+            }
+
+            fun onFailure(call: retrofit2.Call<ResponseBody1>, t: Throwable) {
+
+            }
+        })
+*/
+    }
+
 }

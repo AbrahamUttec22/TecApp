@@ -1,14 +1,10 @@
 package com.material.components.activity.card
-
-import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.support.v4.app.NotificationCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -16,20 +12,24 @@ import android.widget.Toast
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
-import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-
 import com.material.components.R
-import com.material.components.activity.MainMenu
 import com.material.components.adapter.EventoAdapter
-import com.material.components.adapter.UserAdapter
 import com.material.components.model.Evento
-import com.material.components.model.Usuario
 import com.material.components.utils.Tools
-import kotlinx.android.synthetic.main.activity_card_basic.*
 import kotlinx.android.synthetic.main.activity_card_basic.listView
-import kotlinx.android.synthetic.main.activity_user.*
 import java.util.*
+
+import com.material.components.message.ApiClient
+import com.material.components.message.ApiInter
+import com.material.components.message.Notification
+import com.material.components.message.RequestNotificaton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import okhttp3.ResponseBody
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * @author abraham
@@ -44,8 +44,9 @@ class CardBasic : AppCompatActivity() {
     //declare val for save the collection
     private val userCollection: CollectionReference
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
-   // private val channelId = "com.material.components"
+    // private val channelId = "com.material.components"
     private val channelId = "com.example.vicky.notificationexample"
+
     //init the val for get the collection the Firebase with cloud firestore
     init {
         FirebaseApp.initializeApp(this)
@@ -84,22 +85,6 @@ class CardBasic : AppCompatActivity() {
         }
     }
 
-    private fun notifi() {
-        val mBuilder: NotificationCompat.Builder
-        val mNotifyMgr = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val icono = R.mipmap.ic_launcher
-        val i = Intent(this, CardBasic::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, i, 0)
-        mBuilder = NotificationCompat.Builder(applicationContext, channelId)
-                .setContentIntent(pendingIntent)
-                .setSmallIcon(icono)
-                .setContentTitle("Eventos")
-                .setContentText("Se ha agregado un nuevo evento")
-                .setVibrate(longArrayOf(100, 250, 100, 500))
-                .setAutoCancel(true)
-        mNotifyMgr.notify(1, mBuilder.build())
-    }
-
     /**
      * @param changes
      * aqui se hace el recorrido de la coleccion de cloudfirestore
@@ -108,7 +93,6 @@ class CardBasic : AppCompatActivity() {
         val itemUsuario = ArrayList<Evento>()//lista local de una sola instancia
         for (change in changes) {
             itemUsuario.add(change.document.toObject(Evento::class.java))//ir agregando los datos a la lista
-            notifi()
         }//una ves agregado los campos mandar a llamar la vista
         adapter = EventoAdapter(this, R.layout.list_view_evento, itemUsuario)
         listView.adapter = adapter

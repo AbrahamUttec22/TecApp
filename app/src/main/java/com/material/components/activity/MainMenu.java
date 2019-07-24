@@ -269,6 +269,7 @@ import com.material.components.checador.CheckActivity;
 import com.material.components.checador.GenerarQRActivity;
 import com.material.components.data.SharedPref;
 import com.material.components.message.NotificacionActivity;
+import com.material.components.message.PruevaActivity;
 import com.material.components.model.MenuType;
 import com.material.components.utils.Tools;
 
@@ -479,6 +480,8 @@ public class MainMenu extends AppCompatActivity {
                 break;*/
             case 205:
                 startActivity(new Intent(this, UserActivity.class));
+               // startActivity(new Intent(this, PruevaActivity.class));
+
                 break;
 
             // Buttons -----------------------------------------------------------------------------

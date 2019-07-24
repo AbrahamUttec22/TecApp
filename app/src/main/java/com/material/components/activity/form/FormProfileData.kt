@@ -1,7 +1,5 @@
 package com.material.components.activity.form
 
-import android.content.DialogInterface
-import android.graphics.Color
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -9,7 +7,6 @@ import android.support.v7.widget.Toolbar
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-
 import com.material.components.R
 import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_form_profile_data.*
@@ -23,17 +20,24 @@ import com.alejandrolora.finalapp.toast
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.material.components.activity.settings.ImagenesActivity
 import com.material.components.model.Evento
 import java.text.SimpleDateFormat
 import android.provider.MediaStore
-import android.graphics.Bitmap
-import android.R.attr.data
 import android.content.Context
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import java.io.IOException
 
+import com.material.components.message.ApiClient
+import com.material.components.message.ApiInter
+import com.material.components.message.Notification
+import com.material.components.message.RequestNotificaton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import okhttp3.ResponseBody
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * @author  Abraham
@@ -80,13 +84,13 @@ class FormProfileData : AppCompatActivity() {
                 message.text = "Registrando..."
                 builder.setView(dialogView)
                 val evento = Evento()
-                val sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
-                sharedPreference.getString ("id_empresa","")
-                evento.id_empresa=sharedPreference.getString ("id_empresa","").toString()
+                val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                sharedPreference.getString("id_empresa", "")
+                evento.id_empresa = sharedPreference.getString("id_empresa", "").toString()
                 evento.description = description
                 evento.fecha = fecha
                 evento.titulo = titulo
-                evento.id=""
+                evento.id = ""
                 upload(evento)
                 builder.setCancelable(false)
                 val dialog = builder.create()
@@ -143,12 +147,31 @@ class FormProfileData : AppCompatActivity() {
     private fun saveEvento(evento: Evento) {
         //add the collection and save the User, this is validated
         marksCollection.add(evento).addOnSuccessListener {
-            marksCollection.document(it.id).update("id",it.id).addOnSuccessListener {}.addOnFailureListener { }
+            marksCollection.document(it.id).update("id", it.id).addOnSuccessListener {
+                sendNotificationToPatner()
+            }.addOnFailureListener { }
             Toast.makeText(this, "Evento registrado con exito", Toast.LENGTH_LONG).show()
             onBackPressed()
         }.addOnFailureListener {
             Toast.makeText(this, "Error guardando el evento, intenta de nuevo", Toast.LENGTH_LONG).show()
         }
+    }
+
+    private fun sendNotificationToPatner() {
+        val notification = Notification("check", "i miss you")
+        val requestNotificaton = RequestNotificaton()
+        //token is id , whom you want to send notification ,
+        val token = "daEU6FTj5tc:APA91bHHZQ8kKztxEunn8Yz6-n1cOxXwAZeLTH3gkRBaTPxuW6eQIDPxZaP31rR7bnIT8zoy6MhUSJHIOYjcdnKyp1ADGVbjDeBuAi7Cdnq3yjF3lUbZG9F84uLA9suMRqi6qHZ0ubqN"
+        requestNotificaton.token = token
+        requestNotificaton.notification = notification
+        val apiService = ApiClient.getClient().create(ApiInter::class.java!!)
+        val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+        responseBodyCall.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+        })
     }
 
     private fun abrirFotoGaleria() {

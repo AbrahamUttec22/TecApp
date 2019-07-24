@@ -17,6 +17,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.R
 import com.material.components.activity.form.FormSignUp
 import com.material.components.adapter.UserAdapter
@@ -46,6 +47,7 @@ class UserActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
+        val token = FirebaseInstanceId.getInstance().token
         initToolbar()
         addMarksListener()
         swipeRefreshLayout = findViewById(R.id.swipeUsuario)

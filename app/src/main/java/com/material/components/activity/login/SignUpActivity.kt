@@ -54,6 +54,7 @@ class SignUpActivity : AppCompatActivity() {
                 usuario.edad = ""
                 usuario.telefono = ""
                 usuario.direccion = ""
+                usuario.token=""
                 if (radio_adminitrador.isChecked)
                     usuario.rol = "administrador"
                 if (radio_usuario.isChecked)

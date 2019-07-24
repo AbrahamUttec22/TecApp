@@ -27,6 +27,7 @@ import kotlin.random.Random
 import android.content.Intent
 import android.os.Handler
 import com.alejandrolora.finalapp.isValidEmail
+import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.activity.MainMenu
 
 /**
@@ -41,7 +42,6 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
 
     private val TAG = "Tab1Fragment"
     private var btnTEST: Button? = null
-
     //declare val for save the collection
     private val marksCollection: CollectionReference
     //declare val for save the collection
@@ -166,6 +166,8 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
      * in this handler the save user on cloud firestore on the collection with name Empresa
      */
     private fun saveEmpresa(empresa: Empresa) {
+        val token= FirebaseInstanceId.getInstance().token
+        empresa.token= token.toString()
         //add the collection and save the User, this is validated
         marksCollection.add(empresa).addOnSuccessListener {
         }.addOnFailureListener {

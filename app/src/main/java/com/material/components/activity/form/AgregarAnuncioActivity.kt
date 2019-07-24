@@ -1,6 +1,4 @@
 package com.material.components.activity.form
-
-import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -28,6 +26,16 @@ import java.io.IOException
 import java.text.SimpleDateFormat
 import java.util.*
 
+import com.material.components.message.ApiClient
+import com.material.components.message.ApiInter
+import com.material.components.message.Notification
+import com.material.components.message.RequestNotificaton
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import okhttp3.ResponseBody
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 /**
  * @author  Abraham
@@ -148,12 +156,31 @@ class AgregarAnuncioActivity : AppCompatActivity() {
     private fun saveAnuncio(anuncio: Anuncio) {
         //add the collection and save the User, this is validated
         marksCollection.add(anuncio).addOnSuccessListener {
-            marksCollection.document(it.id).update("id",it.id).addOnSuccessListener {}.addOnFailureListener { }
+            marksCollection.document(it.id).update("id",it.id).addOnSuccessListener {
+                sendNotificationToPatner()
+            }.addOnFailureListener { }
             toast("Anuncio registrado con exito")
             onBackPressed()
         }.addOnFailureListener {
             toast("Error guardando el evento, intenta de nuevo")
         }
+    }
+
+    private fun sendNotificationToPatner() {
+        val notification = Notification("check", "i miss you")
+        val requestNotificaton = RequestNotificaton()
+        //token is id , whom you want to send notification ,
+        val token = "daEU6FTj5tc:APA91bHHZQ8kKztxEunn8Yz6-n1cOxXwAZeLTH3gkRBaTPxuW6eQIDPxZaP31rR7bnIT8zoy6MhUSJHIOYjcdnKyp1ADGVbjDeBuAi7Cdnq3yjF3lUbZG9F84uLA9suMRqi6qHZ0ubqN"
+        requestNotificaton.token = token
+        requestNotificaton.notification = notification
+        val apiService = ApiClient.getClient().create(ApiInter::class.java!!)
+        val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+        responseBodyCall.enqueue(object : Callback<ResponseBody> {
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+        })
     }
 
     //see views not back

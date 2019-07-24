@@ -6,6 +6,9 @@ import android.os.IBinder
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.iid.FirebaseInstanceId
+
+
 
 /**
  * @author Abraham
@@ -33,6 +36,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         // Check if message contains a notification payload.
         remoteMessage?.notification?.let {
             Log.d("CLOUD", "Message Notification Body:  ${it.body}")
+            val token = FirebaseInstanceId.getInstance().token
+            Log.i("FCM-TOKEN", "FCM Registration Token: " + token!!)
         }
     }//end for hanlder
 

@@ -13,7 +13,8 @@
         android:roundIcon="@drawable/logo_tecgurus"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.button.ActividadesActivity"></activity>
+        <activity android:name=".message.PruevaActivity"></activity>
+        <activity android:name=".activity.button.ActividadesActivity" />
         <activity android:name=".message.NotificacionActivity" />
 
         <service

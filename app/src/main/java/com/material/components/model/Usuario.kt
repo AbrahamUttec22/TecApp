@@ -7,7 +7,9 @@ class Usuario(var email:String = "",
               var direccion:String="",
               var edad:String="",
               var telefono:String="",
-              var id:String="",var id_empresa:String=""){
+              var id:String="",
+              var id_empresa:String="",
+              var token:String=""){
 
-    override fun toString()= "$email  $name $ubicacion $rol $direccion $edad $telefono $id $id_empresa"
+    override fun toString()= "$email  $name $ubicacion $rol $direccion $edad $telefono $id $id_empresa $token"
 }
