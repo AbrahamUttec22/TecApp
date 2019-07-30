@@ -41,6 +41,7 @@ import com.material.components.activity.about.AboutCompany;
 import com.material.components.activity.about.AboutCompanyCard;
 import com.material.components.activity.about.AboutCompanyImage;
 import com.material.components.activity.about.AboutDialogMainAction;
+import com.material.components.activity.about.EstatusChecadorActivity;
 import com.material.components.activity.article.ArticleBigHeader;
 import com.material.components.activity.article.ArticleCard;
 import com.material.components.activity.article.ArticleFood;
@@ -1039,7 +1040,8 @@ public class MainMenu extends AppCompatActivity {
             case 25004:
                 // startActivity(new Intent(this, SettingProfileLight.class));
                 // imagenes del proyecto
-                startActivity(new Intent(this, ImagenesActivity.class));
+                //startActivity(new Intent(this, ImagenesActivity.class));
+                startActivity(new Intent(this, EstatusChecadorActivity.class));
                 //  startActivity(new Intent(this, StorageActivity.class));
                 //   startActivity(new Intent(this, StorageExample.class));
 
@@ -1457,6 +1459,9 @@ public class MainMenu extends AppCompatActivity {
         }
         if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa")) {
             items.add(new MainMenuAdapter.ListItem(25003, "Generar QR", -1, MenuType.SUB_HEADER));
+        }
+        if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("empresa")) {
+            items.add(new MainMenuAdapter.ListItem(25004, "Estatus del checador", -1, MenuType.SUB_HEADER));
         }
         //add a new line 03/09/2019
 /*

@@ -1,15 +1,14 @@
 package com.material.components.register
 
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
@@ -26,6 +25,8 @@ import java.util.regex.Pattern
 import kotlin.random.Random
 import android.content.Intent
 import android.os.Handler
+import android.support.v7.widget.AppCompatButton
+import android.view.*
 import com.alejandrolora.finalapp.isValidEmail
 import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.activity.MainMenu
@@ -53,6 +54,7 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
         //save the collection marks on val maksCollection
         marksCollection = FirebaseFirestore.getInstance().collection("Empresas")
         usuariosCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+        mAuth.signOut()
     }
 
     override fun onCreateView(inflater: LayoutInflater, parent: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -141,23 +143,51 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
      */
     private fun signUpByEmail(email: String, password: String, empresa: Empresa) {
         //get instance of firebase
-        val randomValues = Random.nextInt(10000, 200000)
+        val randomValues = Random.nextInt(1000, 9000)
+        if (empresa.nombre.contentEquals(" ")){
+            empresa.nombre.split(" ")[1].trim()
+        }
         empresa.id_empresa = empresa.nombre + randomValues.toString()//save the company
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(requireActivity()) { task ->
             if (task.isSuccessful) {
                 mAuth.currentUser!!.sendEmailVerification().addOnCompleteListener(requireActivity()) {
-                    //save the user on cloud firestore
-                    saveEmpresa(empresa)
-                    val intent = Intent(context, LoginCardOverlap::class.java)
-                    startActivityForResult(intent, 0)
-                    Toast.makeText(context, "Se ha enviado un correo de confirmacion", Toast.LENGTH_LONG).show()
-                    mAuth.signOut()//this is necesary because the val is in general
 
                 }
+                //save the user on cloud firestore
+                saveEmpresa(empresa)
+                mAuth.signOut()//this is necesary because the val is in general
+                showConfirmDialog()
             } else {
                 Toast.makeText(context, "Los Datos ingresados ya estan registrados,intenta con uno nuevo", Toast.LENGTH_LONG).show()
             }
         }
+
+    }
+
+    private fun showConfirmDialog() {
+        //the header from dialog
+        val dialog = Dialog(context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+        dialog.setContentView(R.layout.dialog_send_email)
+        dialog.setCancelable(true)
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(dialog.window!!.attributes)
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+        (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
+            dialog.dismiss()
+            val intent = Intent(context, LoginCardOverlap::class.java)
+            startActivityForResult(intent, 0)
+        }
+        dialog.show()
+        dialog.window!!.attributes = lp
+        dialog.setOnDismissListener(object : DialogInterface.OnDismissListener {
+            override fun onDismiss(p0: DialogInterface?) {
+                val intent = Intent(context, LoginCardOverlap::class.java)
+                startActivityForResult(intent, 0)
+            }
+
+        })
 
     }
 
@@ -166,10 +196,10 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
      * in this handler the save user on cloud firestore on the collection with name Empresa
      */
     private fun saveEmpresa(empresa: Empresa) {
-        val token= FirebaseInstanceId.getInstance().token
-        empresa.token= token.toString()
+        empresa.token = ""
         //add the collection and save the User, this is validated
         marksCollection.add(empresa).addOnSuccessListener {
+
         }.addOnFailureListener {
             Toast.makeText(context, "Error guardando la empresa, intenta de nuevo", Toast.LENGTH_LONG).show()
         }

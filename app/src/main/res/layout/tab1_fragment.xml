@@ -36,7 +36,6 @@
                             android:id="@+id/txtNombreEmpresa"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:digits=" ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz"
                             android:hint="Nombre de la Empresa"
                             android:inputType="text"
                             android:maxLines="1"

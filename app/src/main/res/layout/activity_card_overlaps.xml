@@ -138,6 +138,7 @@
                             android:gravity="center_vertical"
                             android:minHeight="@dimen/spacing_xmlarge"
                             android:hint="Nombre"
+                            android:inputType="text"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             android:textColor="@color/grey_40" />
 
@@ -167,6 +168,7 @@
                             android:gravity="center_vertical"
                             android:minHeight="@dimen/spacing_xmlarge"
                             android:hint="Edad"
+                            android:inputType="number"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             android:textColor="@color/grey_40" />
 
@@ -196,6 +198,7 @@
                             android:gravity="center_vertical"
                             android:minHeight="@dimen/spacing_xmlarge"
                             android:hint="Telefono"
+                            android:inputType="phone"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             android:textColor="@color/grey_40" />
 

@@ -1,5 +1,4 @@
 package com.material.components.adapter
-
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -38,8 +37,6 @@ import retrofit2.Response
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
-
 /**
  * @author Abraham
  */

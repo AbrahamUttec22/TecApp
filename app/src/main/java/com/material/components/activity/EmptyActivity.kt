@@ -21,7 +21,7 @@ class MainEmptyActivity : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       // mAuth.signOut()
+       //mAuth.signOut()
         //Validated for know if the user us already login
         if (mAuth.currentUser == null) {
             goToActivity<LoginCardOverlap> {

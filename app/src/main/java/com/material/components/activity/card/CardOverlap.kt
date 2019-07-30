@@ -71,21 +71,18 @@ class CardOverlap : AppCompatActivity() {
             val edad = txtEdad.text.toString()
             val direccion = txtDireccion.text.toString()
             val telefono = txtTelefono.text.toString()
-            if (isValid(nombre, edad, direccion, telefono)) {
-                val builder = AlertDialog.Builder(this)
-                val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
-                val message = dialogView.findViewById<TextView>(R.id.mensaje)
-                message.text = "Actualizando"
-                builder.setView(dialogView)
-                builder.setCancelable(false)
-                updateInformation(nombre, edad, direccion, telefono)
-                val dialog = builder.create()
-                dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1000)
+            val builder = AlertDialog.Builder(this)
+            val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
+            val message = dialogView.findViewById<TextView>(R.id.mensaje)
+            message.text = "Actualizando"
+            builder.setView(dialogView)
+            builder.setCancelable(false)
+            updateInformation(nombre, edad, direccion, telefono)
+            val dialog = builder.create()
+            dialog.show()
+            Handler().postDelayed({ dialog.dismiss() }, 1000)
 
-            } else {
-                toast("Completa los campos")
-            }
+
         }
     }
 
@@ -140,7 +137,7 @@ class CardOverlap : AppCompatActivity() {
     private fun updateInformation(name: String, edad: String, direccion: String, telefono: String) {
         userCollection.document(idDocument).update("name", name, "edad", edad, "direccion", direccion, "telefono", telefono).addOnSuccessListener {
             Toast.makeText(this, "Informacion actulizada", Toast.LENGTH_LONG).show()
-          //  onBackPressed()
+            //  onBackPressed()
         }.addOnFailureListener {
             Toast.makeText(this, "Error actualizando la informacion, intenta de nuevo", Toast.LENGTH_LONG).show()
         }
@@ -202,14 +199,15 @@ class CardOverlap : AppCompatActivity() {
         }
     }
 
-    private fun updateImage(imagen:String){
+    private fun updateImage(imagen: String) {
         userCollection.document(idDocument).update("ubicacion", imagen).addOnSuccessListener {
-          //  Toast.makeText(this, "Informacion actulizada", Toast.LENGTH_LONG).show()
+            //  Toast.makeText(this, "Informacion actulizada", Toast.LENGTH_LONG).show()
             sendDta()
         }.addOnFailureListener {
             Toast.makeText(this, "Error actualizando la informacion, intenta de nuevo", Toast.LENGTH_LONG).show()
         }
     }
+
     //unique views
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar

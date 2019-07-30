@@ -1,5 +1,6 @@
 package com.material.components.register
 
+import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
@@ -7,9 +8,6 @@ import android.support.v4.app.Fragment
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Patterns
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
@@ -22,8 +20,11 @@ import kotlinx.android.synthetic.main.tab1_fragment.view.btnRegistrarEmpresa
 import kotlinx.android.synthetic.main.tab2_fragment.view.*
 import java.util.regex.Pattern
 import android.content.Context
+import android.content.DialogInterface
 import android.os.Handler
+import android.support.v7.widget.AppCompatButton
 import android.util.Log
+import android.view.*
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.iid.FirebaseInstanceId
@@ -47,7 +48,6 @@ class Tab2Fragment : Fragment() {
         //save the collection marks on val maksCollection
         usuariosCollection = FirebaseFirestore.getInstance().collection("Usuarios")
         empresasCollection = FirebaseFirestore.getInstance().collection("Empresas")
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -82,11 +82,12 @@ class Tab2Fragment : Fragment() {
                         usuario.rol = "usuario"
                         usuario.direccion = ""
                         usuario.id = ""
-                        usuario.edad
+                        usuario.edad=""
+                        usuario.token=""
                         usuario.telefono = ""
                         //first save the user on authentication firebase, after that save the user on cloud firestore
                         validCode(email, password, usuario, view)
-                        Handler().postDelayed({ nDialog.dismiss() }, 1000)
+                        Handler().postDelayed({ nDialog.dismiss() }, 2000)
                     } else {
                         view.txtConfirmPasswordEmplead.error = "Las contraseñas no coinciden"
                     }
@@ -137,13 +138,11 @@ class Tab2Fragment : Fragment() {
             if (task.isSuccessful) {
                 //save the user on cloud firestore
                 mAuth.currentUser!!.sendEmailVerification().addOnCompleteListener(requireActivity()) {
-                    //save the user on cloud firestore
                     saveUsuario(usuario, view)
-                    status=true
-                    val intent = Intent(context, LoginCardOverlap::class.java)
-                    startActivityForResult(intent, 0)
                     mAuth.signOut()//this is necesary because the val is in general
-                    Toast.makeText(context, "Se ha enviado un correo de confirmacion", Toast.LENGTH_LONG).show()
+                    //status = true
+                    showConfirmDialog()
+
                 }
             } else {
                 // toast("Los Datos ingresados ya estan registrados,intenta con uno nuevo")
@@ -152,22 +151,51 @@ class Tab2Fragment : Fragment() {
         }
     }
 
+
     /**
      * @param usuario
      * in this handler the save user on cloud firestore on the collection with name Empresa
      */
     private fun saveUsuario(usuario: Usuario, view: View) {
-        val token= FirebaseInstanceId.getInstance().token
-        usuario.token= token.toString()
         //the first case is Valid if the id_empresa already exists
         usuariosCollection.add(usuario).addOnSuccessListener {
             usuariosCollection.document(it.id).update("id", it.id).addOnSuccessListener {
-            }.addOnFailureListener { }
+
+            }.addOnFailureListener {
+                Toast.makeText(context, "" + it, Toast.LENGTH_LONG).show()
+            }
         }.addOnFailureListener {
             Toast.makeText(context, "Error guardando el usuario, intenta de nuevo", Toast.LENGTH_LONG).show()
         }
     }
-//handler
+
+    //handler
+//this is the dialog confirm, afther that register a new user
+    private fun showConfirmDialog() {
+        //the header from dialog
+        val dialog = Dialog(context)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+        dialog.setContentView(R.layout.dialog_send_email)
+        dialog.setCancelable(true)
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(dialog.window!!.attributes)
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+        (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
+            dialog.dismiss()
+            val intent = Intent(context, LoginCardOverlap::class.java)
+            startActivityForResult(intent, 0)
+        }
+        dialog.show()
+        dialog.window!!.attributes = lp
+        dialog.setOnDismissListener(object : DialogInterface.OnDismissListener {
+            override fun onDismiss(p0: DialogInterface?) {
+                val intent = Intent(context, LoginCardOverlap::class.java)
+                startActivityForResult(intent, 0)
+            }
+
+        })
+    }
 
     private fun validCode(email: String, password: String, usuario: Usuario, view: View) {
         val resultado = empresasCollection.whereEqualTo("id_empresa", usuario.id_empresa)
@@ -179,7 +207,7 @@ class Tab2Fragment : Fragment() {
                     con++
                 }
                 if (con == 0) {
-                    status=true
+                    status = true
                     view.txtCodigoEmpresa.error = "Codigo incorrecto"
                 } else {
                     signUpByEmail(email, password, usuario, view)

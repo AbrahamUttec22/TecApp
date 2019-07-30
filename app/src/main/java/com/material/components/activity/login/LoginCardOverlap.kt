@@ -26,8 +26,10 @@ import android.view.WindowManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
+import android.widget.Toast
 import com.alejandrolora.finalapp.goToActivity
 import com.alejandrolora.finalapp.validate
+import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.R
 import com.material.components.activity.MainMenu
 import com.material.components.activity.dialog.*
@@ -83,12 +85,11 @@ class LoginCardOverlap : AppCompatActivity() {
                 builder.setCancelable(false)
                 val dialog = builder.create()
                 dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1000)
+                Handler().postDelayed({ dialog.dismiss() }, 1400)
             } else {
                 toast("Completa los campos")
             }
         }//end for listener
-
         //this I need validated a code of access, this code the admin can update later
         buttonSignUp.setOnClickListener {
             //showDialogAbout()
@@ -98,6 +99,13 @@ class LoginCardOverlap : AppCompatActivity() {
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 
         }// end for listener register
+        forgot_password.setOnClickListener {
+            goToActivity<ForgotPasswordActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+        }
     }//end for onCreate
 
     /**
@@ -117,7 +125,15 @@ class LoginCardOverlap : AppCompatActivity() {
                             for (document in task.result!!) {
                                 val rol = document.get("rol").toString()
                                 val id_empresa = document.get("id_empresa").toString()
+                                val id = document.id
+
                                 if (rol!! == "administrador") {
+                                    val token = FirebaseInstanceId.getInstance().token.toString()
+                                    userCollection.document(id).update("token", token).addOnSuccessListener {
+                                    }.addOnFailureListener {}
+                                    userCollection.document(id).update("id", id).addOnSuccessListener {
+                                    }.addOnFailureListener {}
+
                                     val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                                     var sesion = sharedPreference.edit()
                                     sesion.putString("id_empresa", id_empresa)
@@ -127,6 +143,9 @@ class LoginCardOverlap : AppCompatActivity() {
                                     }
                                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                                 } else {
+                                    val token = FirebaseInstanceId.getInstance().token.toString()
+                                    userCollection.document(id).update("token", token).addOnSuccessListener {
+                                    }.addOnFailureListener {}
                                     val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                                     var sesion = sharedPreference.edit()
                                     sesion.putString("id_empresa", id_empresa)
@@ -148,6 +167,9 @@ class LoginCardOverlap : AppCompatActivity() {
                             for (document in task.result!!) {
                                 //here i send the id_empresa
                                 val id_empresa = document.get("id_empresa").toString()
+                                val token = FirebaseInstanceId.getInstance().token.toString()
+                                userCollection.document(id_empresa).update("token", token).addOnSuccessListener {
+                                }.addOnFailureListener {}
                                 val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                                 var sesion = sharedPreference.edit()
                                 sesion.putString("id_empresa", id_empresa)
@@ -156,7 +178,6 @@ class LoginCardOverlap : AppCompatActivity() {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
                                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-
                             }
                         } else {
                             Log.w("saasas", "Error getting documents.", task.exception)

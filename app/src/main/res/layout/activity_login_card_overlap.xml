@@ -45,13 +45,12 @@
                 android:padding="@dimen/spacing_mlarge">
 
                 <TextView
-
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/spacing_middle"
                     android:layout_marginBottom="@dimen/spacing_xlarge"
-                    android:text="TecApp"
+                    android:text="TG EMPRESA-EMPLEADOS"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                     android:textColor="@color/green_500"
                     android:textStyle="bold" />
@@ -133,6 +132,20 @@
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/forgot_password"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|end"
+                    android:layout_marginTop="@dimen/spacing_medium"
+                    android:clickable="true"
+                    android:text="Olvidaste tu contraseña?"
+                    android:textAlignment="center"
+                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
+                    android:textColor="@color/blue_grey_400"
+                    android:textStyle="bold" />
+
             </LinearLayout>
             </ScrollView>
         </android.support.v7.widget.CardView>

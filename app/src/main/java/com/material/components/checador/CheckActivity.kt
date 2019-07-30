@@ -87,6 +87,7 @@ class CheckActivity : AppCompatActivity() {
                                 checador.hora = formattedDate2
                                 checador.id_empresa = scannedResult
                                 checador.id_usuario = document.get("id").toString()
+                                checador.nombre=document.get("name").toString()
                                 checador.id = ""
                                 saveChecador(checador)
                                 showConfirmDialog()
