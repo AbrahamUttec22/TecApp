@@ -33,7 +33,7 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/spacing_large">
                         <TextView
-                            android:id="@+id/txtActividad"
+                            android:id="@+id/txtActividadDialog"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_weight="80"
@@ -53,26 +53,20 @@
                         android:paddingBottom="@dimen/spacing_middle">
 
                         <Switch
-                            android:id="@+id/simpleSwitch"
+                            android:id="@+id/simpleSwitchDialog"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"/>
                         <TextView
-                            android:id="@+id/txtCambiar"
+                            android:id="@+id/txtCambiarDialog"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:text="Cambiar a realizado" />
+                            />
 
                         <View
-                            android:layout_width="35dp"
+                            android:layout_width="55dp"
                             android:layout_height="match_parent"/>
 
-                        <Button
-                            android:id="@+id/btnEliminarActividad"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/btn_rounded_signup"
-                            android:text="Eliminar"
-                            android:textColor="@color/red_50" />
+
 
                     </LinearLayout>
                 </LinearLayout>

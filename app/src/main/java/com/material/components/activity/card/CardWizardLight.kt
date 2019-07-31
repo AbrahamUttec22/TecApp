@@ -44,7 +44,7 @@ class CardWizardLight : AppCompatActivity() {
     private var about_title_array = arrayOf("")
     private var about_description_array = arrayOf("")
     private var about_images_array = intArrayOf(R.drawable.img_wizard_1)
-    private var ubicacion= arrayOf("")
+    private var ubicacion = arrayOf("")
     private val channelId = "com.example.vicky.notificationexample"
 
     //declare val for save the collection
@@ -76,10 +76,10 @@ class CardWizardLight : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_wizard_light)
-        MAX_STEP=0
-        about_images_array= intArrayOf(0)
-        about_title_array= emptyArray()
-        about_description_array= emptyArray()
+        MAX_STEP = 0
+        about_images_array = intArrayOf(0)
+        about_title_array = emptyArray()
+        about_description_array = emptyArray()
         addMarksListener(applicationContext)
         viewPager = findViewById<View>(R.id.view_pager) as ViewPager
     }
@@ -102,13 +102,13 @@ class CardWizardLight : AppCompatActivity() {
 
     //backend
     private fun addMarksListener(applicationContext: Context) {
-        var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
-        var id_empresa=sharedPreference.getString ("id_empresa","")
-        anuncioCollection.whereEqualTo("id_empresa",id_empresa).addSnapshotListener { snapshots, error ->
+        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa = sharedPreference.getString("id_empresa", "")
+        anuncioCollection.whereEqualTo("id_empresa", id_empresa).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
-                    addChanges(changes,applicationContext)
+                    addChanges(changes, applicationContext)
                 }
             } else {
                 toast("Ha ocurrido un error intenta de nuevo")
@@ -120,33 +120,39 @@ class CardWizardLight : AppCompatActivity() {
      * @param changes
      * aqui se hace el recorrido de la coleccion de cloudfirestore
      */
-    private fun addChanges(changes: List<DocumentChange>,applicationContext: Context) {
+    private fun addChanges(changes: List<DocumentChange>, applicationContext: Context) {
         val itemAnuncio = ArrayList<Anuncio>()//lista local de una sola instancia
         for (change in changes) {
             itemAnuncio.add(change.document.toObject(Anuncio::class.java))//ir agregando los datos a la lista
-            notifi()
         }//una ves agregado los campos mandar a llamar la vista
-        addToList(itemAnuncio,applicationContext)//vista
-
+        addToList(itemAnuncio, applicationContext)//vista
     }
 
     /**
      * @param itemAnuncio
      */
-    private fun addToList(itemAnuncio: List<Anuncio>,applicationContext: Context) {
+    private fun addToList(itemAnuncio: List<Anuncio>, applicationContext: Context) {
         //set empty the data
-        MAX_STEP=0
-        about_title_array= emptyArray()
-        about_description_array= emptyArray()
-        about_images_array= intArrayOf()
-        ubicacion= emptyArray()
-
+        MAX_STEP = 0
+        about_title_array = emptyArray()
+        about_description_array = emptyArray()
+        about_images_array = intArrayOf()
+        ubicacion = emptyArray()
+        var con = 0
         for (item in itemAnuncio) {//recorremos la lista de usuario para agregarlo a la lista de people
+            con++
             about_title_array += arrayOf(item.titulo)
             about_description_array += arrayOf(item.description)
-            about_images_array+= intArrayOf(R.drawable.img_wizard_1)
-            ubicacion+=item.ubicacion
-
+            about_images_array += intArrayOf(R.drawable.img_wizard_1)
+            ubicacion += item.ubicacion
+            MAX_STEP++
+        }
+        if(con==0){
+            about_title_array += arrayOf("")
+            about_description_array += arrayOf("POR EL MOMENTO NO HAY ANUNCIOS")
+            about_images_array += intArrayOf(R.drawable.img_wizard_1)
+            val xd="https://firebasestorage.googleapis.com/v0/b/tecapp-25ed3.appspot.com/o/uploads%2Fimage%3A119?alt=media&token=7f91a2a5-efe2-4f11-9574-a9460f4a28b2"
+            ubicacion += xd
             MAX_STEP++
         }
         bottomProgressDots(0)//init the 0
@@ -208,7 +214,7 @@ class CardWizardLight : AppCompatActivity() {
 
             btnNext!!.setOnClickListener {
                 val current = viewPager!!.currentItem + 1
-               // toast("valor de current es "+current.toString())
+                // toast("valor de current es "+current.toString())
                 //toast("valor de MAN STEP es "+MAX_STEP.toString())
                 //toast(""+current+"<"+""+MAX_STEP)
                 if (current < MAX_STEP) {

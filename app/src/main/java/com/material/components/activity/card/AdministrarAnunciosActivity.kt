@@ -19,7 +19,9 @@ import com.material.components.adapter.AdministrarEventoAdapter
 import com.material.components.model.Anuncio
 import com.material.components.model.Evento
 import com.material.components.utils.Tools
+import kotlinx.android.synthetic.main.activity_administrar_anuncios.*
 import kotlinx.android.synthetic.main.activity_encuesta.*
+import kotlinx.android.synthetic.main.activity_encuesta.listView
 import java.util.ArrayList
 
 /**
@@ -76,9 +78,16 @@ class AdministrarAnunciosActivity : AppCompatActivity() {
      */
     private fun addChanges(changes: List<DocumentChange>) {
         val itemAnuncio = ArrayList<Anuncio>()//lista local de una sola instancia
+        var con=0
         for (change in changes) {
+            con++
             itemAnuncio.add(change.document.toObject(Anuncio::class.java))//ir agregando los datos a la lista
         }//una ves agregado los campos mandar a llamar la vista
+        if(con==0){
+            iconDefaultAdminAnuncios.setVisibility(View.VISIBLE)
+        }else{
+            iconDefaultAdminAnuncios.setVisibility(View.INVISIBLE)
+        }
         eventoList = itemAnuncio
         adapter = AdministrarAnuncioAdapter(this, R.layout.list_view_administrar_anuncio, eventoList)
         //listView.btnCerrarEncuesta

@@ -13,12 +13,20 @@
         android:layout_height="match_parent"
         android:gravity="center_vertical"
         android:orientation="vertical">
+        <TextView
+            android:id="@+id/textemail"
+            android:layout_width="411dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+            android:textColor="@color/grey_80" />
 
         <ImageView
             android:id="@+id/imageUser"
             android:layout_width="80dp"
             android:layout_height="50dp"
             android:background="@android:color/transparent" />
+
         <TextView
             android:id="@+id/textViewName"
             android:layout_width="411dp"
@@ -27,6 +35,7 @@
             android:hint="Name"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/grey_80" />
+
 
         <View
             android:layout_width="25dp"
@@ -42,20 +51,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="20"
-                android:text="Actualizar"
                 android:background="@drawable/btn_rounded_green"
                 android:padding="10dp"
+                android:text="Actualizar"
                 android:textColor="@color/red_50" />
 
-            <Button
-                android:id="@+id/btnEliminarUsuario"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="20"
-                android:background="@drawable/btn_rounded_signup"
-                android:padding="10dp"
-                android:text="Eliminar"
-                android:textColor="@color/red_50" />
 
             <Button
                 android:id="@+id/btnAsignarActividad"
@@ -64,8 +64,9 @@
                 android:layout_weight="20"
                 android:background="@drawable/btn_rounded_orange"
                 android:padding="10dp"
-                android:text="Actividad"
+                android:text="Asignar Actividad"
                 android:textColor="@color/red_50" />
+
 
         </LinearLayout>
     </LinearLayout>

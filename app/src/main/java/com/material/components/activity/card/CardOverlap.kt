@@ -81,8 +81,6 @@ class CardOverlap : AppCompatActivity() {
             val dialog = builder.create()
             dialog.show()
             Handler().postDelayed({ dialog.dismiss() }, 1000)
-
-
         }
     }
 
@@ -164,6 +162,7 @@ class CardOverlap : AppCompatActivity() {
                 upload()
                 dialog.show()
                 Handler().postDelayed({ dialog.dismiss() }, 1300)
+                sendDta()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -202,7 +201,6 @@ class CardOverlap : AppCompatActivity() {
     private fun updateImage(imagen: String) {
         userCollection.document(idDocument).update("ubicacion", imagen).addOnSuccessListener {
             //  Toast.makeText(this, "Informacion actulizada", Toast.LENGTH_LONG).show()
-            sendDta()
         }.addOnFailureListener {
             Toast.makeText(this, "Error actualizando la informacion, intenta de nuevo", Toast.LENGTH_LONG).show()
         }

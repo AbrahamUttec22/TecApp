@@ -146,6 +146,8 @@ class LoginCardOverlap : AppCompatActivity() {
                                     val token = FirebaseInstanceId.getInstance().token.toString()
                                     userCollection.document(id).update("token", token).addOnSuccessListener {
                                     }.addOnFailureListener {}
+                                    userCollection.document(id).update("uid", mAuth.uid.toString()).addOnSuccessListener {
+                                    }.addOnFailureListener {}
                                     val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                                     var sesion = sharedPreference.edit()
                                     sesion.putString("id_empresa", id_empresa)
@@ -170,6 +172,8 @@ class LoginCardOverlap : AppCompatActivity() {
                                 val token = FirebaseInstanceId.getInstance().token.toString()
                                 userCollection.document(id_empresa).update("token", token).addOnSuccessListener {
                                 }.addOnFailureListener {}
+                                userCollection.document(id_empresa).update("uid", mAuth.uid.toString()).addOnSuccessListener {
+                                }.addOnFailureListener {}
                                 val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                                 var sesion = sharedPreference.edit()
                                 sesion.putString("id_empresa", id_empresa)
@@ -182,6 +186,7 @@ class LoginCardOverlap : AppCompatActivity() {
                         } else {
                             Log.w("saasas", "Error getting documents.", task.exception)
                         }
+
                     })//end for expression lambdas this very cool
                 } else {
                     toast("Confirma tu cuenta, se envio un correo con el que te registraste a tu bandeja")

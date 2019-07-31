@@ -1,4 +1,5 @@
 package com.material.components.adapter
+
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
@@ -15,6 +16,8 @@ import com.alejandrolora.finalapp.inflate
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
@@ -37,6 +40,7 @@ import retrofit2.Response
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 /**
  * @author Abraham
  */
@@ -75,32 +79,38 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
         var telefono = "${list[position].telefono}"//telefono
         val id = "${list[position].id}"
         var id_empresa = "${list[position].id_empresa}"//id_empresa
+        val uid = "${list[position].uid}"//uid
         Glide
                 .with(this.context)
                 .load("${list[position].ubicacion}")
                 .into(view.imageUser)
-
-        vh.eliminar.setOnClickListener(object : View.OnClickListener {
+        vh.EmailUser.setVisibility(View.INVISIBLE)
+        //vh.eliminar.setVisibility(View.INVISIBLE)
+        vh.EmailUser.text = id
+       /* vh.eliminar.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
                 val usuario = Usuario()
                 usuario.id = id
+                usuario.uid = uid
+                usuario.email = email
                 val builder = AlertDialog.Builder(context)
                 builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
                     deleteUsuario(usuario)
-                }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
-                        .show()
+                }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() }).show()
             }
 
             private fun deleteUsuario(usuario: Usuario) {
                 FirebaseApp.initializeApp(context)
                 val eventoCollection: CollectionReference
-                eventoCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+                eventoCollection = FirebaseFirestore.getInstance().collection("Actividades")
                 //only this source I update the status,
                 eventoCollection.document(usuario.id).delete().addOnSuccessListener {
                     Toast.makeText(context, "El usuario se ha eliminado correctamente", Toast.LENGTH_LONG).show()
                 }.addOnFailureListener { Toast.makeText(context, "Error  elimando al usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
+
+                //var mAuth: FirebaseAuth = FirebaseAuth.getInstance().currentUser.delete(uid)
             }//end for hanlder
-        })
+        })*/
         vh.actualizar.setOnClickListener(object : View.OnClickListener {
             var calendario = Calendar.getInstance()
             override fun onClick(position: View?) {
@@ -192,7 +202,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 (dialog.findViewById<View>(R.id.btnSaveActividad) as Button).setOnClickListener {
                     var dactividad = txt1.text.toString()
                     if (!dactividad.isNullOrEmpty()) {
-                       var actividad = Actividades()
+                        var actividad = Actividades()
                         actividad.actividad = dactividad//get the field for the view
                         actividad.correo = usuario.email
                         actividad.estatus = "pendiente"
@@ -208,6 +218,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 dialog.show()
                 dialog.window!!.attributes = lp
             }
+
             private fun saveActividad(actividad: Actividades) {
                 FirebaseApp.initializeApp(context)
                 val actividadCollection: CollectionReference
@@ -223,7 +234,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                     empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                         if (task.isSuccessful) {
                             for (document in task.result!!) {
-                                val  token= document.get("token").toString()
+                                val token = document.get("token").toString()
                                 sendNotificationToPatner(token)
                             }
                         } else {
@@ -236,7 +247,8 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                     Toast.makeText(context, "Error asignando la actividad", Toast.LENGTH_LONG).show()
                 }
             }//end for hanlder
-            private fun sendNotificationToPatner(token:String) {
+
+            private fun sendNotificationToPatner(token: String) {
                 val notification = Notification("Se te asigno una actividad", "Actividad")
                 val requestNotificaton = RequestNotificaton()
                 //token is id , whom you want to send notification ,
@@ -260,6 +272,6 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
 private class UserViewHolder(view: View) {
     val fullName: TextView = view.textViewName
     val actualizar: Button = view.btnActualizarUsuario
-    val eliminar: Button = view.btnEliminarUsuario
     val actividad: Button = view.btnAsignarActividad
+    val EmailUser: TextView = view.textemail
 }

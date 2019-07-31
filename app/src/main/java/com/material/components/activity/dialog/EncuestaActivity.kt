@@ -20,7 +20,6 @@ import com.material.components.R
 import com.material.components.adapter.EncuestaAdapter
 import com.material.components.model.Encuesta
 import com.material.components.utils.Tools
-import kotlinx.android.synthetic.main.activity_encuesta.listView
 import kotlinx.android.synthetic.main.list_view_encuesta.*
 import kotlinx.android.synthetic.main.list_view_encuesta.view.*
 import java.util.ArrayList
@@ -33,6 +32,7 @@ import android.widget.TextView
 import com.alejandrolora.finalapp.inflate
 import com.material.components.activity.MainMenu
 import com.material.components.adapter.EncuestaViewHolder
+import kotlinx.android.synthetic.main.activity_encuesta.*
 
 
 /**
@@ -109,10 +109,16 @@ class EncuestaActivity : AppCompatActivity() {
      */
     private fun addChanges(changes: List<DocumentChange>) {
         val itemUsuario = ArrayList<Encuesta>()//lista local de una sola instancia
+        var con=0
         for (change in changes) {
+            con++
             itemUsuario.add(change.document.toObject(Encuesta::class.java))//ir agregando los datos a la lista
-            notifi()
-        }//una ves agregado los campos mandar a llamar la vista
+        }//una ves agregado los campos mandar a llamar la
+        if(con==0){
+            iconDefaultEncuestas.setVisibility(View.VISIBLE)
+        }else{
+            iconDefaultEncuestas.setVisibility(View.INVISIBLE)
+        }
         adapter = EncuestaAdapter(this, R.layout.list_view_encuesta, itemUsuario)
         listView.adapter = adapter
     }

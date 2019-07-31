@@ -19,6 +19,9 @@ import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_encuesta.*
 import java.util.ArrayList
 import android.support.v4.widget.SwipeRefreshLayout
+import kotlinx.android.synthetic.main.activity_administrar_evento.*
+import kotlinx.android.synthetic.main.activity_card_basic.*
+import kotlinx.android.synthetic.main.activity_encuesta.listView
 
 
 /**
@@ -44,6 +47,7 @@ class AdministrarEventoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_administrar_evento)
+
         initToolbar()
         addMarksListener()
         swipeRefreshLayout = findViewById(R.id.swipeEvento)
@@ -78,9 +82,16 @@ class AdministrarEventoActivity : AppCompatActivity() {
      */
     private fun addChanges(changes: List<DocumentChange>) {
         val itemEvento = ArrayList<Evento>()//lista local de una sola instancia
+        var con=0
         for (change in changes) {
+            con++
             itemEvento.add(change.document.toObject(Evento::class.java))//ir agregando los datos a la lista
         }//una ves agregado los campos mandar a llamar la vista
+        if(con==0){
+            iconDefaultAdminEventos.setVisibility(View.VISIBLE)
+        }else{
+            iconDefaultAdminEventos.setVisibility(View.INVISIBLE)
+        }
         eventoList= itemEvento
         adapter = AdministrarEventoAdapter(this, R.layout.list_view_administrar_eveto, itemEvento)
         //listView.btnCerrarEncuesta

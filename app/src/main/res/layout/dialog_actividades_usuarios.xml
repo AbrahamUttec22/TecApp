@@ -7,16 +7,6 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <include layout="@layout/toolbar" />
-
-    </android.support.design.widget.AppBarLayout>
-
-
-
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
@@ -25,29 +15,22 @@
         android:fitsSystemWindows="true"
         android:orientation="vertical">
         <TextView
-            android:id="@+id/iconDefaultEstadisticas"
+            android:id="@+id/iconDefaultActividadver"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="Por el momento no hay encuestas"
             android:typeface="monospace"
-            android:textSize="65dp"
-            android:fontFamily="Arial"
-            app:srcCompat="@drawable/image_1" />
+            android:textSize="45dp"
+            android:fontFamily="Arial"/>
 
-        <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/swipeVerStadisticas"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
             <ListView
-                android:id="@+id/listView"
+                android:id="@+id/listViewActividadesVer"
                 android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-        </android.support.v4.widget.SwipeRefreshLayout>
+                app:layout_constraintTop_toTopOf="parent" />
 
     </android.support.constraint.ConstraintLayout>
+
 </LinearLayout>

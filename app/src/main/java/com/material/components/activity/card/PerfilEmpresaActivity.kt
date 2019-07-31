@@ -1,4 +1,5 @@
 package com.material.components.activity.card
+
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -42,6 +43,7 @@ class PerfilEmpresaActivity : AppCompatActivity() {
     private val PICK_PHOTO = 1
     lateinit var uri: Uri
     private var viewTwo: ImageView? = null
+
     //init the val for get the collection the Firebase with cloud firestore
     init {
         FirebaseApp.initializeApp(this)
@@ -65,21 +67,17 @@ class PerfilEmpresaActivity : AppCompatActivity() {
             val correo = txtEmailEmpresa.text.toString()// not update only information
             val id_empresa = txtIdEmpresa.text.toString()//not update only information
             val direccion = txtDireccionEmpresa.text.toString()
+            val builder = AlertDialog.Builder(this)
+            val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
+            val message = dialogView.findViewById<TextView>(R.id.mensaje)
+            message.text = "Actualizando.."
+            builder.setView(dialogView)
+            builder.setCancelable(false)
+            updateInformation(nombre, giro, direccion, telefono)
+            val dialog = builder.create()
+            dialog.show()
+            Handler().postDelayed({ dialog.dismiss() }, 1000)
 
-            if (isValid(nombre, giro, telefono,direccion)) {
-                val builder = AlertDialog.Builder(this)
-                val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
-                val message = dialogView.findViewById<TextView>(R.id.mensaje)
-                message.text = "Actualizando.."
-                builder.setView(dialogView)
-                builder.setCancelable(false)
-                updateInformation(nombre, giro, direccion, telefono)
-                val dialog = builder.create()
-                dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1000)
-            } else {
-                toast("Completa los campos")
-            }
         }
     }
 
@@ -165,6 +163,7 @@ class PerfilEmpresaActivity : AppCompatActivity() {
                 upload()
                 dialog.show()
                 Handler().postDelayed({ dialog.dismiss() }, 1300)
+                sendDta()
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -198,14 +197,14 @@ class PerfilEmpresaActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateImage(imagen:String){
+    private fun updateImage(imagen: String) {
         empresaCollection.document(idDocument).update("foto", imagen).addOnSuccessListener {
             //  Toast.makeText(this, "Informacion actulizada", Toast.LENGTH_LONG).show()
-            sendDta()
         }.addOnFailureListener {
             Toast.makeText(this, "Error actualizando la informacion, intenta de nuevo", Toast.LENGTH_LONG).show()
         }
     }
+
     //unique views
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar

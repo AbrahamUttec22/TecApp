@@ -22,6 +22,7 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/grey_80" />
 
+
         <View
             android:layout_width="25dp"
             android:layout_height="25dp" />

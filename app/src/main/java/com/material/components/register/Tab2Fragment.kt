@@ -81,6 +81,7 @@ class Tab2Fragment : Fragment() {
                         usuario.ubicacion = imag
                         usuario.rol = "usuario"
                         usuario.direccion = ""
+                        usuario.uid=""
                         usuario.id = ""
                         usuario.edad=""
                         usuario.token=""

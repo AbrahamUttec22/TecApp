@@ -96,8 +96,6 @@ class ActividadesAdapter(val context: Context, val layout: Int, val list: List<A
                 }.addOnFailureListener { Toast.makeText(context, "Error  elimando la actividad intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
         })
-
-
         return view
     }
 

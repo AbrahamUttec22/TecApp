@@ -22,7 +22,15 @@
         android:background="@color/grey_10"
         android:fitsSystemWindows="true"
         android:orientation="vertical">
-
+        <TextView
+            android:id="@+id/iconDefaultActividad"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="No te han asignado actividades"
+            android:typeface="monospace"
+            android:textSize="65dp"
+            android:fontFamily="Arial"
+            app:srcCompat="@drawable/image_1" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeActividades"
@@ -39,4 +47,6 @@
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </android.support.constraint.ConstraintLayout>
+
+
 </LinearLayout>

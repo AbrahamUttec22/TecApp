@@ -147,6 +147,7 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
         if (empresa.nombre.contentEquals(" ")){
             empresa.nombre.split(" ")[1].trim()
         }
+        empresa.uid=""
         empresa.id_empresa = empresa.nombre + randomValues.toString()//save the company
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(requireActivity()) { task ->
             if (task.isSuccessful) {

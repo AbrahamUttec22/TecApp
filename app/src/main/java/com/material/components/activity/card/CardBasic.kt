@@ -17,13 +17,13 @@ import com.material.components.R
 import com.material.components.adapter.EventoAdapter
 import com.material.components.model.Evento
 import com.material.components.utils.Tools
-import kotlinx.android.synthetic.main.activity_card_basic.listView
 import java.util.*
 
 import com.material.components.message.ApiClient
 import com.material.components.message.ApiInter
 import com.material.components.message.Notification
 import com.material.components.message.RequestNotificaton
+import kotlinx.android.synthetic.main.activity_card_basic.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,8 +62,7 @@ class CardBasic : AppCompatActivity() {
         swipeRefreshLayout = findViewById(R.id.swipeEventoUsuario)
         swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
             addMarksListener()
-            swipeRefreshLayout!!.setRefreshing(false);
-
+            swipeRefreshLayout!!.setRefreshing(false)
         })
     }
 
@@ -91,9 +90,16 @@ class CardBasic : AppCompatActivity() {
      */
     private fun addChanges(changes: List<DocumentChange>) {
         val itemUsuario = ArrayList<Evento>()//lista local de una sola instancia
+        var con=0
         for (change in changes) {
+            con++
             itemUsuario.add(change.document.toObject(Evento::class.java))//ir agregando los datos a la lista
-        }//una ves agregado los campos mandar a llamar la vista
+        }//una ves agregado los campos mandar a llamar la
+        if(con==0){
+            iconDefaultEvento.setVisibility(View.VISIBLE)
+        }else{
+            iconDefaultEvento.setVisibility(View.INVISIBLE)
+        }
         adapter = EventoAdapter(this, R.layout.list_view_evento, itemUsuario)
         listView.adapter = adapter
     }

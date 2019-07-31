@@ -15,19 +15,31 @@
 
     </android.support.design.widget.AppBarLayout>
 
+
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/grey_10"
+        android:defaultFocusHighlightEnabled="true"
         android:fitsSystemWindows="true"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/iconDefaultUsuarios"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="Arial"
+            android:text="Por el momento no hay usuarios"
+            android:textSize="65dp"
+            android:typeface="monospace"
+            app:srcCompat="@drawable/image_1" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeUsuario"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
             <ListView
                 android:id="@+id/listView"
                 android:layout_width="0dp"
@@ -35,7 +47,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
         </android.support.v4.widget.SwipeRefreshLayout>
 
     </android.support.constraint.ConstraintLayout>

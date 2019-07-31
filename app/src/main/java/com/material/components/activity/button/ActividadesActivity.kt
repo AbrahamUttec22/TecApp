@@ -26,7 +26,9 @@ import com.material.components.model.Actividades
 import com.material.components.model.Encuesta
 import com.material.components.model.Evento
 import com.material.components.utils.Tools
+import kotlinx.android.synthetic.main.activity_actividades.*
 import kotlinx.android.synthetic.main.activity_encuesta.*
+import kotlinx.android.synthetic.main.activity_encuesta.listView
 import java.util.ArrayList
 
 /**
@@ -102,11 +104,19 @@ class ActividadesActivity : AppCompatActivity() {
      * aqui se hace el recorrido de la coleccion de cloudfirestore
      */
     private fun addChanges(changes: List<DocumentChange>) {
-        val itemActividad = ArrayList<Actividades>()//lista local de una sola instancia
+        val itemActividad = ArrayList<Actividades>()//lista local de una sola instanciavar
+        var con=0
         for (change in changes) {
+            con++
             itemActividad.add(change.document.toObject(Actividades::class.java))//ir agregando los datos a la lista
            // notifi()
         }//una ves agregado los campos mandar a llamar la vista
+        if (con == 0) {
+            iconDefaultActividad.setVisibility(View.VISIBLE)
+        } else {
+            iconDefaultActividad.setVisibility(View.INVISIBLE)
+        }
+
         adapter = ActividadesAdapter(this, R.layout.list_view_actividades, itemActividad)
         listView.adapter = adapter
     }

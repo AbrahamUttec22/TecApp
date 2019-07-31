@@ -21,10 +21,15 @@
         <activity android:name=".activity.button.ActividadesActivity" />
         <activity android:name=".message.NotificacionActivity" />
 
+
+
         <service
-            android:name=".message.MyFirebaseMessagingService"
-            android:enabled="true"
-            android:exported="true" />
+            android:name=".message.MyFirebaseMessagingService">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>
+        </service>
+
 
         <activity android:name=".checador.GenerarQRActivity" />
         <activity android:name=".checador.CheckActivity" />

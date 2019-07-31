@@ -28,6 +28,8 @@ import com.material.components.model.Encuesta
 import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_agregar_encuesta.*
 import kotlinx.android.synthetic.main.activity_encuesta.*
+import kotlinx.android.synthetic.main.activity_encuesta.listView
+import kotlinx.android.synthetic.main.activity_estadistica.*
 import kotlinx.android.synthetic.main.list_view_estadistica.*
 import kotlinx.android.synthetic.main.list_view_estadistica.view.*
 import java.util.ArrayList
@@ -90,9 +92,16 @@ class EstadisticaActivity : AppCompatActivity() {
      */
     private fun addChanges(changes: List<DocumentChange>) {
         val itemUsuario = ArrayList<Encuesta>()//lista local de una sola instancia
+        var con=0
         for (change in changes) {
+            con++
             itemUsuario.add(change.document.toObject(Encuesta::class.java))//ir agregando los datos a la lista
         }//una ves agregado los campos mandar a llamar la vista
+        if(con==0){
+            iconDefaultEstadisticas.setVisibility(View.VISIBLE)
+        }else{
+            iconDefaultEstadisticas.setVisibility(View.INVISIBLE)
+        }
         encuestaList = itemUsuario
         adapter = EstadisticaAdapter(this, R.layout.list_view_estadistica, itemUsuario)
         //listView.btnCerrarEncuesta

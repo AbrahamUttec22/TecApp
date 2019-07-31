@@ -186,7 +186,7 @@ class AgregarAnuncioActivity : AppCompatActivity() {
 
 
     private fun sendNotificationToPatner(token:String) {
-        val notification = Notification("Se ha agregado una nueva encuesta", "Encuestas")
+        val notification = Notification("Se ha agregado un nuevo anuncio", "Anuncios")
         val requestNotificaton = RequestNotificaton()
         //token is id , whom you want to send notification ,
         requestNotificaton.token = token
