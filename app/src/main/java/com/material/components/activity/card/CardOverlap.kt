@@ -124,6 +124,27 @@ class CardOverlap : AppCompatActivity() {
         }
     }
 
+    private fun seeImagePerfil() {
+        if (mAuth.currentUser != null) {
+            var email = mAuth.currentUser!!.email.toString()
+            val resultado = userCollection.whereEqualTo("email", email)
+            //beggin with consult
+            resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result!!) {
+                        val ubicacion = document.get("ubicacion").toString()
+                        view= findViewById<View>(R.id.imgPerfil) as ImageView
+                        Glide
+                                .with(applicationContext)
+                                .load(ubicacion)
+                                .into(view)
+                    }
+                }
+            })
+        }
+    }
+
+
     /**
      * @param direccion
      */
@@ -146,6 +167,7 @@ class CardOverlap : AppCompatActivity() {
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Seleccione una imagen"), PICK_PHOTO)
+        seeImagePerfil()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -161,8 +183,7 @@ class CardOverlap : AppCompatActivity() {
                 val dialog = builder.create()
                 upload()
                 dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1300)
-                sendDta()
+                Handler().postDelayed({ dialog.dismiss() }, 1400)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -172,13 +193,7 @@ class CardOverlap : AppCompatActivity() {
         var mReference = mStorageRef!!.child("usuarios/" + uri.lastPathSegment)
         var uploadTask = mReference.putFile(uri)
         try {
-            uploadTask.addOnProgressListener { taskSnapshot ->
-
-            }.addOnPausedListener {
-
-            }.addOnSuccessListener { taskSnapshot ->
-
-            }.continueWithTask { task ->
+            uploadTask.addOnProgressListener {}.continueWithTask { task ->
                 if (!task.isSuccessful) {
                     throw task.exception!!
                 }
@@ -187,14 +202,17 @@ class CardOverlap : AppCompatActivity() {
                 if (task.isSuccessful) {
                     val downloadUrl: Uri? = task.result
                     updateImage(downloadUrl.toString())
+                    seeImagePerfil()
+
                 } else {
 
                 }
             }.addOnFailureListener { e ->
+                Log.w("CARDOVER", e.toString())
 
             }
         } catch (e: Exception) {
-            toast("" + e.toString())
+            Log.w("CARDOVER", e.toString())
         }
     }
 

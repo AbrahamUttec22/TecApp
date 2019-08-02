@@ -1,3 +1,4 @@
+/*
 package com.material.components.activity.form
 
 import android.content.Intent
@@ -21,9 +22,11 @@ import com.material.components.model.Usuario
 import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_form_sign_up.*
 
+*/
 /**
  * @author Abraham
- */
+ *//*
+
 class FormSignUp : AppCompatActivity() {
 
 
@@ -76,12 +79,14 @@ class FormSignUp : AppCompatActivity() {
     }
 
     //fun for backend
-    /**
+    */
+/**
      * @param email
      * @param password
      * @param usuario
      * in this handler the register on authentication with firebase
-     */
+     *//*
+
     private fun signUpByEmail(email: String, password: String,usuario:Usuario) {
         //get instance of firebase
         val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -96,16 +101,20 @@ class FormSignUp : AppCompatActivity() {
         }
     }
 
-    /**
+    */
+/**
      * @param usuario
      * in this handler the save user on cloud firestore on the collection with name Usuarios
-     */
+     *//*
+
     private fun saveUser(usuario: Usuario) {
         //add the collection and save the User, this is validated
         marksCollection.add(usuario).addOnSuccessListener {
             Toast.makeText(this, "Usuario registrado con exito", Toast.LENGTH_LONG).show()
-         /*   val intento1 = Intent(this, BottomSheetFull::class.java)
-            startActivity(intento1)*/
+         */
+/*   val intento1 = Intent(this, BottomSheetFull::class.java)
+            startActivity(intento1)*//*
+
             //startActivity(Intent(this, BottomSheetFull::class.java))
            onBackPressed()
         }.addOnFailureListener {
@@ -147,3 +156,4 @@ class FormSignUp : AppCompatActivity() {
 
 
 }
+*/

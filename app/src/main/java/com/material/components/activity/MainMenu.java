@@ -57,14 +57,9 @@ import com.material.components.activity.bottomnavigation.BottomNavigationLight;
 import com.material.components.activity.bottomnavigation.BottomNavigationMapBlue;
 import com.material.components.activity.bottomnavigation.BottomNavigationPrimary;
 import com.material.components.activity.bottomnavigation.BottomNavigationShifting;
-import com.material.components.activity.bottomsheet.BottomSheetBasic;
-import com.material.components.activity.bottomsheet.BottomSheetFloating;
-import com.material.components.activity.bottomsheet.BottomSheetFull;
-import com.material.components.activity.bottomsheet.BottomSheetList;
-import com.material.components.activity.bottomsheet.BottomSheetMap;
+
 import com.material.components.activity.bottomsheet.UserActivity;
 import com.material.components.activity.button.ActividadesActivity;
-import com.material.components.activity.button.ButtonBasic;
 import com.material.components.activity.button.ButtonInUtilities;
 import com.material.components.activity.button.FabMiddle;
 import com.material.components.activity.button.FabMore;
@@ -72,8 +67,6 @@ import com.material.components.activity.button.FabMoreText;
 import com.material.components.activity.card.AdministrarAnunciosActivity;
 import com.material.components.activity.card.CardBasic;
 import com.material.components.activity.card.CardOverlap;
-import com.material.components.activity.card.CardTimeline;
-import com.material.components.activity.card.CardWizard;
 import com.material.components.activity.card.CardWizardLight;
 import com.material.components.activity.card.CardWizardOverlap;
 import com.material.components.activity.card.PerfilEmpresaActivity;
@@ -108,11 +101,7 @@ import com.material.components.activity.form.AdministrarEventoActivity;
 import com.material.components.activity.form.AgregarAnuncioActivity;
 import com.material.components.activity.form.AgregarEncuestaActivity;
 import com.material.components.activity.form.EstadisticaActivity;
-import com.material.components.activity.form.FormLogin;
 import com.material.components.activity.form.FormProfileData;
-import com.material.components.activity.form.FormSignUp;
-import com.material.components.activity.form.FormTextArea;
-import com.material.components.activity.form.FormWithIcon;
 import com.material.components.activity.gridlist.GridAlbums;
 import com.material.components.activity.gridlist.GridBasic;
 import com.material.components.activity.gridlist.GridCaller;
@@ -201,14 +190,7 @@ import com.material.components.activity.search.SearchPrimaryBg;
 import com.material.components.activity.search.SearchStore;
 import com.material.components.activity.search.SearchToolbarDark;
 import com.material.components.activity.search.SearchToolbarLight;
-import com.material.components.activity.settings.ClaveActivity;
-import com.material.components.activity.settings.ImagenesActivity;
-import com.material.components.activity.settings.SettingFlat;
-import com.material.components.activity.settings.SettingProfile;
-import com.material.components.activity.settings.SettingProfileLight;
 import com.material.components.activity.settings.SettingSectioned;
-import com.material.components.activity.settings.StorageActivity;
-import com.material.components.activity.settings.StorageExample;
 import com.material.components.activity.shopping.ShoppingCartCard;
 import com.material.components.activity.shopping.ShoppingCartCardDark;
 import com.material.components.activity.shopping.ShoppingCartSimple;
@@ -437,6 +419,7 @@ public class MainMenu extends AppCompatActivity {
     public String result = "";
 
     private void onMenuItemSelected(int itemId) {
+
         if (sharedPref.actionClickOffer()) {
             //  showDialogOffer();
             return;

@@ -106,11 +106,11 @@ class AgregarAnuncioActivity : AppCompatActivity() {
         var mReference = mStorageRef!!.child("anuncios/" + uri.lastPathSegment)
         var uploadTask = mReference.putFile(uri)
         try {
-            uploadTask.addOnProgressListener { taskSnapshot ->
+            uploadTask.addOnProgressListener {
 
             }.addOnPausedListener {
 
-            }.addOnSuccessListener { taskSnapshot ->
+            }.addOnSuccessListener {
 
             }.continueWithTask { task ->
                 if (!task.isSuccessful) {
@@ -146,7 +146,7 @@ class AgregarAnuncioActivity : AppCompatActivity() {
             try {
                 val bitmapImagen = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
                 imgAnuncio.setImageBitmap(bitmapImagen)
-                uri = data!!.data
+                uri = data.data
             } catch (e: IOException) {
                 e.printStackTrace()
             }

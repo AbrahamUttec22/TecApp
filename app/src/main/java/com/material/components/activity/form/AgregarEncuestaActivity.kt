@@ -159,13 +159,6 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         }
     }
 
-    private var date: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
-        // TODO Auto-generated method stub
-        calendario.set(Calendar.YEAR, year)
-        calendario.set(Calendar.MONTH, monthOfYear)
-        calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-        actualizarInput()
-    }
 
     //backend
     private fun isValid(pregunta: String): Boolean {

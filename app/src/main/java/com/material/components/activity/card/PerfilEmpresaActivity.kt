@@ -64,8 +64,8 @@ class PerfilEmpresaActivity : AppCompatActivity() {
             val nombre = txtNombreEmpresa.text.toString()
             val giro = txtGiroEmpresa.text.toString()
             val telefono = txtTelefonoEmpresa.text.toString()
-            val correo = txtEmailEmpresa.text.toString()// not update only information
-            val id_empresa = txtIdEmpresa.text.toString()//not update only information
+            //val correo = txtEmailEmpresa.text.toString()// not update only information
+            //val id_empresa = txtIdEmpresa.text.toString()//not update only information
             val direccion = txtDireccionEmpresa.text.toString()
             val builder = AlertDialog.Builder(this)
             val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
@@ -125,6 +125,26 @@ class PerfilEmpresaActivity : AppCompatActivity() {
         }
     }
 
+    private fun seeImagePerfil() {
+        if (mAuth.currentUser != null) {
+            var email = mAuth.currentUser!!.email.toString()
+            val resultado = empresaCollection.whereEqualTo("correo", email)
+            //beggin with consult
+            resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result!!) {
+                        var imagen = document.get("foto").toString()
+                        view = findViewById<View>(R.id.imgPerfilEmpresa) as ImageView
+                        Glide
+                                .with(applicationContext)
+                                .load(imagen)
+                                .into(view)
+                    }
+                }
+            })
+        }
+    }
+
     /**
      * @param direccion
      */
@@ -147,6 +167,7 @@ class PerfilEmpresaActivity : AppCompatActivity() {
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Seleccione una imagen"), PICK_PHOTO)
+
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -162,8 +183,7 @@ class PerfilEmpresaActivity : AppCompatActivity() {
                 val dialog = builder.create()
                 upload()
                 dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1300)
-                sendDta()
+                Handler().postDelayed({ dialog.dismiss() }, 1400)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -173,12 +193,7 @@ class PerfilEmpresaActivity : AppCompatActivity() {
         var mReference = mStorageRef!!.child("usuarios/" + uri.lastPathSegment)
         var uploadTask = mReference.putFile(uri)
         try {
-            uploadTask.addOnProgressListener { taskSnapshot ->
-
-            }.addOnPausedListener {
-
-            }.addOnSuccessListener { taskSnapshot ->
-
+            uploadTask.addOnProgressListener {
             }.continueWithTask { task ->
                 if (!task.isSuccessful) {
                     throw task.exception!!
@@ -187,13 +202,16 @@ class PerfilEmpresaActivity : AppCompatActivity() {
             }.addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     val downloadUrl: Uri? = task.result
+
                     updateImage(downloadUrl.toString())
+                    seeImagePerfil()
                 } else {
                 }
             }.addOnFailureListener { e ->
+                Log.w("PERFILEMP", e.toString())
             }
         } catch (e: Exception) {
-            toast("" + e.toString())
+            Log.w("PERFILEMP", e.toString())
         }
     }
 

@@ -1,3 +1,4 @@
+/*
 package com.material.components.activity.bottomsheet
 
 import android.content.Intent
@@ -28,12 +29,14 @@ import com.material.components.model.Usuario
 import com.material.components.utils.Tools
 import java.util.*
 
+*/
 /**
  * @author Abraham
  *  * This class was in java but now is in kotlin
  * 18/06/2019 9:39 am
  * See users
- */
+ *//*
+
 class BottomSheetFull : AppCompatActivity() {
 
     private var recyclerView: RecyclerView? = null
@@ -65,9 +68,11 @@ class BottomSheetFull : AppCompatActivity() {
         // display first sheet
     }
 
-    /**
+    */
+/**
      * Listener for peopleCollection
-     */
+     *//*
+
     private fun addMarksListener() {
         peopleCollection.addSnapshotListener { snapshots, error ->
             if (error == null) {
@@ -81,10 +86,12 @@ class BottomSheetFull : AppCompatActivity() {
         }
     }
 
-    /**
+    */
+/**
      * @param changes
      * aqui se hace el recorrido de la coleccion de cloudfirestore
-     */
+     *//*
+
     private fun addChanges(changes: List<DocumentChange>) {
         val itemUsuario = ArrayList<Usuario>()//lista local de una sola instancia
         for (change in changes) {
@@ -93,9 +100,11 @@ class BottomSheetFull : AppCompatActivity() {
         addToList(itemUsuario)//vista
     }
 
-    /**
+    */
+/**
      * @param itemUsuario
-     */
+     *//*
+
     private fun addToList(itemUsuario: List<Usuario>) {
         val itemPeople = ArrayList<People>()//lista de people
         val drw_arr = this.getResources().obtainTypedArray(R.array.people_images)//contexto de imagenes
@@ -115,9 +124,11 @@ class BottomSheetFull : AppCompatActivity() {
 
     }
 
-    /**
+    */
+/**
      * initToolbar(header)
-     */
+     *//*
+
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         toolbar.setNavigationIcon(R.drawable.ic_menu)
@@ -140,11 +151,14 @@ class BottomSheetFull : AppCompatActivity() {
             //Toast.makeText(applicationContext, item.title, Toast.LENGTH_SHORT).show()
             toast("Diste click en search")
         }else if  (item.itemId== R.id.action_settings) {//icono de mas opciones para agregar usuario
-            /*val intento1 = Intent(this, FormSignUp::class.java)
-            startActivity(intento1)*/
+            */
+/*val intento1 = Intent(this, FormSignUp::class.java)
+            startActivity(intento1)*//*
+
             startActivity(Intent(this, FormSignUp::class.java))
         }
         return super.onOptionsItemSelected(item)
     }
 
 }
+*/

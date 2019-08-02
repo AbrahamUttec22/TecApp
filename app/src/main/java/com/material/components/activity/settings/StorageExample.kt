@@ -1,3 +1,4 @@
+/*
 package com.material.components.activity.settings
 
 import android.graphics.Bitmap
@@ -434,4 +435,4 @@ class StorageExample : AppCompatActivity() {
         }
     }
     // [END storage_custom_failure_listener]
-}
+}*/

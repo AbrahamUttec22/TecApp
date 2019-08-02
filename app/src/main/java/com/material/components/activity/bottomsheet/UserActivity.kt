@@ -2,16 +2,10 @@ package com.material.components.activity.bottomsheet
 
 import android.app.Dialog
 import android.content.Context
-import android.content.Intent
-import android.graphics.Color
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.widget.SwipeRefreshLayout
-import android.support.v7.widget.AppCompatSeekBar
 import android.support.v7.widget.Toolbar
-import android.util.Log
 import android.view.*
 import android.widget.*
 import com.alejandrolora.finalapp.toast
@@ -21,19 +15,14 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.R
-import com.material.components.activity.form.FormSignUp
 import com.material.components.adapter.ActividadesVerAdapter
 import com.material.components.adapter.UserAdapter
 import com.material.components.model.Actividades
-import com.material.components.model.Encuesta
 import com.material.components.model.Usuario
 import com.material.components.utils.Tools
-import kotlinx.android.synthetic.main.activity_actividades.*
 import kotlinx.android.synthetic.main.activity_user.*
 import kotlinx.android.synthetic.main.activity_user.listView
-import kotlinx.android.synthetic.main.dialog_actividades_usuarios.*
 import kotlinx.android.synthetic.main.list_view_usuario.view.*
 import java.util.ArrayList
 

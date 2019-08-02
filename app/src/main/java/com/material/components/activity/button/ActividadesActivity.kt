@@ -84,8 +84,8 @@ class ActividadesActivity : AppCompatActivity() {
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-        var id_empresa = sharedPreference.getString("id_empresa", "")
+        //var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+       // var id_empresa = sharedPreference.getString("id_empresa", "")
         var email = mAuth.currentUser!!.email.toString()
         actividadesCollection.whereEqualTo("correo", email).addSnapshotListener { snapshots, error ->
             if (error == null) {

@@ -79,7 +79,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
         var telefono = "${list[position].telefono}"//telefono
         val id = "${list[position].id}"
         var id_empresa = "${list[position].id_empresa}"//id_empresa
-        val uid = "${list[position].uid}"//uid
+        //val uid = "${list[position].uid}"//uid
         Glide
                 .with(this.context)
                 .load("${list[position].ubicacion}")
@@ -254,7 +254,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 //token is id , whom you want to send notification ,
                 requestNotificaton.token = token
                 requestNotificaton.notification = notification
-                val apiService = ApiClient.getClient().create(ApiInter::class.java!!)
+                val apiService = ApiClient.getClient().create(ApiInter::class.java)
                 val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
                 responseBodyCall.enqueue(object : Callback<ResponseBody> {
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {

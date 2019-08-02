@@ -94,7 +94,7 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
                         signUpByEmail(email, password, empresa)
                         Handler().postDelayed({ nDialog.dismiss() }, 1000)
                     } else {
-                        view.txtConfirmPasswordEmpresa.error = "Ingresa un correo valido"
+                        view.txtConfirmPasswordEmpresa.error = "Las contraseñas no coinciden"
                     }
                 } else {
                     view.txtCorreoEmpresa.error = "Ingresa un correo valido"

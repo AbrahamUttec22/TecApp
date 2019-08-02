@@ -90,10 +90,7 @@ class ImagenesActivity : AppCompatActivity() {
         }//una ves agregado los campos mandar a llamar la vista
         adapter = ImagenAdapter(this, R.layout.list_view_imagen, itemUsuario)
         listView.adapter = adapter//
-        listView.setOnItemClickListener { parent: AdapterView<*>?, view: View?, position, id ->
-            //here for a item onclik for the images
 
-        }
     }
 
     private fun abrirFotoGaleria() {
@@ -128,11 +125,11 @@ class ImagenesActivity : AppCompatActivity() {
         var mReference = mStorageRef!!.child("uploads/" + uri.lastPathSegment)
         var uploadTask = mReference.putFile(uri)
         try {
-            uploadTask.addOnProgressListener { taskSnapshot ->
+            uploadTask.addOnProgressListener {
 
             }.addOnPausedListener {
 
-            }.addOnSuccessListener { taskSnapshot ->
+            }.addOnSuccessListener {
 
             }.continueWithTask { task ->
                 if (!task.isSuccessful) {
@@ -150,10 +147,10 @@ class ImagenesActivity : AppCompatActivity() {
 
                 }
             }.addOnFailureListener { e ->
-
+                Log.w("IMAGENESAC", e.toString())
             }
         } catch (e: Exception) {
-            toast("" + e.toString())
+            Log.w("IMAGENESAC", e.toString())
         }
     }
 

@@ -163,7 +163,7 @@ class EstadisticaActivity : AppCompatActivity() {
                 var c1=0
                 var c2=0
                 var c3=0
-                var ctotal=0
+                var ctotal:Int
                 for (document in task.result!!) {
                     val respuesta = document.get("respuesta").toString()
                     if (respuesta== res1) {

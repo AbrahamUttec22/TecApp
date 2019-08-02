@@ -139,12 +139,12 @@ class Tab2Fragment : Fragment() {
             if (task.isSuccessful) {
                 //save the user on cloud firestore
                 mAuth.currentUser!!.sendEmailVerification().addOnCompleteListener(requireActivity()) {
-                    saveUsuario(usuario, view)
-                    mAuth.signOut()//this is necesary because the val is in general
-                    //status = true
-                    showConfirmDialog()
 
                 }
+                saveUsuario(usuario, view)
+                mAuth.signOut()//this is necesary because the val is in general
+                //status = true
+                showConfirmDialog()
             } else {
                 // toast("Los Datos ingresados ya estan registrados,intenta con uno nuevo")
                 Toast.makeText(context, "Los Datos ingresados ya estan registrados,intenta con uno nuevo", Toast.LENGTH_LONG).show()

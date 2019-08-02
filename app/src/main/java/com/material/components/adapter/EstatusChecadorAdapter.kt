@@ -47,7 +47,7 @@ class EstatusChecadorAdapter(val context: Context, val layout: Int, val list: Li
         }
         val id_usuario = "${list[position].id_usuario}"
         val id = "${list[position].id}"
-        val id_empresa = "${list[position].id_empresa}"
+        //val id_empresa = "${list[position].id_empresa}"
         val fecha = "${list[position].fecha}"
 
 
@@ -58,7 +58,7 @@ class EstatusChecadorAdapter(val context: Context, val layout: Int, val list: Li
         val usuarioCollection: CollectionReference
         val checadorCollection: CollectionReference
         usuarioCollection = FirebaseFirestore.getInstance().collection("Usuarios")
-        checadorCollection = FirebaseFirestore.getInstance().collection("Checador")
+       // checadorCollection = FirebaseFirestore.getInstance().collection("Checador")
 
         //only this source I update the status,
         val consulta = usuarioCollection.whereEqualTo("id", id_usuario)

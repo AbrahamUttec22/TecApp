@@ -121,11 +121,11 @@ class FormProfileData : AppCompatActivity() {
         var mReference = mStorageRef!!.child("eventos/" + uri.lastPathSegment)
         var uploadTask = mReference.putFile(uri)
         try {
-            uploadTask.addOnProgressListener { taskSnapshot ->
+            uploadTask.addOnProgressListener {
 
             }.addOnPausedListener {
 
-            }.addOnSuccessListener { taskSnapshot ->
+            }.addOnSuccessListener {
 
             }.continueWithTask { task ->
                 if (!task.isSuccessful) {

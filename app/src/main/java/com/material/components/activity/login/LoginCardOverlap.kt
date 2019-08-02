@@ -127,7 +127,7 @@ class LoginCardOverlap : AppCompatActivity() {
                                 val id_empresa = document.get("id_empresa").toString()
                                 val id = document.id
 
-                                if (rol!! == "administrador") {
+                                if (rol == "administrador") {
                                     val token = FirebaseInstanceId.getInstance().token.toString()
                                     userCollection.document(id).update("token", token).addOnSuccessListener {
                                     }.addOnFailureListener {}
@@ -244,7 +244,7 @@ class LoginCardOverlap : AppCompatActivity() {
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     } else {
                         val editText = (dialog.findViewById<View>(R.id.txtCodeAccess) as EditText)
-                        editText?.error = "Codigo incorrecto"
+                        editText.error = "Codigo incorrecto"
                     }
                 }
             } else {
