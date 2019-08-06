@@ -1,5 +1,4 @@
 package com.material.components.checador
-
 import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -9,8 +8,6 @@ import android.view.MenuItem
 import android.view.View
 import com.material.components.R
 import com.material.components.utils.Tools
-import kotlinx.android.synthetic.main.activity_generar_qr.*
-import net.glxn.qrgen.android.QRCode
 
 /**
  * @author Abraham Casas Aguilar
@@ -23,9 +20,17 @@ class GenerarQRActivity : AppCompatActivity() {
         initToolbar()
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var id_empresa = sharedPreference.getString("id_empresa", "")
-        val bitmap = QRCode.from(id_empresa).bitmap()
-        //Suponiendo que tienes un ImageView con el id ivCodigoGenerado
-        imgQR.setImageBitmap(bitmap)
+        /*     Handler().postDelayed({
+                 val multiFormatWriter = MultiFormatWriter()
+                 val bitMatrix = multiFormatWriter.encode("avervavqwewer", BarcodeFormat.QR_CODE, 500, 500)
+                 val barcodeEncoder = BarcodeEncoder()
+                 val bitmap = barcodeEncoder.createBitmap(bitMatrix)
+                 //Suponiendo que tienes un ImageView con el id ivCodigoGenerado
+                 toast("Hola")
+                 imgQR.setImageBitmap(bitmap)
+             }, 10)
+     */
+
     }
 
     private fun initToolbar() {

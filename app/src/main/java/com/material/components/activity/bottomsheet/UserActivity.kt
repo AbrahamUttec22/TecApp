@@ -37,11 +37,9 @@ class UserActivity : AppCompatActivity() {
     //declare val for save the collection
     private val userCollection: CollectionReference
     private val actividadesCollection: CollectionReference
-
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private lateinit var usuarioList: List<Usuario>
     private lateinit var actividadesList: List<Actividades>
-
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -138,6 +136,9 @@ class UserActivity : AppCompatActivity() {
                             val status = document.get("estatus").toString()
                             val id = document.get("id").toString()
                             val id_usuario = document.get("id_usuario").toString()
+                            val terminada = document.get("fecha_hora_terminada").toString()
+                            val asignada = document.get("fecha_hora_asignada").toString()
+
                             //
                             var actividad = Actividades()
                             actividad.actividad = actividadName
@@ -145,6 +146,8 @@ class UserActivity : AppCompatActivity() {
                             actividad.estatus = status
                             actividad.id = id
                             actividad.id_usuario = id_usuario
+                            actividad.fecha_hora_terminada=terminada
+                            actividad.fecha_hora_asignada=asignada
                             itemActividad.add(actividad)
                         }//end for
                         if (con == 0) {
@@ -165,7 +168,6 @@ class UserActivity : AppCompatActivity() {
         dialog.show()
         dialog.window!!.attributes = lp
     }
-
 
     /**
      * initToolbar(header)
@@ -194,4 +196,5 @@ class UserActivity : AppCompatActivity() {
         }
         return super.onOptionsItemSelected(item)
     }
+
 }

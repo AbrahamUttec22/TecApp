@@ -1,13 +1,18 @@
 package com.material.components.adapter
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.view.View
 import android.view.ViewGroup
-import android.widget.BaseAdapter
-import android.widget.Button
-import android.widget.Switch
-import android.widget.TextView
+import android.widget.*
 import com.alejandrolora.finalapp.inflate
+import com.google.firebase.FirebaseApp
+import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.material.components.model.Actividades
 import kotlinx.android.synthetic.main.list_view_actividades.view.*
 import kotlinx.android.synthetic.main.list_view_actividades_ver.view.*
@@ -43,19 +48,49 @@ class ActividadesVerAdapter(val context: Context, val layout: Int, val list: Lis
         }
         val status = "${list[position].estatus}"
         val actividad = "${list[position].actividad}"
+        val asignada= "${list[position].fecha_hora_asignada}"
+        val terminada="${list[position].fecha_hora_terminada}"
 
         if (status.equals("pendiente")) {
             vh.simpleSwitch.isChecked = false
             vh.simpleSwitch.isClickable = false
             vh.texto.text = "Pendiente"
             vh.actividad.text=actividad
+            //val color = Color.parseColor("#999999")
+            //vh.eliminar.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+            vh.eliminar.setVisibility(View.INVISIBLE)
+            vh.fecha_estatus.text="Asignada: "+asignada
         } else if (status.equals("realizado")) {
             vh.actividad.text=actividad
             vh.simpleSwitch.isChecked = true
             vh.simpleSwitch.isClickable = false
-            vh.texto.text = "Actividad realizada"
+            vh.texto.text = "Realizada"
+            vh.eliminar.setVisibility(View.VISIBLE)
+            vh.fecha_estatus.text="Asignada: "+asignada+" \n Concluida: "+terminada
         }
+        val id = "${list[position].id}"
 
+        vh.eliminar.setOnClickListener(object : View.OnClickListener {
+            override fun onClick(position: View?) {
+                val actividad = Actividades()
+                actividad.id = id
+                val builder = AlertDialog.Builder(context)
+                builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                    sentVoto(actividad)
+                }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+                        .show()
+            }
+
+            private fun sentVoto(actividad: Actividades) {
+                FirebaseApp.initializeApp(context)
+                val eventoCollection: CollectionReference
+                eventoCollection = FirebaseFirestore.getInstance().collection("Actividades")
+                //only this source I update the status,
+                eventoCollection.document(actividad.id).delete().addOnSuccessListener {
+                    Toast.makeText(context, "Se ha eliminado correctamente la actividad", Toast.LENGTH_LONG).show()
+                }.addOnFailureListener { Toast.makeText(context, "Error  elimando la actividad intenta de nuevo", Toast.LENGTH_LONG).show() }
+            }//end for hanlder
+        })
         return view
     }
 
@@ -65,6 +100,8 @@ class ActividadesVerViewHolder(view: View) {
     val actividad: TextView = view.txtActividadDialog
     val simpleSwitch: Switch = view.simpleSwitchDialog
     val texto: TextView = view.txtCambiarDialog
+    val eliminar: Button = view.btnEliminarActividadver
+    val fecha_estatus: TextView = view.txtFechaVer
 }
 
 

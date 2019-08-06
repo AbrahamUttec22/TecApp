@@ -22,6 +22,7 @@
             android:hint="Name"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/grey_80" />
+
         <View
             android:layout_width="15dp"
             android:layout_height="15dp" />
@@ -36,27 +37,27 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="20"
-                android:background="@drawable/btn_rounded_green"
+                android:background="@drawable/btn_rounded_indigo_outline"
                 android:padding="10dp"
-                android:textColor="@color/brown_50" />
+                android:textColor="@color/overlay_dark_90" />
 
             <Button
                 android:id="@+id/txtRespuestas2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="20"
-                android:background="@drawable/btn_rounded_primary"
+                android:background="@drawable/btn_rounded_indigo_outline"
                 android:padding="10dp"
-                android:textColor="@color/brown_50" />
+                android:textColor="@color/overlay_dark_90" />
 
             <Button
                 android:id="@+id/txtRespuestas3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="20"
-                android:background="@drawable/btn_rounded_signup"
+                android:background="@drawable/btn_rounded_indigo_outline"
                 android:padding="10dp"
-                android:textColor="@color/brown_50" />
+                android:textColor="@color/overlay_dark_90" />
 
         </LinearLayout>
     </LinearLayout>

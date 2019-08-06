@@ -4,6 +4,9 @@ import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.os.Handler
 import android.support.v7.app.AlertDialog
 import android.support.v7.widget.AppCompatButton
@@ -63,6 +66,7 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
         }
         val fullName = "${list[position].pregunta}"
         val id_empresa = "${list[position].id_empresa}"
+
         vh.pregunta.text = fullName
         // vh.respuesta.text = "${list[position].respuestas?.get(position)}"
         var con = list[position].respuestas?.size
@@ -90,6 +94,45 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
             vh.respuestathree.setVisibility(View.VISIBLE)
         }
 
+        val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+        val preguntaA = vh.pregunta.text.toString()
+        //val resp = vh.respuesta.text.toString()
+        val correoV = mAuth.currentUser!!.email.toString()
+        val pruebavCollection: CollectionReference
+        pruebavCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
+        val resultado = pruebavCollection.whereEqualTo("correo", correoV).whereEqualTo("id_pregunta", preguntaA)
+        //beggin with consult
+        resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var respuestaBD = ""
+                var documentId = ""
+                var con = 0
+                for (document in task.result!!) {
+                    respuestaBD = document.get("respuesta").toString()
+                    documentId = document.id
+                }
+                //I need validated the type of the voto
+                if (respuestaBD.equals(vh.respuesta.text)) {
+                    vh.respuesta.background
+                    val color = Color.parseColor("#FA8258")
+                    vh.respuesta.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                    // android:background="@drawable/btn_rounded_indigo_outline"
+                } else if (respuestaBD.equals(vh.respuestatwo.text)) {
+                    vh.respuestatwo.background
+                    val color = Color.parseColor("#FA8258")
+                    vh.respuestatwo.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                } else if (respuestaBD.equals(vh.respuestathree.text)) {
+                    vh.respuestathree.background
+                    val color = Color.parseColor("#FA8258")
+                    vh.respuestathree.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                }
+            } else {
+                Log.w("EXCEPTION", "Error getting documents.", task.exception)
+            }
+        })//end for expression lambdas this very cool
+
+
         vh.respuesta.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
                 val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -110,7 +153,6 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                 userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
                 val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
                 //beggin with consult
-
                 resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                     if (task.isSuccessful) {
                         var respuestaBD = ""
@@ -127,8 +169,8 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                                 showConfirmDialog()
                             }.addOnFailureListener {}
                         }
-
                         if (con == 1 && respuestaBD != voto.respuesta) {
+                            //I need validated the type of the voto
                             userCollection.document(documentId).update("respuesta", voto.respuesta).addOnSuccessListener {
                                 showConfirmDialogTwo()
                             }.addOnFailureListener { }
@@ -139,7 +181,6 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                         Log.w("EXCEPTION", "Error getting documents.", task.exception)
                     }
                 })//end for expression lambdas this very cool
-
             }//end for hanlder
 
             private fun showConfirmDialog() {
@@ -175,9 +216,7 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                 dialog.show()
                 dialog.window!!.attributes = lp
             }
-
         })//first question
-
         vh.respuestatwo.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
                 val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -198,7 +237,6 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                 userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
                 val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
                 //beggin with consult
-
                 resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                     if (task.isSuccessful) {
                         var respuestaBD = ""
@@ -215,7 +253,6 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                                 showConfirmDialog()
                             }.addOnFailureListener {}
                         }
-
                         if (con == 1 && respuestaBD != voto.respuesta) {
                             userCollection.document(documentId).update("respuesta", voto.respuesta).addOnSuccessListener {
                                 showConfirmDialogTwo()
@@ -227,7 +264,6 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                         Log.w("EXCEPTION", "Error getting documents.", task.exception)
                     }
                 })//end for expression lambdas this very cool
-
             }//end for hanlder
 
             private fun showConfirmDialog() {
@@ -265,7 +301,6 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
             }
 
         })
-
         vh.respuestathree.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
                 val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -314,7 +349,6 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                         Log.w("EXCEPTION", "Error getting documents.", task.exception)
                     }
                 })//end for expression lambdas this very cool
-
             }//end for hanlder
 
             private fun showConfirmDialog() {
@@ -350,8 +384,8 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                 dialog.show()
                 dialog.window!!.attributes = lp
             }
-
         })
+
         return view
     }
 }

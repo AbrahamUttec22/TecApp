@@ -43,7 +43,6 @@ import com.itextpdf.text.Element
 import kotlinx.android.synthetic.main.list_view_estatus_checador.view.*
 import org.w3c.dom.Text
 
-
 /**
  * @author Abraham Casas Aguilar
  */
@@ -92,14 +91,15 @@ class EstatusChecadorActivity : AppCompatActivity() {
         val c = Calendar.getInstance()
         val df = SimpleDateFormat("dd/MM/yyyy")
         val formattedDate = df.format(c.getTime()).toString()
-        checadorCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("fecha", formattedDate).addSnapshotListener { snapshots, error ->
+        checadorCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("fecha", formattedDate).
+                orderBy("hora").addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
                     addChanges(changes)
                 }
             } else {
-                toast("Ha ocurrido un error intente de nuevo")
+                // toast("Ha ocurrido un error intente de nuevo")
             }
         }
     }
@@ -122,14 +122,16 @@ class EstatusChecadorActivity : AppCompatActivity() {
     private fun addMarksListenerTWO() {
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var id_empresa = sharedPreference.getString("id_empresa", "")
-        checadorCollection.whereEqualTo("id_empresa", id_empresa).addSnapshotListener { snapshots, error ->
+        checadorCollection.whereEqualTo("id_empresa", id_empresa).
+                orderBy("fecha").orderBy("hora").orderBy("nombre").
+                addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
                     addChangesTwo(changes)
                 }
             } else {
-                toast("Ha ocurrido un error intente de nuevo")
+                //toast("Ha ocurrido un error intente de nuevo")
             }
         }
     }
@@ -156,11 +158,11 @@ class EstatusChecadorActivity : AppCompatActivity() {
                 requestPermissions(permissions, 100)
             } else {
                 //permission already granted, call savePdf() method
-                savePdf(queMesRecibi(mes),mes)
+                savePdf(queMesRecibi(mes), mes)
             }
         } else {
             //system OS < marshmallow, call savePdf() method
-            savePdf(queMesRecibi(mes),mes)
+            savePdf(queMesRecibi(mes), mes)
         }
     }
 
@@ -175,11 +177,11 @@ class EstatusChecadorActivity : AppCompatActivity() {
                 requestPermissions(permissions, 100)
             } else {
                 //permission already granted, call savePdf() method
-                savePdf(queMesRecibi(mes),mes)
+                savePdf(queMesRecibi(mes), mes)
             }
         } else {
             //system OS < marshmallow, call savePdf() method
-            savePdf(queMesRecibi(mes),mes)
+            savePdf(queMesRecibi(mes), mes)
         }
     }
 
@@ -194,11 +196,11 @@ class EstatusChecadorActivity : AppCompatActivity() {
                 requestPermissions(permissions, 100)
             } else {
                 //permission already granted, call savePdf() method
-                savePdf(queMesRecibi(mes),mes)
+                savePdf(queMesRecibi(mes), mes)
             }
         } else {
             //system OS < marshmallow, call savePdf() method
-            savePdf(queMesRecibi(mes),mes)
+            savePdf(queMesRecibi(mes), mes)
 
         }
     }
@@ -325,7 +327,7 @@ class EstatusChecadorActivity : AppCompatActivity() {
             STORAGE_CODE -> {
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission from popup was granted, call savePdf() method
-                    savePdf(queMesRecibi(mesEscogido),mesEscogido)
+                    savePdf(queMesRecibi(mesEscogido), mesEscogido)
                 } else {
                     Toast.makeText(this, "Permission denied...!", Toast.LENGTH_SHORT).show()
                 }
@@ -333,7 +335,7 @@ class EstatusChecadorActivity : AppCompatActivity() {
         }
     }
 
-    private fun savePdf(mesRecibido: String,mesNombre:String) {
+    private fun savePdf(mesRecibido: String, mesNombre: String) {
         //create object of Document class
         val mDoc = Document()
         //pdf file name
@@ -341,14 +343,11 @@ class EstatusChecadorActivity : AppCompatActivity() {
         //pdf file path
         val mFilePath = Environment.getExternalStorageDirectory().toString() + "/" + mFileName + ".pdf"
         try {
-            //create instance of PdfWriter class
-            PdfWriter.getInstance(mDoc, FileOutputStream(mFilePath))
-            //open the document for writing
-            mDoc.open()
+
             //get text from EditText i.e. textEt
             //add author of the document (metadata)
             var bandera = 0
-            eventoListTwo.forEach() {
+            eventoListTwo.forEach {
                 var fechaBD = it.fecha
                 var mesBD = fechaBD.substring(3, 5)//mm
                 var anoDB = fechaBD.substring(6, 10)//yyyy
@@ -357,11 +356,14 @@ class EstatusChecadorActivity : AppCompatActivity() {
                 val ano2 = df2.format(c2.getTime()).toString()
                 if (mesBD.equals(mesRecibido) && ano2.equals(anoDB)) {
                     if (bandera == 0) {
+                        //create instance of PdfWriter class
+                        PdfWriter.getInstance(mDoc, FileOutputStream(mFilePath))
+                        //open the document for writing
+                        mDoc.open()
                         mDoc.add(Paragraph("Checador en el mes de " + mesNombre))
                         mDoc.add(Paragraph("_______________________________"))
                         bandera++
                     }
-
                     mDoc.add(Paragraph("Nombre:" + it.nombre))
                     mDoc.add(Paragraph("Fecha:" + it.fecha))
                     mDoc.add(Paragraph("Hora:" + it.hora))
@@ -369,9 +371,13 @@ class EstatusChecadorActivity : AppCompatActivity() {
                 }
             }
             //close document
-            mDoc.close()
+            if (bandera == 1) {
+                mDoc.close()
+                Toast.makeText(this, "$mFileName.pdf\nse  guardo en\n$mFilePath", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this, "No hay registros de checador en ese mes", Toast.LENGTH_SHORT).show()
+            }
             //show file saved message with file name and path
-            Toast.makeText(this, "$mFileName.pdf\nse  guardo en\n$mFilePath", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
             //if anything goes wrong causing exception, get and show exception message
             Toast.makeText(this, "No hay registros de checador en ese mes", Toast.LENGTH_SHORT).show()

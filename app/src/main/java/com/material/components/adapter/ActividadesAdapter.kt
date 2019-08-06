@@ -16,6 +16,8 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.material.components.model.Actividades
 import com.material.components.model.Evento
 import kotlinx.android.synthetic.main.list_view_actividades.view.*
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * @author Abraham Casas Aguilar
@@ -47,21 +49,24 @@ class ActividadesAdapter(val context: Context, val layout: Int, val list: List<A
             vh = view.tag as ActividadesViewHolder
         }
         val actividad = "${list[position].actividad}"
+        val asignada= "${list[position].fecha_hora_asignada}"
+        val terminada="${list[position].fecha_hora_terminada}"
+
         vh.actividad.text = actividad
         val status = "${list[position].estatus}"
         val id = "${list[position].id}"
+
         if (status.equals("pendiente")) {
             vh.simpleSwitch.isClickable = true
             vh.simpleSwitch.isChecked = false
             vh.texto.text="Cambiar a realizado"
-            val color = Color.parseColor("#999999")
-            vh.eliminar.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
-            vh.eliminar.setVisibility(View.INVISIBLE)
+            vh.fecha_estatus.text="Asignada: "+asignada
 
         } else if (status.equals("realizado")) {
             vh.simpleSwitch.isChecked = true
             vh.simpleSwitch.isClickable = false
             vh.texto.text="Actividad realizada"
+            vh.fecha_estatus.text="Asignada: "+asignada+" \n Concluida: "+terminada
 
         }
 
@@ -70,32 +75,19 @@ class ActividadesAdapter(val context: Context, val layout: Int, val list: List<A
             val eventoCollection: CollectionReference
             eventoCollection = FirebaseFirestore.getInstance().collection("Actividades")
             //only this source I update the status,
-            eventoCollection.document(id).update("estatus", "realizado").addOnSuccessListener {
+            val c = Calendar.getInstance()
+            val df = SimpleDateFormat("dd/MM/yyyy")
+            val fechaA = df.format(c.getTime()).toString()
+            val c2 = Calendar.getInstance()
+            val df2 = SimpleDateFormat("HH:mm:ss")
+            val horaA = df2.format(c2.getTime()).toString()
+            val fecha_concluida=fechaA+" "+horaA
+
+            eventoCollection.document(id).update("estatus", "realizado","fecha_hora_terminada",fecha_concluida).addOnSuccessListener {
                 Toast.makeText(context, "Se ha cambiado la actividad a realizado", Toast.LENGTH_LONG).show()
                 vh.texto.text = "Actividad realizada"
             }.addOnFailureListener { Toast.makeText(context, "Error  al marcar la actividad, intenta de nuevo", Toast.LENGTH_LONG).show() }
         }
-        vh.eliminar.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(position: View?) {
-                val actividad = Actividades()
-                actividad.id = id
-                val builder = AlertDialog.Builder(context)
-                builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
-                    sentVoto(actividad)
-                }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
-                        .show()
-            }
-
-            private fun sentVoto(actividad: Actividades) {
-                FirebaseApp.initializeApp(context)
-                val eventoCollection: CollectionReference
-                eventoCollection = FirebaseFirestore.getInstance().collection("Actividades")
-                //only this source I update the status,
-                eventoCollection.document(actividad.id).delete().addOnSuccessListener {
-                    Toast.makeText(context, "Se ha eliminado correctamente la actividad", Toast.LENGTH_LONG).show()
-                }.addOnFailureListener { Toast.makeText(context, "Error  elimando la actividad intenta de nuevo", Toast.LENGTH_LONG).show() }
-            }//end for hanlder
-        })
         return view
     }
 
@@ -105,7 +97,6 @@ class ActividadesViewHolder(view: View) {
     val actividad: TextView = view.txtActividad
     val simpleSwitch: Switch = view.simpleSwitch
     val texto: TextView = view.txtCambiar
-    val eliminar: Button = view.btnEliminarActividad
-
+    val fecha_estatus: TextView = view.txtFecha
 
 }

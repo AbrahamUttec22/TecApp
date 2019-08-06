@@ -102,7 +102,6 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
             } else {
                 Toast.makeText(context, "Completa los campos", Toast.LENGTH_SHORT).show()
             }
-
         }//end for listner
 
         view.txtCorreoEmpresa.addTextChangedListener(object : TextWatcher {
@@ -144,11 +143,15 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
     private fun signUpByEmail(email: String, password: String, empresa: Empresa) {
         //get instance of firebase
         val randomValues = Random.nextInt(1000, 9000)
-        if (empresa.nombre.contentEquals(" ")){
-            empresa.nombre.split(" ")[1].trim()
+        var nuevo = ""
+        if (empresa.nombre.contentEquals(" ") || empresa.nombre.contains(" ")) {
+            nuevo = empresa.nombre.split(" ")[1].trim()
+        } else {
+            nuevo = empresa.nombre.trim()
         }
-        empresa.uid=""
-        empresa.id_empresa = empresa.nombre + randomValues.toString()//save the company
+
+        empresa.uid = ""
+        empresa.id_empresa = nuevo + randomValues.toString()//save the company
         mAuth.createUserWithEmailAndPassword(email, password).addOnCompleteListener(requireActivity()) { task ->
             if (task.isSuccessful) {
                 mAuth.currentUser!!.sendEmailVerification().addOnCompleteListener(requireActivity()) {

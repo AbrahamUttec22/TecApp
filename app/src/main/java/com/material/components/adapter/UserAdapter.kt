@@ -87,30 +87,30 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
         vh.EmailUser.setVisibility(View.INVISIBLE)
         //vh.eliminar.setVisibility(View.INVISIBLE)
         vh.EmailUser.text = id
-       /* vh.eliminar.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(position: View?) {
-                val usuario = Usuario()
-                usuario.id = id
-                usuario.uid = uid
-                usuario.email = email
-                val builder = AlertDialog.Builder(context)
-                builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
-                    deleteUsuario(usuario)
-                }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() }).show()
-            }
+        /* vh.eliminar.setOnClickListener(object : View.OnClickListener {
+             override fun onClick(position: View?) {
+                 val usuario = Usuario()
+                 usuario.id = id
+                 usuario.uid = uid
+                 usuario.email = email
+                 val builder = AlertDialog.Builder(context)
+                 builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                     deleteUsuario(usuario)
+                 }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() }).show()
+             }
 
-            private fun deleteUsuario(usuario: Usuario) {
-                FirebaseApp.initializeApp(context)
-                val eventoCollection: CollectionReference
-                eventoCollection = FirebaseFirestore.getInstance().collection("Actividades")
-                //only this source I update the status,
-                eventoCollection.document(usuario.id).delete().addOnSuccessListener {
-                    Toast.makeText(context, "El usuario se ha eliminado correctamente", Toast.LENGTH_LONG).show()
-                }.addOnFailureListener { Toast.makeText(context, "Error  elimando al usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
+             private fun deleteUsuario(usuario: Usuario) {
+                 FirebaseApp.initializeApp(context)
+                 val eventoCollection: CollectionReference
+                 eventoCollection = FirebaseFirestore.getInstance().collection("Actividades")
+                 //only this source I update the status,
+                 eventoCollection.document(usuario.id).delete().addOnSuccessListener {
+                     Toast.makeText(context, "El usuario se ha eliminado correctamente", Toast.LENGTH_LONG).show()
+                 }.addOnFailureListener { Toast.makeText(context, "Error  elimando al usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
 
-                //var mAuth: FirebaseAuth = FirebaseAuth.getInstance().currentUser.delete(uid)
-            }//end for hanlder
-        })*/
+                 //var mAuth: FirebaseAuth = FirebaseAuth.getInstance().currentUser.delete(uid)
+             }//end for hanlder
+         })*/
         vh.actualizar.setOnClickListener(object : View.OnClickListener {
             var calendario = Calendar.getInstance()
             override fun onClick(position: View?) {
@@ -207,8 +207,18 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                         actividad.correo = usuario.email
                         actividad.estatus = "pendiente"
                         actividad.id = ""
+                        actividad.fecha_hora_terminada = ""
                         actividad.id_usuario = usuario.id
                         //first save the user on authe
+                        //send fecha
+                        val c = Calendar.getInstance()
+                        val df = SimpleDateFormat("dd/MM/yyyy")
+                        val fechaA = df.format(c.getTime()).toString()
+                        val c2 = Calendar.getInstance()
+                        val df2 = SimpleDateFormat("HH:mm:ss")
+                        val horaA = df2.format(c2.getTime()).toString()
+                        actividad.fecha_hora_asignada = fechaA+" "+horaA
+
                         saveActividad(actividad)
                         dialog.dismiss()
                     } else {

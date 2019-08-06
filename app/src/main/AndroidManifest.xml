@@ -4,8 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -15,21 +14,18 @@
         android:roundIcon="@drawable/logo_tecgurus"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".activity.about.EstatusChecadorActivity"></activity>
+        <activity android:name=".checador.GenerarQrJActivity"></activity>
+        <activity android:name=".activity.about.EstatusChecadorActivity" />
         <activity android:name=".activity.login.ForgotPasswordActivity" />
         <activity android:name=".message.PruevaActivity" />
         <activity android:name=".activity.button.ActividadesActivity" />
         <activity android:name=".message.NotificacionActivity" />
 
-
-
-        <service
-            android:name=".message.MyFirebaseMessagingService">
+        <service android:name=".message.MyFirebaseMessagingService">
             <intent-filter>
-                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-
 
         <activity android:name=".checador.GenerarQRActivity" />
         <activity android:name=".checador.CheckActivity" />

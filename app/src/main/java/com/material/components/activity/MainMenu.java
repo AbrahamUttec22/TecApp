@@ -250,6 +250,7 @@ import com.material.components.adapter.ExpandableRecyclerAdapter;
 import com.material.components.adapter.MainMenuAdapter;
 import com.material.components.checador.CheckActivity;
 import com.material.components.checador.GenerarQRActivity;
+import com.material.components.checador.GenerarQrJActivity;
 import com.material.components.data.SharedPref;
 import com.material.components.message.NotificacionActivity;
 import com.material.components.message.PruevaActivity;
@@ -1018,7 +1019,9 @@ public class MainMenu extends AppCompatActivity {
             case 25003:
                 //startActivity(new Intent(this, SettingProfile.class));
                 //startActivity(new Intent(this, ClaveActivity.class));
-                startActivity(new Intent(this, GenerarQRActivity.class));
+                //startActivity(new Intent(this, GenerarQRActivity.class));
+                startActivity(new Intent(this, GenerarQrJActivity.class));
+
                 break;
             case 25004:
                 // startActivity(new Intent(this, SettingProfileLight.class));
@@ -1436,7 +1439,7 @@ public class MainMenu extends AppCompatActivity {
         items.add(new MainMenuAdapter.ListItem(24002, "Header Auto", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(24003, "Card", -1, MenuType.SUB_HEADER));
         items.add(new MainMenuAdapter.ListItem(24004, "Card Auto", -1, MenuType.SUB_HEADER));*/
-        items.add(new MainMenuAdapter.ListItem(25000, "Settings", R.drawable.ic_settings, MenuType.HEADER));
+        items.add(new MainMenuAdapter.ListItem(25000, "Herramientas", R.drawable.ic_settings, MenuType.HEADER));
         if (result.equalsIgnoreCase("administrador") || result.equalsIgnoreCase("usuario")) {
             items.add(new MainMenuAdapter.ListItem(25002, "Checador", -1, MenuType.SUB_HEADER));
         }
@@ -1507,7 +1510,7 @@ public class MainMenu extends AppCompatActivity {
 */
 
         items.add(new MainMenuAdapter.ListItem(-1, "Application", -1, MenuType.DIVIDER));
-        items.add(new MainMenuAdapter.ListItem(1, "About", R.drawable.ic_error_outline, MenuType.NORMAL));
+        items.add(new MainMenuAdapter.ListItem(1, "Acerca de", R.drawable.ic_error_outline, MenuType.NORMAL));
 
         return items;
     }

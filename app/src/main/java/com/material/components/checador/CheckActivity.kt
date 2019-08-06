@@ -1,4 +1,5 @@
 package com.material.components.checador
+
 import android.app.Dialog
 import android.content.Context
 import android.content.Intent
@@ -30,6 +31,7 @@ import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_check.*
 import java.text.SimpleDateFormat
 import java.util.*
+
 /**
  * @author Abraham Casas Aguilar
  */
@@ -73,9 +75,11 @@ class CheckActivity : AppCompatActivity() {
                 empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
-                            var id_empresa=document.get("id_empresa").toString()
+                            var id_empresa = document.get("id_empresa").toString()
                             scannedResult = result.contents
-                            if(id_empresa.equals(scannedResult)){
+                            var cadena = scannedResult.substring(0, scannedResult.length - 1)
+
+                            if (id_empresa.equals(cadena)) {
                                 var checador = Checador()
                                 val c = Calendar.getInstance()
                                 val df = SimpleDateFormat("dd/MM/yyyy")
@@ -87,14 +91,13 @@ class CheckActivity : AppCompatActivity() {
                                 checador.hora = formattedDate2
                                 checador.id_empresa = scannedResult
                                 checador.id_usuario = document.get("id").toString()
-                                checador.nombre=document.get("name").toString()
+                                checador.nombre = document.get("name").toString()
                                 checador.id = ""
                                 saveChecador(checador)
                                 showConfirmDialog()
-                            }else{
+                            } else {
                                 showErrorDialog()
                             }
-
                         }
                     } else {
                         Log.w("saasas", "Error getting documents.", task.exception)
