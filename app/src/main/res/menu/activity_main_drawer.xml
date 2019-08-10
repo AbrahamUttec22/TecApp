@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group>
+        <item
+            android:id="@+id/nav_item_inicio"
+            android:icon="@drawable/ic_event_seat"
+            android:title="Inicio" />
+        <item
+            android:id="@+id/nav_item_usuarios"
+            android:icon="@drawable/ic_call_to_actio"
+            android:title="Panel de Usuarios" />
+        <item
+            android:id="@+id/nav_item_actividades"
+            android:icon="@drawable/ic_touch_app"
+            android:title="Actividades" />
+        <item
+            android:id="@+id/nav_item_eventos"
+            android:icon="@drawable/ic_note"
+            android:title="Eventos" />
+        <item
+            android:id="@+id/nav_item_encuestas"
+            android:icon="@drawable/ic_label"
+            android:title="Encuestas" />
+        <item
+            android:id="@+id/nav_item_anuncios"
+            android:icon="@drawable/ic_picture_in_picture"
+            android:title="Anuncios" />
+    </group>
+
+    <group android:id="@+id/group_menu">
+        <item
+            android:id="@+id/nav_item_perfil"
+            android:title="Perfil" />
+        <item
+            android:id="@+id/nav_item_cerrar"
+            android:title="Cerrar Sesion" />
+    </group>
+
+    <item android:title="Herramientes">
+        <menu>
+            <item
+                android:id="@+id/nav_item_checador"
+                android:icon="@drawable/ic_label"
+                android:title="Checador" />
+            <item
+                android:id="@+id/nav_item_generar_qr"
+                android:icon="@drawable/ic_picture_in_picture"
+                android:title="Generar QR" />
+            <item
+                android:id="@+id/nav_item_estatus_checador"
+                android:icon="@drawable/ic_picture_in_picture"
+                android:title="Estatus del checador" />
+        </menu>
+    </item>
+</menu>

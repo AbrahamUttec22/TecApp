@@ -139,7 +139,6 @@ class Tab2Fragment : Fragment() {
             if (task.isSuccessful) {
                 //save the user on cloud firestore
                 mAuth.currentUser!!.sendEmailVerification().addOnCompleteListener(requireActivity()) {
-
                 }
                 saveUsuario(usuario, view)
                 mAuth.signOut()//this is necesary because the val is in general

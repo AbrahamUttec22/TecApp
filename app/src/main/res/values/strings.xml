@@ -1,5 +1,12 @@
 <resources>
     <string name="app_name">TG Empresa-Empleados</string>
+    <string name="inbox">Inbox</string>
+    <string name="sent">Sent</string>
+    <string name="draft">Draft</string>
+    <string name="trash">Trash</string>
+    <string name="settings">Settings</string>
+    <string name="drawerOpen">Open</string>
+    <string name="drawerClose">Close</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -29,4 +36,7 @@
     <string name="quickstart_message">Click the SUBSCRIBE TO WEATHER button below to subscribe to the
         weather topic. Messages sent to the weather topic will be received. The LOG TOKEN button logs the
         InstanceID token to logcat.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

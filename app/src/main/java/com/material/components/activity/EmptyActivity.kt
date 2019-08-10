@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity
 import com.alejandrolora.finalapp.goToActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.material.components.activity.login.LoginCardOverlap
+import com.material.components.drawer.InicioKActivity
 
 /**
  * @author Abraham
@@ -21,10 +22,13 @@ class MainEmptyActivity : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-       //mAuth.signOut()
+        mAuth.signOut()
         //Validated for know if the user us already login
         if (mAuth.currentUser == null) {
-            goToActivity<LoginCardOverlap> {
+            /*  goToActivity<LoginCardOverlap> {
+                  flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+              }*/
+            goToActivity<InicioKActivity> {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
