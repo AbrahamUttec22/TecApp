@@ -15,6 +15,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.alejandrolora.finalapp.goToActivity
 import com.alejandrolora.finalapp.toast
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
@@ -28,6 +29,7 @@ import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.material.components.R
 import com.material.components.activity.MainMenu
+import com.material.components.drawer.DashboarActivity
 import com.material.components.model.Usuario
 import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_card_overlaps.*
@@ -133,7 +135,7 @@ class CardOverlap : AppCompatActivity() {
                 if (task.isSuccessful) {
                     for (document in task.result!!) {
                         val ubicacion = document.get("ubicacion").toString()
-                        view= findViewById<View>(R.id.imgPerfil) as ImageView
+                        view = findViewById<View>(R.id.imgPerfil) as ImageView
                         Glide
                                 .with(applicationContext)
                                 .load(ubicacion)
@@ -143,7 +145,6 @@ class CardOverlap : AppCompatActivity() {
             })
         }
     }
-
 
     /**
      * @param direccion
@@ -227,23 +228,33 @@ class CardOverlap : AppCompatActivity() {
     //unique views
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.setNavigationIcon(R.drawable.ic_menu)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setTitle(null)
+        supportActionBar!!.title = "Mi perfil"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        Tools.setSystemBarColor(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_basic, menu)
+        menuInflater.inflate(R.menu.menu_done, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            finish()
+            goToActivity<DashboarActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         } else {
             Toast.makeText(applicationContext, item.title, Toast.LENGTH_SHORT).show()
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        goToActivity<DashboarActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 }

@@ -27,12 +27,21 @@ import android.provider.AlarmClock.EXTRA_MESSAGE
 import android.content.Intent
 import android.support.v4.app.NotificationCompat
 import android.support.v4.widget.SwipeRefreshLayout
+import android.util.Log
 import android.widget.Button
 import android.widget.TextView
+import com.alejandrolora.finalapp.goToActivity
 import com.alejandrolora.finalapp.inflate
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.activity.MainMenu
+import com.material.components.adapter.AdministrarEventoAdapter
 import com.material.components.adapter.EncuestaViewHolder
+import com.material.components.drawer.DashboarActivity
+import com.material.components.model.Evento
+import kotlinx.android.synthetic.main.activity_administrar_evento.*
 import kotlinx.android.synthetic.main.activity_encuesta.*
+import kotlinx.android.synthetic.main.activity_encuesta.listView
 
 
 /**
@@ -46,20 +55,23 @@ class EncuestaActivity : AppCompatActivity() {
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     private val channelId = "com.example.vicky.notificationexample"
     //declare val for save the collection
-    private val userCollection: CollectionReference
+    private val encuestaCollection: CollectionReference
+    private val votacionCollection: CollectionReference
+
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
         FirebaseApp.initializeApp(this)
         //save the collection marks on val maksCollection
-        userCollection = FirebaseFirestore.getInstance().collection("Encuestas")
-
+        encuestaCollection = FirebaseFirestore.getInstance().collection("Encuestas")
+        votacionCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_encuesta)
         initToolbar()
+        addMarksListenerVoto()
         addMarksListener()
         swipeRefreshLayout = findViewById(R.id.swipeVerEncuestas)
         swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
@@ -69,33 +81,19 @@ class EncuestaActivity : AppCompatActivity() {
         //end for click listener a second boton
     }
 
-    private fun notifi() {
-        val mBuilder: NotificationCompat.Builder
-        val mNotifyMgr = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val icono = R.mipmap.ic_launcher
-        val i = Intent(this, EncuestaActivity::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, i, 0)
-        mBuilder = NotificationCompat.Builder(applicationContext, channelId)
-                .setContentIntent(pendingIntent)
-                .setSmallIcon(icono)
-                .setContentTitle("Encuestas")
-                .setContentText("Se ha agregado una nueva encuesta")
-                .setVibrate(longArrayOf(100, 250, 100, 500))
-                .setAutoCancel(true)
-        mNotifyMgr.notify(1, mBuilder.build())
-    }
 
     /**
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
-        var id_empresa=sharedPreference.getString ("id_empresa","")
-        userCollection.whereEqualTo("status","1").whereEqualTo("id_empresa",id_empresa).addSnapshotListener { snapshots, error ->
+        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa = sharedPreference.getString("id_empresa", "")
+        encuestaCollection.whereEqualTo("status", "1").whereEqualTo("id_empresa", id_empresa).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
-                    addChanges(changes)
+                    //addChanges(changes)
+                    listenerDb()
                 }
             } else {
                 Toast.makeText(this, "Ha ocurrido un error intenta de nuevo", Toast.LENGTH_SHORT).show()
@@ -104,19 +102,67 @@ class EncuestaActivity : AppCompatActivity() {
     }
 
     /**
+     * Listener for peopleCollection
+     */
+    private fun addMarksListenerVoto() {
+        votacionCollection.addSnapshotListener { snapshots, error ->
+            if (error == null) {
+                val changes = snapshots?.documentChanges
+                if (changes != null) {
+                    //addChanges(changes)
+                    listenerDb()
+                }
+            } else {
+                Toast.makeText(this, "Ha ocurrido un error intenta de nuevo", Toast.LENGTH_SHORT).show()
+            }
+        }
+    }
+
+
+    private fun listenerDb() {
+        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa = sharedPreference.getString("id_empresa", "")
+        val consul = encuestaCollection.whereEqualTo("status", "1").whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                val itemEncuesta = ArrayList<Encuesta>()//lista local de una sola instancia
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                    itemEncuesta.add(document.toObject(Encuesta::class.java))//ir agregando los datos a la lista
+                }
+                if (con == 0) {
+                    iconDefaultEncuestas.setVisibility(View.VISIBLE)
+                } else {
+                    iconDefaultEncuestas.setVisibility(View.INVISIBLE)
+                }
+                adapter = EncuestaAdapter(this, R.layout.list_view_encuesta, itemEncuesta)
+                listView.adapter = adapter
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+
+    }
+
+
+    /**
      * @param changes
      * aqui se hace el recorrido de la coleccion de cloudfirestore
      */
     private fun addChanges(changes: List<DocumentChange>) {
         val itemUsuario = ArrayList<Encuesta>()//lista local de una sola instancia
-        var con=0
+        var con = 0
         for (change in changes) {
             con++
             itemUsuario.add(change.document.toObject(Encuesta::class.java))//ir agregando los datos a la lista
         }//una ves agregado los campos mandar a llamar la
-        if(con==0){
+        if (con == 0) {
             iconDefaultEncuestas.setVisibility(View.VISIBLE)
-        }else{
+        } else {
             iconDefaultEncuestas.setVisibility(View.INVISIBLE)
         }
         adapter = EncuestaAdapter(this, R.layout.list_view_encuesta, itemUsuario)
@@ -126,9 +172,8 @@ class EncuestaActivity : AppCompatActivity() {
     //front end
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.setNavigationIcon(R.drawable.ic_menu)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setTitle("Encuestas")
+        supportActionBar!!.title = "Encuestas"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
     }
@@ -140,9 +185,19 @@ class EncuestaActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            finish()
+            goToActivity<DashboarActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
         }
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        goToActivity<DashboarActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    }
 }

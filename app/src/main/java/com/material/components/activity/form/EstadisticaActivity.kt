@@ -24,6 +24,7 @@ import com.material.components.R
 import com.material.components.activity.MainMenu
 import com.material.components.adapter.EncuestaAdapter
 import com.material.components.adapter.EstadisticaAdapter
+import com.material.components.drawer.DashboarActivity
 import com.material.components.model.Encuesta
 import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_agregar_encuesta.*
@@ -72,13 +73,14 @@ class EstadisticaActivity : AppCompatActivity() {
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
-        var id_empresa=sharedPreference.getString ("id_empresa","")
-        encuestasCollection.whereEqualTo("id_empresa",id_empresa).addSnapshotListener { snapshots, error ->
+        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa = sharedPreference.getString("id_empresa", "")
+        encuestasCollection.whereEqualTo("id_empresa", id_empresa).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
-                    addChanges(changes)
+                    // addChanges(changes)
+                    listenerDb()
                 }
             } else {
                 toast("Ha ocurrido un error intente de nuevo")
@@ -86,20 +88,58 @@ class EstadisticaActivity : AppCompatActivity() {
         }
     }
 
+    private fun listenerDb() {
+        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa = sharedPreference.getString("id_empresa", "")
+        val consul = encuestasCollection.whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                val itemEncuesta = ArrayList<Encuesta>()//lista local de una sola instancia
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                    itemEncuesta.add(document.toObject(Encuesta::class.java))//ir agregando los datos a la lista
+                }
+                if (con == 0) {
+                    iconDefaultEstadisticas.setVisibility(View.VISIBLE)
+                } else {
+                    iconDefaultEstadisticas.setVisibility(View.INVISIBLE)
+                }
+                encuestaList = itemEncuesta
+                adapter = EstadisticaAdapter(this, R.layout.list_view_estadistica, itemEncuesta)
+                //listView.btnCerrarEncuesta
+                listView.adapter = adapter
+                listView.onItemClickListener = object : AdapterView.OnItemClickListener {
+                    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                        val pregunta = view!!.txtPregunta.text.toString()
+                        showDialog(pregunta)
+                    }
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+
+    }
+
+
     /**
      * @param changes
      * aqui se hace el recorrido de la coleccion de cloudfirestore
      */
     private fun addChanges(changes: List<DocumentChange>) {
         val itemUsuario = ArrayList<Encuesta>()//lista local de una sola instancia
-        var con=0
+        var con = 0
         for (change in changes) {
             con++
             itemUsuario.add(change.document.toObject(Encuesta::class.java))//ir agregando los datos a la lista
         }//una ves agregado los campos mandar a llamar la vista
-        if(con==0){
+        if (con == 0) {
             iconDefaultEstadisticas.setVisibility(View.VISIBLE)
-        }else{
+        } else {
             iconDefaultEstadisticas.setVisibility(View.INVISIBLE)
         }
         encuestaList = itemUsuario
@@ -160,30 +200,30 @@ class EstadisticaActivity : AppCompatActivity() {
         //beggin with consult
         resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
-                var c1=0
-                var c2=0
-                var c3=0
-                var ctotal:Int
+                var c1 = 0
+                var c2 = 0
+                var c3 = 0
+                var ctotal: Int
                 for (document in task.result!!) {
                     val respuesta = document.get("respuesta").toString()
-                    if (respuesta== res1) {
+                    if (respuesta == res1) {
                         c1++
-                    } else if (respuesta== res2){
+                    } else if (respuesta == res2) {
                         c2++
-                    }else if(respuesta== res3){
+                    } else if (respuesta == res3) {
                         c3++
                     }
                 }//end for
-                ctotal=c1+c2+c3
+                ctotal = c1 + c2 + c3
                 if (ta == "2") {
                     txt1.text = res1
                     txt2.text = res2
-                    vt1.text=c1.toString()
-                    vt2.text=c2.toString()
-                    sk1.max=ctotal
-                    sk2.max=ctotal
-                    sk1.progress=c1
-                    sk2.progress=c2
+                    vt1.text = c1.toString()
+                    vt2.text = c2.toString()
+                    sk1.max = ctotal
+                    sk2.max = ctotal
+                    sk1.progress = c1
+                    sk2.progress = c2
                     txt3.setVisibility(View.INVISIBLE)
                     vt3.setVisibility(View.INVISIBLE)
                     sk3.setVisibility(View.INVISIBLE)
@@ -191,15 +231,15 @@ class EstadisticaActivity : AppCompatActivity() {
                     txt1.text = res1
                     txt2.text = res2
                     txt3.text = res3
-                    sk1.max=ctotal
-                    sk2.max=ctotal
-                    sk3.max=ctotal
-                    sk1.progress=c1
-                    sk2.progress=c2
-                    sk3.progress=c3
-                    vt1.text=c1.toString()
-                    vt2.text=c2.toString()
-                    vt3.text=c3.toString()
+                    sk1.max = ctotal
+                    sk2.max = ctotal
+                    sk3.max = ctotal
+                    sk1.progress = c1
+                    sk2.progress = c2
+                    sk3.progress = c3
+                    vt1.text = c1.toString()
+                    vt2.text = c2.toString()
+                    vt3.text = c3.toString()
                 }
             }
         })//end for expression lambdas this very cool
@@ -208,24 +248,37 @@ class EstadisticaActivity : AppCompatActivity() {
         dialog.show()
         dialog.window!!.attributes = lp
     }
+
     //here the front end
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.setNavigationIcon(R.drawable.ic_menu)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setTitle("Estadisticas")
+        supportActionBar!!.title = "Estadisticas"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
     }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_search_setting, menu)
         return true
     }
+
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item!!.itemId == android.R.id.home) {
-            finish()
+            goToActivity<DashboarActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        goToActivity<DashboarActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
 }//end for handler

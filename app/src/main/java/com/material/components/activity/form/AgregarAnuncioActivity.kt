@@ -1,4 +1,5 @@
 package com.material.components.activity.form
+
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
@@ -13,6 +14,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
+import com.alejandrolora.finalapp.goToActivity
 import com.alejandrolora.finalapp.toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
@@ -22,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.material.components.R
+import com.material.components.drawer.DashboarActivity
 import com.material.components.model.Anuncio
 import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_agregar_anuncio.*
@@ -68,30 +71,30 @@ class AgregarAnuncioActivity : AppCompatActivity() {
         setContentView(R.layout.activity_agregar_anuncio)
         initToolbar()
         registrarAnuncio.setOnClickListener {
-            val description=txtDescriptionAnuncio.text.toString()
-            val titulo=txtTituloAnuncio.text.toString()
-            if (isValid(description,titulo) && imgAnuncio.getDrawable() != null){
+            val description = txtDescriptionAnuncio.text.toString()
+            val titulo = txtTituloAnuncio.text.toString()
+            if (isValid(description, titulo) && imgAnuncio.getDrawable() != null) {
                 val builder = AlertDialog.Builder(this)
                 val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
                 val message = dialogView.findViewById<TextView>(R.id.mensaje)
                 message.text = "Registrando..."
-                val obj=Anuncio()
-                var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
-                var id_empresa=sharedPreference.getString ("id_empresa","")
-                obj.id_empresa=id_empresa
-                obj.description=description
-                obj.titulo=titulo
+                val obj = Anuncio()
+                var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                var id_empresa = sharedPreference.getString("id_empresa", "")
+                obj.id_empresa = id_empresa
+                obj.description = description
+                obj.titulo = titulo
                 val c = Calendar.getInstance()
                 val df = SimpleDateFormat("dd/MM/yyyy")
                 val formattedDate = df.format(c.getTime()).toString()
-                obj.fecha=formattedDate
+                obj.fecha = formattedDate
                 upload(obj)
                 builder.setView(dialogView)
                 builder.setCancelable(false)
                 val dialog = builder.create()
                 dialog.show()
                 Handler().postDelayed({ dialog.dismiss() }, 1600)
-            }else{
+            } else {
                 toast("Completa los campos")
             }
         }
@@ -162,13 +165,13 @@ class AgregarAnuncioActivity : AppCompatActivity() {
     private fun saveAnuncio(anuncio: Anuncio) {
         //add the collection and save the User, this is validated
         marksCollection.add(anuncio).addOnSuccessListener {
-            marksCollection.document(it.id).update("id",it.id).addOnSuccessListener {
+            marksCollection.document(it.id).update("id", it.id).addOnSuccessListener {
                 val empleado = userCollection.whereEqualTo("id_empresa", anuncio.id_empresa)
                 //beggin with consult
                 empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
-                            val  token= document.get("token").toString()
+                            val token = document.get("token").toString()
                             sendNotificationToPatner(token)
                         }
                     } else {
@@ -185,7 +188,7 @@ class AgregarAnuncioActivity : AppCompatActivity() {
     }
 
 
-    private fun sendNotificationToPatner(token:String) {
+    private fun sendNotificationToPatner(token: String) {
         val notification = Notification("Se ha agregado un nuevo anuncio", "Anuncios")
         val requestNotificaton = RequestNotificaton()
         //token is id , whom you want to send notification ,
@@ -218,14 +221,24 @@ class AgregarAnuncioActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            finish()
+            goToActivity<DashboarActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun isValid(description:String,titulo:String):Boolean{
-     return !description.isNullOrEmpty() &&
-             !titulo.isNullOrEmpty()
+    private fun isValid(description: String, titulo: String): Boolean {
+        return !description.isNullOrEmpty() &&
+                !titulo.isNullOrEmpty()
+    }
+
+    override fun onBackPressed() {
+        goToActivity<DashboarActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
 }

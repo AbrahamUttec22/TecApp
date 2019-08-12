@@ -2,6 +2,7 @@ package com.material.components.activity.about
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
@@ -36,10 +37,16 @@ import java.lang.Exception
 import android.os.Environment
 import android.util.Log
 import android.widget.TextView
+import com.alejandrolora.finalapp.goToActivity
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QuerySnapshot
 import com.itextpdf.text.Element
+import com.material.components.adapter.ActividadesAdapter
+import com.material.components.drawer.DashboarActivity
+import com.material.components.model.Actividades
+import kotlinx.android.synthetic.main.activity_actividades.*
+import kotlinx.android.synthetic.main.activity_encuesta.listView
 import kotlinx.android.synthetic.main.list_view_estatus_checador.view.*
 import org.w3c.dom.Text
 
@@ -88,21 +95,53 @@ class EstatusChecadorActivity : AppCompatActivity() {
     private fun addMarksListener() {
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var id_empresa = sharedPreference.getString("id_empresa", "")
+        //toast(id_empresa)
         val c = Calendar.getInstance()
         val df = SimpleDateFormat("dd/MM/yyyy")
         val formattedDate = df.format(c.getTime()).toString()
-        checadorCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("fecha", formattedDate).
-                orderBy("hora").addSnapshotListener { snapshots, error ->
+
+        checadorCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("fecha", formattedDate).orderBy("hora").addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
-                    addChanges(changes)
+                    //  addChanges(changes)
+                    listenerDb()
                 }
             } else {
                 // toast("Ha ocurrido un error intente de nuevo")
             }
         }
     }
+
+    private fun listenerDb() {
+        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa = sharedPreference.getString("id_empresa", "")
+        //toast(id_empresa)
+        val c = Calendar.getInstance()
+        val df = SimpleDateFormat("dd/MM/yyyy")
+        val formattedDate = df.format(c.getTime()).toString()
+        val consul = checadorCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("fecha", formattedDate).orderBy("hora")
+        //beggin with consult
+        consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                val itemChecador = ArrayList<Checador>()//lista local de una sola instancia
+                for (document in task.result!!) {
+                    itemChecador.add(document.toObject(Checador::class.java))//ir agregando los datos a la lista
+                }
+                eventoList = itemChecador
+                Log.w("LISTA", eventoList.toString())
+                adapter = EstatusChecadorAdapter(this, R.layout.list_view_estatus_checador, eventoList)
+                //listView.btnCerrarEncuesta
+                listView.adapter = adapter
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+
+    }
+
 
     /**
      * @param changes
@@ -114,6 +153,7 @@ class EstatusChecadorActivity : AppCompatActivity() {
             itemChecador.add(change.document.toObject(Checador::class.java))//ir agregando los datos a la lista
         }//una ves agregado los campos mandar a llamar la vista
         eventoList = itemChecador
+        Log.w("LISTA", eventoList.toString())
         adapter = EstatusChecadorAdapter(this, R.layout.list_view_estatus_checador, eventoList)
         //listView.btnCerrarEncuesta
         listView.adapter = adapter
@@ -122,9 +162,7 @@ class EstatusChecadorActivity : AppCompatActivity() {
     private fun addMarksListenerTWO() {
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var id_empresa = sharedPreference.getString("id_empresa", "")
-        checadorCollection.whereEqualTo("id_empresa", id_empresa).
-                orderBy("fecha").orderBy("hora").orderBy("nombre").
-                addSnapshotListener { snapshots, error ->
+        checadorCollection.whereEqualTo("id_empresa", id_empresa).orderBy("fecha").orderBy("hora").addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
@@ -146,6 +184,7 @@ class EstatusChecadorActivity : AppCompatActivity() {
             itemChecadorTwo.add(change.document.toObject(Checador::class.java))//ir agregando los datos a la lista
         }//una ves agregado los campos mandar a llamar la vista
         eventoListTwo = itemChecadorTwo
+
     }//end for handler
 
     private fun validarmesprimero(mes: String) {
@@ -239,9 +278,8 @@ class EstatusChecadorActivity : AppCompatActivity() {
     //here the front end
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.setNavigationIcon(R.drawable.ic_menu)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setTitle("Horas de chequeo")
+        supportActionBar!!.title = "Horas de chequeo"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
     }
@@ -307,7 +345,11 @@ class EstatusChecadorActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item!!.itemId == android.R.id.home) {
-            finish()
+            goToActivity<DashboarActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
         } else if (item!!.itemId == R.id.mesultimo) {
             mesEscogido = item.title.toString()
             validarmesprimero(item.title.toString())
@@ -384,4 +426,10 @@ class EstatusChecadorActivity : AppCompatActivity() {
         }
     }
 
+    override fun onBackPressed() {
+        goToActivity<DashboarActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    }
 }

@@ -14,7 +14,8 @@
         android:roundIcon="@drawable/logo_tecgurus"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".drawer.InicioKActivity"></activity>
+        <activity android:name=".drawer.DashboarActivity"></activity>
+        <activity android:name=".drawer.InicioKActivity" />
         <activity android:name=".checador.GenerarQrJActivity" />
         <activity android:name=".activity.about.EstatusChecadorActivity" />
         <activity android:name=".activity.login.ForgotPasswordActivity" />

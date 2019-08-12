@@ -2,6 +2,7 @@ package com.material.components.activity.form
 
 import android.app.DatePickerDialog
 import android.content.Context
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -24,12 +25,14 @@ import java.util.*
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.TextView
+import com.alejandrolora.finalapp.goToActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
+import com.material.components.drawer.DashboarActivity
 import com.material.components.model.Evento
 
 import com.material.components.message.ApiClient
@@ -42,6 +45,7 @@ import retrofit2.Response
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+
 /**
  * @author abraham
  * add a new encuesta
@@ -107,15 +111,15 @@ class AgregarEncuestaActivity : AppCompatActivity() {
                 when (valorRespuestas) {
                     1 -> {
                         if (!txtRespuestas.text.isNullOrEmpty() && !txtRespuestas2.text.isNullOrEmpty()) {
-                          val builder = AlertDialog.Builder(this)
+                            val builder = AlertDialog.Builder(this)
                             val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
                             val message = dialogView.findViewById<TextView>(R.id.mensaje)
                             message.text = "Registrando..."
                             builder.setView(dialogView)
                             var encuesta = Encuesta()//this isn´t global because the instance
-                            var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
-                            var id_empresa=sharedPreference.getString ("id_empresa","")
-                            encuesta.id_empresa=id_empresa
+                            var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                            var id_empresa = sharedPreference.getString("id_empresa", "")
+                            encuesta.id_empresa = id_empresa
                             encuesta.pregunta = pregunta
                             encuesta.status = "1"
                             encuesta.respuestas = listOf(txtRespuestas.text.toString(), txtRespuestas2.text.toString())
@@ -130,15 +134,15 @@ class AgregarEncuestaActivity : AppCompatActivity() {
                     }
                     2 -> {
                         if (!txtRespuestas.text.isNullOrEmpty() && !txtRespuestas2.text.isNullOrEmpty() && !txtRespuestas3.text.isNullOrEmpty()) {
-                          val builder = AlertDialog.Builder(this)
+                            val builder = AlertDialog.Builder(this)
                             val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
                             val message = dialogView.findViewById<TextView>(R.id.mensaje)
                             message.text = "Registrando..."
                             builder.setView(dialogView)
                             var encuesta = Encuesta()//this isn´t global because the instance
-                            var sharedPreference = getSharedPreferences ("shared_login_data", Context.MODE_PRIVATE)
-                            var id_empresa=sharedPreference.getString ("id_empresa","")
-                            encuesta.id_empresa=id_empresa
+                            var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                            var id_empresa = sharedPreference.getString("id_empresa", "")
+                            encuesta.id_empresa = id_empresa
                             encuesta.pregunta = pregunta
                             encuesta.status = "1"
                             encuesta.respuestas = listOf(txtRespuestas.text.toString(), txtRespuestas2.text.toString(), txtRespuestas3.text.toString())
@@ -173,7 +177,7 @@ class AgregarEncuestaActivity : AppCompatActivity() {
             empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                 if (task.isSuccessful) {
                     for (document in task.result!!) {
-                        val  token= document.get("token").toString()
+                        val token = document.get("token").toString()
                         sendNotificationToPatner(token)
                     }
                 } else {
@@ -187,7 +191,7 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendNotificationToPatner(token:String) {
+    private fun sendNotificationToPatner(token: String) {
         val notification = Notification("Se ha agregado una nueva encuesta", "Encuestas")
         val requestNotificaton = RequestNotificaton()
         //token is id , whom you want to send notification ,
@@ -225,9 +229,20 @@ class AgregarEncuestaActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            finish()
+            goToActivity<DashboarActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onBackPressed() {
+        goToActivity<DashboarActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
 }

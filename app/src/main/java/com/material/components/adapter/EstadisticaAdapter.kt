@@ -98,7 +98,7 @@ class EstadisticaAdapter(val context: Context, val layout: Int, val list: List<E
                 encuesta.pregunta = pregunta
                 encuesta.status="0"//false
                 val builder = AlertDialog.Builder(context)
-                builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Si", DialogInterface.OnClickListener { dialog, id ->
                     sentVoto(encuesta)
                 }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
                         .show()

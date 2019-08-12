@@ -25,6 +25,7 @@ import com.google.zxing.integration.android.IntentResult
 import com.material.components.R
 import com.material.components.activity.MainMenu
 import com.material.components.activity.login.LoginCardOverlap
+import com.material.components.drawer.DashboarActivity
 import com.material.components.model.Checador
 import com.material.components.model.Evento
 import com.material.components.utils.Tools
@@ -78,7 +79,6 @@ class CheckActivity : AppCompatActivity() {
                             var id_empresa = document.get("id_empresa").toString()
                             scannedResult = result.contents
                             var cadena = scannedResult.substring(0, scannedResult.length - 1)
-
                             if (id_empresa.equals(cadena)) {
                                 var checador = Checador()
                                 val c = Calendar.getInstance()
@@ -89,7 +89,7 @@ class CheckActivity : AppCompatActivity() {
                                 val formattedDate2 = df2.format(c2.getTime()).toString()
                                 checador.fecha = formattedDate
                                 checador.hora = formattedDate2
-                                checador.id_empresa = scannedResult
+                                checador.id_empresa = cadena
                                 checador.id_usuario = document.get("id").toString()
                                 checador.nombre = document.get("name").toString()
                                 checador.id = ""
@@ -180,9 +180,8 @@ class CheckActivity : AppCompatActivity() {
 
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.setNavigationIcon(R.drawable.ic_menu)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setTitle("Checador")
+        supportActionBar!!.title = "Checador"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
     }
@@ -194,8 +193,17 @@ class CheckActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            finish()
+            goToActivity<DashboarActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
         return super.onOptionsItemSelected(item)
+    }
+    override fun onBackPressed() {
+        goToActivity<DashboarActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 }

@@ -66,7 +66,7 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                 val evento = Evento()
                 evento.id = id
                 val builder = AlertDialog.Builder(context)
-                builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, id ->
+                builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Si", DialogInterface.OnClickListener { dialog, id ->
                     sentVoto(evento)
                 }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
                         .show()

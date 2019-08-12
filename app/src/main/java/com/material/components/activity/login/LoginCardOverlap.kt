@@ -33,6 +33,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.R
 import com.material.components.activity.MainMenu
 import com.material.components.activity.dialog.*
+import com.material.components.drawer.DashboarActivity
 import com.material.components.model.Encuesta
 import com.material.components.register.RegistrosActivity
 import kotlinx.android.synthetic.main.activity_agregar_encuesta.*
@@ -73,7 +74,7 @@ class LoginCardOverlap : AppCompatActivity() {
         setContentView(com.material.components.R.layout.activity_login_card_overlap)
         //listener
         buttonLogIn.setOnClickListener {
-            val email = txtEmail.text.toString()
+            val email = txtEmail.text.toString().trim()
             val password = txtPassword.text.toString()
             if (isValidEmail(email) && !password.isNullOrEmpty()) {//valid the params
                 val builder = AlertDialog.Builder(this)
@@ -85,6 +86,7 @@ class LoginCardOverlap : AppCompatActivity() {
                 builder.setCancelable(false)
                 val dialog = builder.create()
                 dialog.show()
+
                 Handler().postDelayed({ dialog.dismiss() }, 1400)
             } else {
                 toast("Completa los campos")
@@ -138,7 +140,7 @@ class LoginCardOverlap : AppCompatActivity() {
                                     var sesion = sharedPreference.edit()
                                     sesion.putString("id_empresa", id_empresa)
                                     sesion.commit()
-                                    goToActivity<MainMenu> {
+                                    goToActivity<DashboarActivity> {
                                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     }
                                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -152,7 +154,7 @@ class LoginCardOverlap : AppCompatActivity() {
                                     var sesion = sharedPreference.edit()
                                     sesion.putString("id_empresa", id_empresa)
                                     sesion.commit()
-                                    goToActivity<MainMenu> {
+                                    goToActivity<DashboarActivity> {
                                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                     }
                                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -178,7 +180,7 @@ class LoginCardOverlap : AppCompatActivity() {
                                 var sesion = sharedPreference.edit()
                                 sesion.putString("id_empresa", id_empresa)
                                 sesion.commit()
-                                goToActivity<MainMenu> {
+                                goToActivity<DashboarActivity> {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
                                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

@@ -1,6 +1,7 @@
 package com.material.components.checador;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.os.Handler;
@@ -18,6 +19,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.material.components.R;
+import com.material.components.drawer.DashboarActivity;
 import com.material.components.utils.Tools;
 
 import java.util.Random;
@@ -58,8 +60,7 @@ public class GenerarQrJActivity extends AppCompatActivity {
                     bitMatrix = multiFormatWriter.encode(valor, BarcodeFormat.QR_CODE, 500, 500);
                     String cadena = "";
                     cadena = valor.substring(0, valor.length() - 1);
-                    Toast.makeText(GenerarQrJActivity.this, cadena, Toast.LENGTH_SHORT).show();
-
+                  //  Toast.makeText(GenerarQrJActivity.this, cadena, Toast.LENGTH_SHORT).show();
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                     imageView.setImageBitmap(bitmap);
@@ -74,7 +75,6 @@ public class GenerarQrJActivity extends AppCompatActivity {
 
     private void initToolbar() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        toolbar.setNavigationIcon(R.drawable.ic_menu);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("QR");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -90,9 +90,19 @@ public class GenerarQrJActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
-            finish();
+            regreso();//poner un intent
         }
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onBackPressed() {
+        regreso();
+    }
+
+    private void regreso() {
+        handler.removeCallbacksAndMessages(null);
+        Intent intent = new Intent(this, DashboarActivity.class);
+        startActivity(intent);
+    }
 }

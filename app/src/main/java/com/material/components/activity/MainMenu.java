@@ -1092,28 +1092,28 @@ public class MainMenu extends AppCompatActivity {
 
             // Dashboard ---------------------------------------------------------------------------
             case 29001:
-                startActivity(new Intent(this, DashboardGridFab.class));
+                startActivity(new Intent(this, DashboardGridFab.class));//posible
                 break;
             case 29002:
-                startActivity(new Intent(this, DashboardStatistics.class));
+                startActivity(new Intent(this, DashboardStatistics.class));//no
                 break;
             case 29003:
-                startActivity(new Intent(this, DashboardPayBill.class));
+                startActivity(new Intent(this, DashboardPayBill.class));//no tampoco xd
                 break;
             case 29004:
-                startActivity(new Intent(this, DashboardFlight.class));
+                startActivity(new Intent(this, DashboardFlight.class));//nope
                 break;
             case 29005:
-                startActivity(new Intent(this, DashboardWallet.class));
+                startActivity(new Intent(this, DashboardWallet.class));//no queda
                 break;
             case 29006:
-                startActivity(new Intent(this, DashboardWalletGreen.class));
+                startActivity(new Intent(this, DashboardWalletGreen.class));//tarjetas de credito
                 break;
             case 29007:
-                startActivity(new Intent(this, DashboardFinance.class));
+                startActivity(new Intent(this, DashboardFinance.class));//no queda
                 break;
             case 29008:
-                startActivity(new Intent(this, DashboardCryptocurrency.class));
+                startActivity(new Intent(this, DashboardCryptocurrency.class));//no
                 break;
 
             // Article -----------------------------------------------------------------------------

@@ -11,25 +11,34 @@ import android.support.v4.app.NotificationCompat
 import android.support.v4.view.PagerAdapter
 import android.support.v4.view.ViewPager
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.Toolbar
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
+import com.alejandrolora.finalapp.goToActivity
 import com.alejandrolora.finalapp.toast
 import com.bumptech.glide.Glide
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.R
 import com.material.components.activity.MainMenu
+import com.material.components.adapter.EstadisticaAdapter
+import com.material.components.drawer.DashboarActivity
 import com.material.components.model.Anuncio
+import com.material.components.model.Encuesta
 import com.material.components.utils.Tools
+import kotlinx.android.synthetic.main.activity_encuesta.*
+import kotlinx.android.synthetic.main.activity_estadistica.*
+import kotlinx.android.synthetic.main.activity_estadistica.listView
 import kotlinx.android.synthetic.main.item_card_wizard_light.*
 import kotlinx.android.synthetic.main.item_card_wizard_light.view.*
+import kotlinx.android.synthetic.main.list_view_estadistica.view.*
 import kotlinx.android.synthetic.main.list_view_imagen.view.*
 
 
@@ -84,22 +93,6 @@ class CardWizardLight : AppCompatActivity() {
         viewPager = findViewById<View>(R.id.view_pager) as ViewPager
     }
 
-    private fun notifi() {
-        val mBuilder: NotificationCompat.Builder
-        val mNotifyMgr = applicationContext.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val icono = R.mipmap.ic_launcher
-        val i = Intent(this, CardWizardLight::class.java)
-        val pendingIntent = PendingIntent.getActivity(this, 0, i, 0)
-        mBuilder = NotificationCompat.Builder(applicationContext, channelId)
-                .setContentIntent(pendingIntent)
-                .setSmallIcon(icono)
-                .setContentTitle("Anuncios")
-                .setContentText("Se ha agregado un nuevo aviso")
-                .setVibrate(longArrayOf(100, 250, 100, 500))
-                .setAutoCancel(true)
-        mNotifyMgr.notify(1, mBuilder.build())
-    }
-
     //backend
     private fun addMarksListener(applicationContext: Context) {
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
@@ -108,13 +101,37 @@ class CardWizardLight : AppCompatActivity() {
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
-                    addChanges(changes, applicationContext)
+                    //addChanges(changes, applicationContext)
+                    listenerDb()
                 }
             } else {
                 toast("Ha ocurrido un error intenta de nuevo")
             }
         }
     }
+
+
+    private fun listenerDb() {
+        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa = sharedPreference.getString("id_empresa", "")
+        val consul = anuncioCollection.whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                val itemAnuncio = ArrayList<Anuncio>()//lista local de una sola instancia
+                for (document in task.result!!) {
+                    itemAnuncio.add(document.toObject(Anuncio::class.java))//ir agregando los datos a la lista
+                }
+                addToList(itemAnuncio, applicationContext)//vista
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+
+    }
+
 
     /**
      * @param changes
@@ -147,11 +164,11 @@ class CardWizardLight : AppCompatActivity() {
             ubicacion += item.ubicacion
             MAX_STEP++
         }
-        if(con==0){
+        if (con == 0) {
             about_title_array += arrayOf("")
             about_description_array += arrayOf("POR EL MOMENTO NO HAY ANUNCIOS")
             about_images_array += intArrayOf(R.drawable.img_wizard_1)
-            val xd="https://firebasestorage.googleapis.com/v0/b/tecapp-25ed3.appspot.com/o/uploads%2Fimage%3A119?alt=media&token=7f91a2a5-efe2-4f11-9574-a9460f4a28b2"
+            val xd = "https://firebasestorage.googleapis.com/v0/b/tecapp-25ed3.appspot.com/o/uploads%2Fimage%3A119?alt=media&token=7f91a2a5-efe2-4f11-9574-a9460f4a28b2"
             ubicacion += xd
             MAX_STEP++
         }
@@ -182,6 +199,13 @@ class CardWizardLight : AppCompatActivity() {
             dots[current_index]!!.setImageResource(R.drawable.shape_circle)
             dots[current_index]!!.setColorFilter(resources.getColor(R.color.light_green_600), PorterDuff.Mode.SRC_IN)
         }
+    }
+
+    override fun onBackPressed() {
+        goToActivity<DashboarActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
     /**
@@ -221,7 +245,10 @@ class CardWizardLight : AppCompatActivity() {
                     // move to next screen
                     viewPager!!.currentItem = current
                 } else {
-                    finish()
+                    goToActivity<DashboarActivity> {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }
             }
 

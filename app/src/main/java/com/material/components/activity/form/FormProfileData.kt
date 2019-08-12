@@ -31,6 +31,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.material.components.activity.MainMenu
+import com.material.components.drawer.DashboarActivity
 import java.io.IOException
 
 import com.material.components.message.ApiClient
@@ -161,8 +162,8 @@ class FormProfileData : AppCompatActivity() {
                 empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
-                            val  token= document.get("token").toString()
-                           sendNotificationToPatner(token)
+                            val token = document.get("token").toString()
+                            sendNotificationToPatner(token)
                         }
                     } else {
                         Log.w("saasas", "Error getting documents.", task.exception)
@@ -177,7 +178,7 @@ class FormProfileData : AppCompatActivity() {
         }
     }
 
-    private fun sendNotificationToPatner(token:String) {
+    private fun sendNotificationToPatner(token: String) {
         val notification = Notification("Se ha agregado un nuevo evento", "Eventos")
         val requestNotificaton = RequestNotificaton()
         //token is id , whom you want to send notification ,
@@ -230,11 +231,13 @@ class FormProfileData : AppCompatActivity() {
     }
 
     private fun initToolbar() {
+
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
         supportActionBar!!.title = "Agregar Evento"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
@@ -244,7 +247,11 @@ class FormProfileData : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            finish()
+            goToActivity<DashboarActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
         }
         return super.onOptionsItemSelected(item)
     }
@@ -255,4 +262,10 @@ class FormProfileData : AppCompatActivity() {
                 !titulo.isNullOrEmpty()
     }
 
+    override fun onBackPressed() {
+        goToActivity<DashboarActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    }
 }
