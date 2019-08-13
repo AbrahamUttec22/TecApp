@@ -128,17 +128,17 @@ class LoginCardOverlap : AppCompatActivity() {
                                 val rol = document.get("rol").toString()
                                 val id_empresa = document.get("id_empresa").toString()
                                 val id = document.id
-
                                 if (rol == "administrador") {
                                     val token = FirebaseInstanceId.getInstance().token.toString()
                                     userCollection.document(id).update("token", token).addOnSuccessListener {
                                     }.addOnFailureListener {}
                                     userCollection.document(id).update("id", id).addOnSuccessListener {
                                     }.addOnFailureListener {}
-
                                     val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                                     var sesion = sharedPreference.edit()
                                     sesion.putString("id_empresa", id_empresa)
+                                    sesion.putString("rol", "administrador")
+                                    sesion.putString("token", token)
                                     sesion.commit()
                                     goToActivity<DashboarActivity> {
                                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -153,6 +153,8 @@ class LoginCardOverlap : AppCompatActivity() {
                                     val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                                     var sesion = sharedPreference.edit()
                                     sesion.putString("id_empresa", id_empresa)
+                                    sesion.putString("rol", "usuario")
+                                    sesion.putString("token", token)
                                     sesion.commit()
                                     goToActivity<DashboarActivity> {
                                         flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
@@ -179,6 +181,9 @@ class LoginCardOverlap : AppCompatActivity() {
                                 val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                                 var sesion = sharedPreference.edit()
                                 sesion.putString("id_empresa", id_empresa)
+                                sesion.putString("rol", "empresa")
+                                sesion.putString("token", token)
+
                                 sesion.commit()
                                 goToActivity<DashboarActivity> {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK

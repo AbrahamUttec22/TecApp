@@ -70,6 +70,8 @@ class FormProfileData : AppCompatActivity() {
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
     }
 
+    lateinit var dialog: AlertDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_form_profile_data)
@@ -80,15 +82,14 @@ class FormProfileData : AppCompatActivity() {
                     .get(Calendar.YEAR), calendario.get(Calendar.MONTH),
                     calendario.get(Calendar.DAY_OF_MONTH)).show()
         }
-
         registrarEvento.setOnClickListener {
             val description = txtDescription.text.toString()
             val fecha = etBirthday.text.toString()
             val titulo = txtTitulo.text.toString()
             if (isValid(description, fecha, titulo) && btnGaleriaEvento.getDrawable() != null) {
                 //agregar linea del valor de la imagen
-                val builder = AlertDialog.Builder(this)
-                val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
+                var builder = AlertDialog.Builder(this)
+                var dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
                 val message = dialogView.findViewById<TextView>(R.id.mensaje)
                 message.text = "Registrando..."
                 builder.setView(dialogView)
@@ -102,9 +103,9 @@ class FormProfileData : AppCompatActivity() {
                 evento.id = ""
                 upload(evento)
                 builder.setCancelable(false)
-                val dialog = builder.create()
+                dialog = builder.create()
                 dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1500)
+                //  Handler().postDelayed({ dialog.dismiss() }, 1500)
             } else {
                 toast("Completa los campos")
             }
@@ -163,7 +164,13 @@ class FormProfileData : AppCompatActivity() {
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
                             val token = document.get("token").toString()
-                            sendNotificationToPatner(token)
+                            var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                            var toke = sharedPreference.getString("token", "").toString()
+                            if (toke.equals(token)) {
+
+                            } else {
+                                sendNotificationToPatner(token)
+                            }
                         }
                     } else {
                         Log.w("saasas", "Error getting documents.", task.exception)
@@ -171,8 +178,9 @@ class FormProfileData : AppCompatActivity() {
                 })//end for expression lambdas this very cool
 
             }.addOnFailureListener { }
+            dialog.dismiss()
             Toast.makeText(this, "Evento registrado con exito", Toast.LENGTH_LONG).show()
-            onBackPressed()
+            deregreso()
         }.addOnFailureListener {
             Toast.makeText(this, "Error guardando el evento, intenta de nuevo", Toast.LENGTH_LONG).show()
         }
@@ -263,6 +271,10 @@ class FormProfileData : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        deregreso()
+    }
+
+    private fun deregreso() {
         goToActivity<DashboarActivity> {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }

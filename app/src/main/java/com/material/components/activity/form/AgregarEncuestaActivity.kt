@@ -68,6 +68,8 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
     }
 
+    lateinit var dialog: AlertDialog
+
     //in this parshat the source is long because i Need validations
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -126,9 +128,9 @@ class AgregarEncuestaActivity : AppCompatActivity() {
 
                             saveEncuesta(encuesta)
                             builder.setCancelable(false)
-                            val dialog = builder.create()
+                            dialog = builder.create()
                             dialog.show()
-                            Handler().postDelayed({ dialog.dismiss() }, 1500)
+                            // Handler().postDelayed({ dialog.dismiss() }, 1500)
                         } else
                             toast("Completa los campos")
                     }
@@ -148,9 +150,9 @@ class AgregarEncuestaActivity : AppCompatActivity() {
                             encuesta.respuestas = listOf(txtRespuestas.text.toString(), txtRespuestas2.text.toString(), txtRespuestas3.text.toString())
                             saveEncuesta(encuesta)
                             builder.setCancelable(false)
-                            val dialog = builder.create()
+                            dialog = builder.create()
                             dialog.show()
-                            Handler().postDelayed({ dialog.dismiss() }, 1500)
+                            //Handler().postDelayed({ dialog.dismiss() }, 1500)
                         } else
                             toast("Completa los campos")
                     }
@@ -179,17 +181,27 @@ class AgregarEncuestaActivity : AppCompatActivity() {
                     for (document in task.result!!) {
                         val token = document.get("token").toString()
                         sendNotificationToPatner(token)
+                        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                        var toke = sharedPreference.getString("token", "").toString()
+                        if (toke.equals(token)) {
+
+                        } else {
+                            sendNotificationToPatner(token)
+                        }
                     }
                 } else {
                     Log.w("saasas", "Error getting documents.", task.exception)
                 }
             })//end for expression lambdas this very cool
+            dialog.dismiss()
             toast("Encuesta registrado con exito")
-            onBackPressed()
+            deregreso()
         }.addOnFailureListener {
             toast("Error guardando la encuesta, intenta de nuevo")
         }
     }
+
+
 
     private fun sendNotificationToPatner(token: String) {
         val notification = Notification("Se ha agregado una nueva encuesta", "Encuestas")
@@ -239,10 +251,13 @@ class AgregarEncuestaActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        deregreso()
+    }
+
+    private fun deregreso() {
         goToActivity<DashboarActivity> {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
-
 }

@@ -1,11 +1,13 @@
 package com.material.components.drawer
 
+import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.LightingColorFilter
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.support.v7.app.AppCompatActivity
@@ -28,10 +30,7 @@ import com.material.components.R
 import com.material.components.activity.about.EstatusChecadorActivity
 import com.material.components.activity.bottomsheet.UserActivity
 import com.material.components.activity.button.ActividadesActivity
-import com.material.components.activity.card.AdministrarAnunciosActivity
-import com.material.components.activity.card.CardBasic
-import com.material.components.activity.card.CardOverlap
-import com.material.components.activity.card.CardWizardLight
+import com.material.components.activity.card.*
 import com.material.components.activity.dialog.EncuestaActivity
 import com.material.components.activity.form.*
 import com.material.components.activity.login.LoginCardOverlap
@@ -73,10 +72,21 @@ class DashboarActivity : AppCompatActivity() {
         MiPerfil.setOnClickListener {
             //403 USUARIOS,404 EMPRESA
             //Hacer cnosulta para saber que perfil mostrar
-            goToActivity<CardOverlap> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+            var rol = sharedPreference.getString("rol", "").toString()
+            if (rol.equals("empresa")) {
+                //403 USUARIOS,404 EMPRESA
+                //Hacer cnosulta para saber que perfil mostrar
+                goToActivity<PerfilEmpresaActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            } else if (rol.equals("administrador") || rol.equals("usuario")) {
+                goToActivity<CardOverlap> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         }
         PanelUsuarios.setOnClickListener {
             //205
@@ -190,7 +200,7 @@ class DashboarActivity : AppCompatActivity() {
 
         CerrarSesion.setOnClickListener {
             val builder = AlertDialog.Builder(this)
-            builder.setMessage("Estas seguro de cerrar sesion?").setPositiveButton("Si", DialogInterface.OnClickListener { dialog, id ->
+            builder.setMessage("Estas seguro de cerrar sesión?").setPositiveButton("Si", DialogInterface.OnClickListener { dialog, id ->
                 mAuth.signOut()
                 goToActivity<LoginCardOverlap> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
             }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
@@ -225,6 +235,7 @@ class DashboarActivity : AppCompatActivity() {
     /**
      * initToolbar(header)
      */
+    @SuppressLint("ResourceType")
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbarD) as Toolbar
         //toolbar.setNavigationIcon(R.drawable.ic_menu)
@@ -254,36 +265,55 @@ class DashboarActivity : AppCompatActivity() {
                         InfoCodigoEmpresa.setVisibility(View.INVISIBLE)
                         //deshabilitar funciones
                         val color = Color.parseColor("#D3D3D3")
+                        var filter = LightingColorFilter(Color.GRAY, Color.GRAY)
 
                         PanelUsuarios.isEnabled = false
-                        PanelUsuarios.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                        PanelUsuarios.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                        //PanelUsuarios.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
                         AgregarEventos.isEnabled = false
-                        AgregarEventos.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                        AgregarEventos.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                        //AgregarEventos.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
                         AdministrarEventos.isEnabled = false
-                        AdministrarEventos.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                        AdministrarEventos.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                        //AdministrarEventos.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
                         AgregarEncuesta.isEnabled = false
-                        AgregarEncuesta.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                        AgregarEncuesta.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                        //AgregarEncuesta.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
                         AdministrarEncuestas.isEnabled = false
-                        AdministrarEncuestas.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                        AdministrarEncuestas.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                        //AdministrarEncuestas.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
                         AgregarAnuncio.isEnabled = false
-                        AgregarAnuncio.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                        AgregarAnuncio.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                        //  AgregarAnuncio.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
                         AdministrarAnuncios.isEnabled = false
-                        AdministrarAnuncios.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                        AdministrarAnuncios.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                        //AdministrarAnuncios.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
                         GenerarQR.isEnabled = false
-                        GenerarQR.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                        GenerarQR.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                        //GenerarQR.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
                         EstatusChecador.isEnabled = false
-                        EstatusChecador.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                        EstatusChecador.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                        //EstatusChecador.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
                     }
                 }
+
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
             }
@@ -293,20 +323,25 @@ class DashboarActivity : AppCompatActivity() {
         empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
                 for (document in task.result!!) {
-                    val color = Color.parseColor("#D3D3D3")
+                     val color = Color.parseColor("#D3D3D3")
+                    //var filter = LightingColorFilter(Color.GRAY, Color.GRAY)
 
                     VerActividades.isEnabled = false
-                    VerActividades.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                    VerActividades.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                    //VerActividades.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                    Checar.isEnabled = false
+                    Checar.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                    //Checar.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
                     name = document.get("nombre").toString()
                     toolbar.title = "Hola, " + name
                     val id_empresa = document.get("id_empresa").toString()
                     MostrarCodigo.text = id_empresa
-                    tituloCodigo.text = "Codigo Empresa"
+                    tituloCodigo.text = "Código Empresa"
                     InfoCodigoEmpresa.text = "¿Qué es esto?"
                 }
-
-
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
             }

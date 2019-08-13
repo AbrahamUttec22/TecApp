@@ -196,7 +196,7 @@
                             android:layout_height="wrap_content"
                             android:gravity="center_vertical"
                             android:minHeight="@dimen/spacing_xmlarge"
-                            android:hint="Telefono"
+                            android:hint="Teléfono"
                             android:inputType="phone"
                             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                             android:textColor="@color/grey_40" />
@@ -295,7 +295,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="?attr/actionBarSize"
                         android:gravity="center_vertical"
-                        android:text="Direccion"
+                        android:text="Dirección"
                         android:textAppearance="@style/TextAppearance.AppCompat.Title"
                         android:textColor="@color/grey_80" />
 
@@ -304,7 +304,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:hint="Ingresa tu direccion"
+                        android:hint="Ingresa tu dirección"
                         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                         android:textColor="@color/grey_40" />
 

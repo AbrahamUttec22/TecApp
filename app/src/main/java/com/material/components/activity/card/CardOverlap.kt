@@ -50,6 +50,7 @@ class CardOverlap : AppCompatActivity() {
     private val PICK_PHOTO = 1
     lateinit var uri: Uri
     private var viewTwo: ImageView? = null
+    lateinit var dialog: AlertDialog
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -59,6 +60,7 @@ class CardOverlap : AppCompatActivity() {
         mStorageRef = FirebaseStorage.getInstance().getReference()
 
     }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,9 +82,9 @@ class CardOverlap : AppCompatActivity() {
             builder.setView(dialogView)
             builder.setCancelable(false)
             updateInformation(nombre, edad, direccion, telefono)
-            val dialog = builder.create()
+            dialog = builder.create()
             dialog.show()
-            Handler().postDelayed({ dialog.dismiss() }, 1000)
+            //Handler().postDelayed({ dialog.dismiss() }, 1000)
         }
     }
 
@@ -143,6 +145,7 @@ class CardOverlap : AppCompatActivity() {
                     }
                 }
             })
+            dialog.dismiss()
         }
     }
 
@@ -156,9 +159,12 @@ class CardOverlap : AppCompatActivity() {
 
     private fun updateInformation(name: String, edad: String, direccion: String, telefono: String) {
         userCollection.document(idDocument).update("name", name, "edad", edad, "direccion", direccion, "telefono", telefono).addOnSuccessListener {
+            dialog.dismiss()
             Toast.makeText(this, "Informacion actulizada", Toast.LENGTH_LONG).show()
             //  onBackPressed()
         }.addOnFailureListener {
+            dialog.dismiss()
+
             Toast.makeText(this, "Error actualizando la informacion, intenta de nuevo", Toast.LENGTH_LONG).show()
         }
     }
@@ -168,7 +174,6 @@ class CardOverlap : AppCompatActivity() {
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Seleccione una imagen"), PICK_PHOTO)
-        seeImagePerfil()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -181,10 +186,11 @@ class CardOverlap : AppCompatActivity() {
                 message.text = "Subiendo..."
                 builder.setView(dialogView)
                 builder.setCancelable(false)
-                val dialog = builder.create()
                 upload()
+                dialog = builder.create()
                 dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1400)
+
+                //Handler().postDelayed({ dialog.dismiss() }, 1400)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -257,4 +263,5 @@ class CardOverlap : AppCompatActivity() {
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
+
 }

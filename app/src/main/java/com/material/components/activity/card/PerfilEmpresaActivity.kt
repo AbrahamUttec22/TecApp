@@ -1,5 +1,4 @@
 package com.material.components.activity.card
-
 import android.content.Intent
 import android.net.Uri
 import android.support.v7.app.AppCompatActivity
@@ -14,6 +13,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
+import com.alejandrolora.finalapp.goToActivity
 import com.alejandrolora.finalapp.toast
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
@@ -25,9 +25,10 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.material.components.R
+import com.material.components.drawer.DashboarActivity
+import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_card_overlaps.*
 import kotlinx.android.synthetic.main.activity_perfil_empresa.*
-
 /**
  * @author Abraham
  * Mi perfil empresa
@@ -43,6 +44,7 @@ class PerfilEmpresaActivity : AppCompatActivity() {
     private val PICK_PHOTO = 1
     lateinit var uri: Uri
     private var viewTwo: ImageView? = null
+    lateinit var dialog: AlertDialog
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -74,10 +76,9 @@ class PerfilEmpresaActivity : AppCompatActivity() {
             builder.setView(dialogView)
             builder.setCancelable(false)
             updateInformation(nombre, giro, direccion, telefono)
-            val dialog = builder.create()
+            dialog = builder.create()
             dialog.show()
-            Handler().postDelayed({ dialog.dismiss() }, 1000)
-
+            //Handler().postDelayed({ dialog.dismiss() }, 1000)
         }
     }
 
@@ -142,6 +143,7 @@ class PerfilEmpresaActivity : AppCompatActivity() {
                     }
                 }
             })
+            dialog.dismiss()
         }
     }
 
@@ -155,9 +157,11 @@ class PerfilEmpresaActivity : AppCompatActivity() {
 
     private fun updateInformation(name: String, giro: String, direccion: String, telefono: String) {
         empresaCollection.document(idDocument).update("nombre", name, "giro", giro, "direccion", direccion, "telefono", telefono).addOnSuccessListener {
+            dialog.dismiss()
             Toast.makeText(this, "Informacion actulizada", Toast.LENGTH_LONG).show()
             //  onBackPressed()
         }.addOnFailureListener {
+            dialog.dismiss()
             Toast.makeText(this, "Error actualizando la informacion, intenta de nuevo", Toast.LENGTH_LONG).show()
         }
     }
@@ -167,7 +171,6 @@ class PerfilEmpresaActivity : AppCompatActivity() {
         intent.type = "image/*"
         intent.action = Intent.ACTION_GET_CONTENT
         startActivityForResult(Intent.createChooser(intent, "Seleccione una imagen"), PICK_PHOTO)
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -180,10 +183,10 @@ class PerfilEmpresaActivity : AppCompatActivity() {
                 message.text = "Subiendo..."
                 builder.setView(dialogView)
                 builder.setCancelable(false)
-                val dialog = builder.create()
+                dialog = builder.create()
                 upload()
                 dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1400)
+                //Handler().postDelayed({ dialog.dismiss() }, 1400)
             }
         }
         super.onActivityResult(requestCode, resultCode, data)
@@ -226,23 +229,34 @@ class PerfilEmpresaActivity : AppCompatActivity() {
     //unique views
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
-        toolbar.setNavigationIcon(R.drawable.ic_menu)
         setSupportActionBar(toolbar)
-        supportActionBar!!.setTitle(null)
+        supportActionBar!!.title = "Mi perfil"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        Tools.setSystemBarColor(this)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_basic, menu)
+        menuInflater.inflate(R.menu.menu_done, menu)
         return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            finish()
+            goToActivity<DashboarActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
         } else {
             Toast.makeText(applicationContext, item.title, Toast.LENGTH_SHORT).show()
         }
         return super.onOptionsItemSelected(item)
     }
+
+    override fun onBackPressed() {
+        goToActivity<DashboarActivity> {
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        }
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+    }
+
 }

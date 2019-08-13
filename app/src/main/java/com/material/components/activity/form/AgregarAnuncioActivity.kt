@@ -66,6 +66,8 @@ class AgregarAnuncioActivity : AppCompatActivity() {
 
     }
 
+    lateinit var dialog: AlertDialog
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_agregar_anuncio)
@@ -91,9 +93,9 @@ class AgregarAnuncioActivity : AppCompatActivity() {
                 upload(obj)
                 builder.setView(dialogView)
                 builder.setCancelable(false)
-                val dialog = builder.create()
+                dialog = builder.create()
                 dialog.show()
-                Handler().postDelayed({ dialog.dismiss() }, 1600)
+                // Handler().postDelayed({ dialog.dismiss() }, 1600)
             } else {
                 toast("Completa los campos")
             }
@@ -173,6 +175,13 @@ class AgregarAnuncioActivity : AppCompatActivity() {
                         for (document in task.result!!) {
                             val token = document.get("token").toString()
                             sendNotificationToPatner(token)
+                            var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                            var toke = sharedPreference.getString("token", "").toString()
+                            if (toke.equals(token)) {
+
+                            } else {
+                                sendNotificationToPatner(token)
+                            }
                         }
                     } else {
                         Log.w("saasas", "Error getting documents.", task.exception)
@@ -180,13 +189,13 @@ class AgregarAnuncioActivity : AppCompatActivity() {
                 })//end for expression lambdas this very cool
 
             }.addOnFailureListener { }
+            dialog.dismiss()
             toast("Anuncio registrado con exito")
-            onBackPressed()
+            deregreso()
         }.addOnFailureListener {
             toast("Error guardando el evento, intenta de nuevo")
         }
     }
-
 
     private fun sendNotificationToPatner(token: String) {
         val notification = Notification("Se ha agregado un nuevo anuncio", "Anuncios")
@@ -203,7 +212,6 @@ class AgregarAnuncioActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
         })
     }
-
 
     //see views not back
     private fun initToolbar() {
@@ -235,6 +243,10 @@ class AgregarAnuncioActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
+        deregreso()
+    }
+
+    private fun deregreso() {
         goToActivity<DashboarActivity> {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }

@@ -36,15 +36,17 @@
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.81" />
 
 
     <ImageButton
         android:id="@+id/btnScan2"
         style="@style/Widget.AppCompat.Button.Borderless"
-        android:layout_width="270dp"
-        android:layout_height="190dp"
+        android:layout_width="wrap_content"
+        android:layout_height="500dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
         android:layout_marginTop="8dp"
@@ -53,14 +55,14 @@
         android:layout_marginBottom="8dp"
         android:paddingLeft="@dimen/spacing_mlarge"
         android:paddingRight="@dimen/spacing_mlarge"
-        android:src="@drawable/image_6"
+        android:src="@drawable/img_number_verification"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toTopOf="@+id/btnScan"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
-        app:layout_constraintVertical_bias="0.496" />
+        app:layout_constraintVertical_bias="1.0" />
 
 
 
