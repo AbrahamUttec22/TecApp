@@ -1,5 +1,4 @@
 package com.material.components.activity.card
-
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
@@ -40,7 +39,6 @@ import kotlinx.android.synthetic.main.item_card_wizard_light.*
 import kotlinx.android.synthetic.main.item_card_wizard_light.view.*
 import kotlinx.android.synthetic.main.list_view_estadistica.view.*
 import kotlinx.android.synthetic.main.list_view_imagen.view.*
-
 
 /**
  * @author Abraham

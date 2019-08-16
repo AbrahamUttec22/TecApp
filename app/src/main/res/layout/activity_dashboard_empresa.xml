@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/grey_10"
     android:fitsSystemWindows="true"
+    android:screenOrientation="portrait"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -85,7 +86,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/MiPerfil"
+                                android:id="@+id/MiPerfilE"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -114,7 +115,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/PanelUsuarios"
+                                android:id="@+id/PanelUsuariosE"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -134,33 +135,6 @@
                                 android:textColor="@color/grey_40" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/VerActividades"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:clickable="true"
-                                android:tint="@android:color/white"
-                                app:backgroundTint="@color/purple_400"
-                                app:elevation="0dp"
-                                app:fabSize="mini"
-                                app:rippleColor="@android:color/white"
-                                app:srcCompat="@drawable/ic_activities" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/spacing_medium"
-                                android:text="Ver Actividades"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                                android:textColor="@color/grey_40" />
-                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -170,7 +144,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/AgregarEventos"
+                                android:id="@+id/AgregarEventosE"
 
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -191,20 +165,6 @@
                                 android:textColor="@color/grey_40" />
                         </LinearLayout>
 
-
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/spacing_mlarge" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal">
-
-
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -213,7 +173,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/VerEventos"
+                                android:id="@+id/VerEventosE"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -233,6 +193,18 @@
                                 android:textColor="@color/grey_40" />
                         </LinearLayout>
 
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/spacing_mlarge" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -241,7 +213,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/AdministrarEventos"
+                                android:id="@+id/AdministrarEventosE"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -269,7 +241,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/AgregarEncuesta"
+                                android:id="@+id/AgregarEncuestaE"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -298,7 +270,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/VerEncuestas"
+                                android:id="@+id/VerEncuestasE"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -318,19 +290,6 @@
                                 android:textColor="@color/grey_40" />
                         </LinearLayout>
 
-                    </LinearLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/spacing_mlarge" />
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_horizontal"
-                        android:orientation="horizontal">
-
-
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -339,7 +298,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/AdministrarEncuestas"
+                                android:id="@+id/AdministrarEncuestasE"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -359,33 +318,18 @@
                                 android:textColor="@color/grey_40" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
 
-                            <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/AgregarAnuncio"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:clickable="true"
-                                android:tint="@android:color/white"
-                                app:backgroundTint="@color/deep_orange_A400"
-                                app:elevation="0dp"
-                                app:fabSize="mini"
-                                app:rippleColor="@android:color/white"
-                                app:srcCompat="@drawable/ic_add_ob" />
+                    </LinearLayout>
 
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/spacing_medium"
-                                android:text="Agregar Anuncio"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                                android:textColor="@color/grey_40" />
-                        </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/spacing_mlarge" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -395,7 +339,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/VerAnuncio"
+                                android:id="@+id/VerAnuncioE"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -424,7 +368,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/AdministrarAnuncios"
+                                android:id="@+id/AdministrarAnunciosE"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -442,6 +386,63 @@
                                 android:text="Administrar Anuncios"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <android.support.design.widget.FloatingActionButton
+                                android:id="@+id/AgregarAnuncioE"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:tint="@android:color/white"
+                                app:backgroundTint="@color/deep_orange_A400"
+                                app:elevation="0dp"
+                                app:fabSize="mini"
+                                app:rippleColor="@android:color/white"
+                                app:srcCompat="@drawable/ic_add_ob" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/spacing_medium"
+                                android:text="Agregar Anuncio"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                android:textColor="@color/grey_40" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <android.support.design.widget.FloatingActionButton
+                                android:id="@+id/GenerarQRE"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:tint="@android:color/white"
+                                app:backgroundTint="@color/indigo_600"
+                                app:elevation="0dp"
+                                app:fabSize="mini"
+                                app:rippleColor="@android:color/white"
+                                app:srcCompat="@drawable/ic_qr" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/spacing_medium"
+                                android:text="Generar QR"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                android:textColor="@color/grey_40" />
+
                         </LinearLayout>
 
                     </LinearLayout>
@@ -465,65 +466,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/Checar"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:clickable="true"
-                                android:tint="@android:color/white"
-                                app:backgroundTint="@color/indigo_600"
-                                app:elevation="0dp"
-                                app:fabSize="mini"
-                                app:rippleColor="@android:color/white"
-                                app:srcCompat="@drawable/ic_check" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/spacing_medium"
-                                android:text="Checar"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                                android:textColor="@color/grey_40" />
-                        </LinearLayout>
-
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/GenerarQR"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:clickable="true"
-                                android:tint="@android:color/white"
-                                app:backgroundTint="@color/indigo_600"
-                                app:elevation="0dp"
-                                app:fabSize="mini"
-                                app:rippleColor="@android:color/white"
-                                app:srcCompat="@drawable/ic_qr" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/spacing_medium"
-                                android:text="Generar QR"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                                android:textColor="@color/grey_40" />
-
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
-
-                            <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/EstatusChecador"
+                                android:id="@+id/EstatusChecadorE"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -551,7 +494,7 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/CerrarSesion"
+                                android:id="@+id/CerrarSesionE"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -604,14 +547,14 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tituloCodigo"
+                            android:id="@+id/tituloCodigoE"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
                             android:textColor="@color/grey_60" />
 
                         <TextView
-                            android:id="@+id/MostrarCodigo"
+                            android:id="@+id/MostrarCodigoE"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
@@ -629,7 +572,7 @@
                         android:paddingBottom="@dimen/spacing_small">
 
                         <Button
-                            android:id="@+id/InfoCodigoEmpresa"
+                            android:id="@+id/InfoCodigoEmpresaE"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:background="@drawable/btn_rounded_indigo_outline"

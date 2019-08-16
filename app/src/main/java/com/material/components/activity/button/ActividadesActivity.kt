@@ -33,7 +33,6 @@ import com.material.components.model.Encuesta
 import com.material.components.model.Evento
 import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_actividades.*
-import kotlinx.android.synthetic.main.activity_dashboard_grid_fab.*
 import kotlinx.android.synthetic.main.activity_encuesta.*
 import kotlinx.android.synthetic.main.activity_encuesta.listView
 import java.util.ArrayList

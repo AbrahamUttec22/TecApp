@@ -1,9 +1,7 @@
 package com.material.components.activity;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,11 +9,9 @@ import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -29,10 +25,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-import com.material.components.BuildConfig;
 import com.material.components.R;
 import com.material.components.activity.about.AboutApp;
 import com.material.components.activity.about.AboutAppSimple;
@@ -75,7 +69,6 @@ import com.material.components.activity.chip.ChipTag;
 import com.material.components.activity.dashboard.DashboardCryptocurrency;
 import com.material.components.activity.dashboard.DashboardFinance;
 import com.material.components.activity.dashboard.DashboardFlight;
-import com.material.components.activity.dashboard.DashboardGridFab;
 import com.material.components.activity.dashboard.DashboardPayBill;
 import com.material.components.activity.dashboard.DashboardStatistics;
 import com.material.components.activity.dashboard.DashboardWallet;
@@ -85,7 +78,6 @@ import com.material.components.activity.dialog.DialogAddReview;
 import com.material.components.activity.dialog.DialogBasic;
 import com.material.components.activity.dialog.DialogCustom;
 import com.material.components.activity.dialog.DialogCustomDark;
-import com.material.components.activity.dialog.DialogCustomInfo;
 import com.material.components.activity.dialog.DialogCustomLight;
 import com.material.components.activity.dialog.DialogCustomWarning;
 import com.material.components.activity.dialog.DialogFullscreen;
@@ -249,11 +241,8 @@ import com.material.components.activity.verification.VerificationPhone;
 import com.material.components.adapter.ExpandableRecyclerAdapter;
 import com.material.components.adapter.MainMenuAdapter;
 import com.material.components.checador.CheckActivity;
-import com.material.components.checador.GenerarQRActivity;
 import com.material.components.checador.GenerarQrJActivity;
 import com.material.components.data.SharedPref;
-import com.material.components.message.NotificacionActivity;
-import com.material.components.message.PruevaActivity;
 import com.material.components.model.MenuType;
 import com.material.components.utils.Tools;
 
@@ -1092,7 +1081,7 @@ public class MainMenu extends AppCompatActivity {
 
             // Dashboard ---------------------------------------------------------------------------
             case 29001:
-                startActivity(new Intent(this, DashboardGridFab.class));//posible
+               // startActivity(new Intent(this, DashboardGridFab.class));//posible
                 break;
             case 29002:
                 startActivity(new Intent(this, DashboardStatistics.class));//no

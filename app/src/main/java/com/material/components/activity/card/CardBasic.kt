@@ -109,6 +109,7 @@ class CardBasic : AppCompatActivity() {
                 for (document in task.result!!) {
                     con++
                     val evento = Evento()
+                    evento.hora= document.get("hora").toString()
                     evento.description = document.get("description").toString()
                     evento.fecha = document.get("fecha").toString()
                     evento.id = document.get("id").toString()

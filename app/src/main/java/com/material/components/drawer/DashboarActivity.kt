@@ -1,5 +1,4 @@
 package com.material.components.drawer
-
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
@@ -8,8 +7,6 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.LightingColorFilter
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.AppCompatButton
@@ -25,7 +22,6 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.R
 import com.material.components.activity.about.EstatusChecadorActivity
 import com.material.components.activity.bottomsheet.UserActivity
@@ -36,9 +32,10 @@ import com.material.components.activity.form.*
 import com.material.components.activity.login.LoginCardOverlap
 import com.material.components.checador.CheckActivity
 import com.material.components.checador.GenerarQrJActivity
-import com.material.components.model.Actividades
 import com.material.components.utils.Tools
-import kotlinx.android.synthetic.main.activity_dashboard_grid_fab.*
+import kotlinx.android.synthetic.main.activity_dashboard_administrador.*
+import kotlinx.android.synthetic.main.activity_dashboard_empresa.*
+import kotlinx.android.synthetic.main.activity_dashboard_usuario.*
 
 /**
  * @author Abraham Casas Aguilar
@@ -63,152 +60,358 @@ class DashboarActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // setContentView(R.layout.activity_dashboar)
-        setContentView(R.layout.activity_dashboard_grid_fab)
-        getDataUser()
-        //apartir de aqui se van a hacer instancias a las ventanas correspondientes
 
-        //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
-        MiPerfil.setOnClickListener {
-            //403 USUARIOS,404 EMPRESA
-            //Hacer cnosulta para saber que perfil mostrar
-            var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-            var rol = sharedPreference.getString("rol", "").toString()
-            if (rol.equals("empresa")) {
+        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var rol = sharedPreference.getString("rol", "").toString()
+
+        if (rol.equals("empresa")) {
+            setContentView(R.layout.activity_dashboard_empresa)
+
+            //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
+            MiPerfilE.setOnClickListener {
                 //403 USUARIOS,404 EMPRESA
                 //Hacer cnosulta para saber que perfil mostrar
-                goToActivity<PerfilEmpresaActivity> {
+                var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                var rol = sharedPreference.getString("rol", "").toString()
+                if (rol.equals("empresa")) {
+                    //403 USUARIOS,404 EMPRESA
+                    //Hacer cnosulta para saber que perfil mostrar
+                    goToActivity<PerfilEmpresaActivity> {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                } else if (rol.equals("administrador") || rol.equals("usuario")) {
+                    goToActivity<CardOverlap> {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                }
+            }
+            PanelUsuariosE.setOnClickListener {
+                //205
+                goToActivity<UserActivity> {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-            } else if (rol.equals("administrador") || rol.equals("usuario")) {
-                goToActivity<CardOverlap> {
+
+            }
+
+            //Checador (6) no es necesario programacion reactiva
+            GenerarQRE.setOnClickListener {
+                //25003
+                goToActivity<GenerarQrJActivity> {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
-        }
-        PanelUsuarios.setOnClickListener {
-            //205
-            goToActivity<UserActivity> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            EstatusChecadorE.setOnClickListener {
+                //25004
+                goToActivity<EstatusChecadorActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 
-        }
-        VerActividades.setOnClickListener {
-            //301
-            goToActivity<ActividadesActivity> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+            //Eventos  (9) YA TIENE PROGRAMACION REACTIVA
+            AgregarEventosE.setOnClickListener {
+                //1603
+                goToActivity<FormProfileData> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            VerEventosE.setOnClickListener {
+                //401
+                goToActivity<CardBasic> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            AdministrarEventosE.setOnClickListener {
+                //1601
+                goToActivity<AdministrarEventoActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+
+            //Encuestas  (12) YA CONTIENE PROGRAMACION REACTIVA
+            AgregarEncuestaE.setOnClickListener {
+                //1604
+                goToActivity<AgregarEncuestaActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            VerEncuestasE.setOnClickListener {
+                //604
+                goToActivity<EncuestaActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            AdministrarEncuestasE.setOnClickListener {
+                //1605  (ver estadisticas)
+                goToActivity<EstadisticaActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+
+            //Anuncios (15) YA CONTIENE PROGRAMACION REACTIVA
+            AgregarAnuncioE.setOnClickListener {
+                //1602
+                goToActivity<AgregarAnuncioActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            VerAnuncioE.setOnClickListener {
+                //405
+                goToActivity<CardWizardLight> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            AdministrarAnunciosE.setOnClickListener {
+                //402
+                goToActivity<AdministrarAnunciosActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+            }
+
+            CerrarSesionE.setOnClickListener {
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("Estas seguro de cerrar sesión?").setPositiveButton("Si", DialogInterface.OnClickListener { dialog, id ->
+                    mAuth.signOut()
+                    goToActivity<LoginCardOverlap> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
+                }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+                        .show()
+            }
+            InfoCodigoEmpresaE.setOnClickListener {
+                showConfirmDialog()
+            }
+        } else if (rol.equals("usuario")) {
+            setContentView(R.layout.activity_dashboard_usuario)
+            //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
+            MiPerfilU.setOnClickListener {
+                //403 USUARIOS,404 EMPRESA
+                //Hacer cnosulta para saber que perfil mostrar
+                var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                var rol = sharedPreference.getString("rol", "").toString()
+                if (rol.equals("empresa")) {
+                    //403 USUARIOS,404 EMPRESA
+                    //Hacer cnosulta para saber que perfil mostrar
+                    goToActivity<PerfilEmpresaActivity> {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                } else if (rol.equals("administrador") || rol.equals("usuario")) {
+                    goToActivity<CardOverlap> {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                }
+            }
+            VerActividadesU.setOnClickListener {
+                //301
+                goToActivity<ActividadesActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+
+            //Checador (6) no es necesario programacion reactiva
+            ChecarU.setOnClickListener {
+                //25002
+                goToActivity<CheckActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+
+            //Eventos  (9) YA TIENE PROGRAMACION REACTIVA
+            VerEventosU.setOnClickListener {
+                //401
+                goToActivity<CardBasic> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+
+            //Encuestas  (12) YA CONTIENE PROGRAMACION REACTIVA
+            VerEncuestasU.setOnClickListener {
+                //604
+                goToActivity<EncuestaActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+
+            //Anuncios (15) YA CONTIENE PROGRAMACION REACTIVA
+            VerAnuncioU.setOnClickListener {
+                //405
+                goToActivity<CardWizardLight> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+
+            CerrarSesionU.setOnClickListener {
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("Estas seguro de cerrar sesión?").setPositiveButton("Si", DialogInterface.OnClickListener { dialog, id ->
+                    mAuth.signOut()
+                    goToActivity<LoginCardOverlap> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
+                }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+                        .show()
+            }
+        } else if (rol.equals("administrador")) {
+            setContentView(R.layout.activity_dashboard_administrador)
+            //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
+            MiPerfilA.setOnClickListener {
+                //403 USUARIOS,404 EMPRESA
+                //Hacer cnosulta para saber que perfil mostrar
+                var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                var rol = sharedPreference.getString("rol", "").toString()
+                if (rol.equals("empresa")) {
+                    //403 USUARIOS,404 EMPRESA
+                    //Hacer cnosulta para saber que perfil mostrar
+                    goToActivity<PerfilEmpresaActivity> {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                } else if (rol.equals("administrador") || rol.equals("usuario")) {
+                    goToActivity<CardOverlap> {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                }
+            }
+            PanelUsuariosA.setOnClickListener {
+                //205
+                goToActivity<UserActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+            }
+            VerActividadesA.setOnClickListener {
+                //301
+                goToActivity<ActividadesActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+
+            //Checador (6) no es necesario programacion reactiva
+            ChecarA.setOnClickListener {
+                //25002
+                goToActivity<CheckActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            GenerarQRA.setOnClickListener {
+                //25003
+                goToActivity<GenerarQrJActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            EstatusChecadorA.setOnClickListener {
+                //25004
+                goToActivity<EstatusChecadorActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+            }
+
+            //Eventos  (9) YA TIENE PROGRAMACION REACTIVA
+            AgregarEventosA.setOnClickListener {
+                //1603
+                goToActivity<FormProfileData> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            VerEventosA.setOnClickListener {
+                //401
+                goToActivity<CardBasic> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            AdministrarEventosA.setOnClickListener {
+                //1601
+                goToActivity<AdministrarEventoActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+
+            //Encuestas  (12) YA CONTIENE PROGRAMACION REACTIVA
+            AgregarEncuestaA.setOnClickListener {
+                //1604
+                goToActivity<AgregarEncuestaActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            VerEncuestasA.setOnClickListener {
+                //604
+                goToActivity<EncuestaActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            AdministrarEncuestasA.setOnClickListener {
+                //1605  (ver estadisticas)
+                goToActivity<EstadisticaActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+
+            //Anuncios (15) YA CONTIENE PROGRAMACION REACTIVA
+            AgregarAnuncioA.setOnClickListener {
+                //1602
+                goToActivity<AgregarAnuncioActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            VerAnuncioA.setOnClickListener {
+                //405
+                goToActivity<CardWizardLight> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+            }
+            AdministrarAnunciosA.setOnClickListener {
+                //402
+                goToActivity<AdministrarAnunciosActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
+            }
+
+            CerrarSesionA.setOnClickListener {
+                val builder = AlertDialog.Builder(this)
+                builder.setMessage("Estas seguro de cerrar sesión?").setPositiveButton("Si", DialogInterface.OnClickListener { dialog, id ->
+                    mAuth.signOut()
+                    goToActivity<LoginCardOverlap> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
+                }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+                        .show()
+            }
         }
 
-        //Checador (6) no es necesario programacion reactiva
-        Checar.setOnClickListener {
-            //25002
-            goToActivity<CheckActivity> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-        GenerarQR.setOnClickListener {
-            //25003
-            goToActivity<GenerarQrJActivity> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-        EstatusChecador.setOnClickListener {
-            //25004
-            goToActivity<EstatusChecadorActivity> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-
-        }
-
-        //Eventos  (9) YA TIENE PROGRAMACION REACTIVA
-        AgregarEventos.setOnClickListener {
-            //1603
-            goToActivity<FormProfileData> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-        VerEventos.setOnClickListener {
-            //401
-            goToActivity<CardBasic> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-        AdministrarEventos.setOnClickListener {
-            //1601
-            goToActivity<AdministrarEventoActivity> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-
-        //Encuestas  (12) YA CONTIENE PROGRAMACION REACTIVA
-        AgregarEncuesta.setOnClickListener {
-            //1604
-            goToActivity<AgregarEncuestaActivity> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-        VerEncuestas.setOnClickListener {
-            //604
-            goToActivity<EncuestaActivity> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-        AdministrarEncuestas.setOnClickListener {
-            //1605  (ver estadisticas)
-            goToActivity<EstadisticaActivity> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-
-        //Anuncios (15) YA CONTIENE PROGRAMACION REACTIVA
-        AgregarAnuncio.setOnClickListener {
-            //1602
-            goToActivity<AgregarAnuncioActivity> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-        VerAnuncio.setOnClickListener {
-            //405
-            goToActivity<CardWizardLight> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-        }
-        AdministrarAnuncios.setOnClickListener {
-            //402
-            goToActivity<AdministrarAnunciosActivity> {
-                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            }
-            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-
-        }
-
-        CerrarSesion.setOnClickListener {
-            val builder = AlertDialog.Builder(this)
-            builder.setMessage("Estas seguro de cerrar sesión?").setPositiveButton("Si", DialogInterface.OnClickListener { dialog, id ->
-                mAuth.signOut()
-                goToActivity<LoginCardOverlap> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
-            }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
-                    .show()
-        }
-        InfoCodigoEmpresa.setOnClickListener {
-            showConfirmDialog()
-        }
+        getDataUser()
+        //apartir de aqui se van a hacer instancias a las ventanas correspondientes
     }
 
     private fun showConfirmDialog() {
@@ -256,18 +459,16 @@ class DashboarActivity : AppCompatActivity() {
                     toolbar.title = "Hola, " + name
 
                     if (rol == "administrador") {
-                        MostrarCodigo.text = "Fue creado el 17/06/2019"
-                        tituloCodigo.text = "Tg-Admin-Empleados"
-                        InfoCodigoEmpresa.setVisibility(View.INVISIBLE)
+                        MostrarCodigoA.text = "Fue creado el 17/06/2019"
+                        tituloCodigoA.text = "Tg-Admin-Empleados"
                     } else {
-                        MostrarCodigo.text = "Fue creado el 17/06/2019"
-                        tituloCodigo.text = "Tg-Admin-Empleados"
-                        InfoCodigoEmpresa.setVisibility(View.INVISIBLE)
+                        MostrarCodigoU.text = "Fue creado el 17/06/2019"
+                        tituloCodigoU.text = "Tg-Admin-Empleados"
                         //deshabilitar funciones
                         val color = Color.parseColor("#D3D3D3")
                         var filter = LightingColorFilter(Color.GRAY, Color.GRAY)
 
-                        PanelUsuarios.isEnabled = false
+                        /*PanelUsuarios.isEnabled = false
                         PanelUsuarios.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
                         //PanelUsuarios.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
@@ -310,7 +511,7 @@ class DashboarActivity : AppCompatActivity() {
                         EstatusChecador.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
                         //EstatusChecador.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
-
+*/
                     }
                 }
 
@@ -323,24 +524,24 @@ class DashboarActivity : AppCompatActivity() {
         empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
                 for (document in task.result!!) {
-                     val color = Color.parseColor("#D3D3D3")
+                    val color = Color.parseColor("#D3D3D3")
                     //var filter = LightingColorFilter(Color.GRAY, Color.GRAY)
 
-                    VerActividades.isEnabled = false
-                    VerActividades.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                    /* VerActividades.isEnabled = false
+                     VerActividades.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
-                    //VerActividades.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                     //VerActividades.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
 
-                    Checar.isEnabled = false
-                    Checar.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
-                    //Checar.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
-
+                     Checar.isEnabled = false
+                     Checar.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                     //Checar.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+ */
                     name = document.get("nombre").toString()
                     toolbar.title = "Hola, " + name
                     val id_empresa = document.get("id_empresa").toString()
-                    MostrarCodigo.text = id_empresa
-                    tituloCodigo.text = "Código Empresa"
-                    InfoCodigoEmpresa.text = "¿Qué es esto?"
+                    MostrarCodigoE.text = id_empresa
+                    tituloCodigoE.text = "Código Empresa"
+                    InfoCodigoEmpresaE.text = "¿Qué es esto?"
                 }
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)

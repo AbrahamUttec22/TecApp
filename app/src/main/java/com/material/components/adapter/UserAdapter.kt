@@ -111,170 +111,175 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                  //var mAuth: FirebaseAuth = FirebaseAuth.getInstance().currentUser.delete(uid)
              }//end for hanlder
          })*/
-        vh.actualizar.setOnClickListener(object : View.OnClickListener {
-            var calendario = Calendar.getInstance()
-            override fun onClick(position: View?) {
-                var usuario = Usuario()
-                usuario.email = email
-                usuario.ubicacion = ubicacion
-                usuario.name = fullName
-                usuario.rol = rol
-                usuario.direccion = direccion
-                usuario.edad = edad
-                usuario.telefono = telefono
-                usuario.id = id
-                usuario.id_empresa = id
-                showDialog(usuario)
-            }
 
-            private fun showDialog(usuario: Usuario) {
-                //the header from dialog
-                val dialog = Dialog(context)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
-                dialog.setContentView(R.layout.dialog_actualizar_usuario)
-                dialog.setCancelable(true)
-                val lp = WindowManager.LayoutParams()
-                lp.copyFrom(dialog.window!!.attributes)
-                lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-                lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-                //in this code I get the information on cloud firestore
-                if (usuario.rol.equals("administrador")) {
-                    (dialog.findViewById<View>(R.id.ac_radio_adminitrador) as AppCompatRadioButton).isChecked = true
-                    (dialog.findViewById<View>(R.id.ac_radio_usuario) as AppCompatRadioButton).isChecked = false
-                } else {
-                    (dialog.findViewById<View>(R.id.ac_radio_adminitrador) as AppCompatRadioButton).isChecked = false
-                    (dialog.findViewById<View>(R.id.ac_radio_usuario) as AppCompatRadioButton).isChecked = true
+        try {
+            vh.actualizar.setOnClickListener(object : View.OnClickListener {
+                var calendario = Calendar.getInstance()
+                override fun onClick(position: View?) {
+                    var usuario = Usuario()
+                    usuario.email = email
+                    usuario.ubicacion = ubicacion
+                    usuario.name = fullName
+                    usuario.rol = rol
+                    usuario.direccion = direccion
+                    usuario.edad = edad
+                    usuario.telefono = telefono
+                    usuario.id = id
+                    usuario.id_empresa = id
+                    showDialog(usuario)
                 }
 
-                (dialog.findViewById<View>(R.id.btnActualizarUsuario) as Button).setOnClickListener {
-                    //after that I get the data
-                    if ((dialog.findViewById<View>(R.id.ac_radio_adminitrador) as AppCompatRadioButton).isChecked)
-                        usuario.rol = "administrador"
-                    if ((dialog.findViewById<View>(R.id.ac_radio_usuario) as AppCompatRadioButton).isChecked)
-                        usuario.rol = "usuario"
-                    //first save the user on authe
-                    updateUsuario(usuario)
-                    dialog.dismiss()
-                }
-                dialog.show()
-                dialog.window!!.attributes = lp
-            }
-
-            private fun updateUsuario(usuario: Usuario) {
-                FirebaseApp.initializeApp(context)
-                val eventoCollection: CollectionReference
-                eventoCollection = FirebaseFirestore.getInstance().collection("Usuarios")
-                //only this source I update the status,
-                eventoCollection.document(usuario.id).update("rol", usuario.rol).addOnSuccessListener {
-                    Toast.makeText(context, "El rol se ha actualizado correctamente", Toast.LENGTH_LONG).show()
-                }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
-            }//end for hanlder
-
-        })
-        vh.actividad.setOnClickListener(object : View.OnClickListener {
-            var calendario = Calendar.getInstance()
-            override fun onClick(position: View?) {
-                var usuario = Usuario()
-                usuario.email = email
-                usuario.ubicacion = ubicacion
-                usuario.name = fullName
-                usuario.rol = rol
-                usuario.direccion = direccion
-                usuario.edad = edad
-                usuario.telefono = telefono
-                usuario.id = id
-                usuario.id_empresa = id
-                showDialog(usuario)
-            }
-
-            private fun showDialog(usuario: Usuario) {
-                //the header from dialog
-                val dialog = Dialog(context)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
-                dialog.setContentView(R.layout.dialog_actividad_usuario)
-                dialog.setCancelable(true)
-                val lp = WindowManager.LayoutParams()
-                lp.copyFrom(dialog.window!!.attributes)
-                lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-                lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-                //in this code I get the information on cloud firestore
-                var txt1 = (dialog.findViewById<View>(R.id.txtDescriptionActividad) as EditText)
-                (dialog.findViewById<View>(R.id.btnSaveActividad) as Button).setOnClickListener {
-                    var dactividad = txt1.text.toString()
-                    if (!dactividad.isNullOrEmpty()) {
-                        var actividad = Actividades()
-                        actividad.actividad = dactividad//get the field for the view
-                        actividad.correo = usuario.email
-                        actividad.estatus = "pendiente"
-                        actividad.id = ""
-                        actividad.fecha_hora_terminada = ""
-                        actividad.id_usuario = usuario.id
-                        //first save the user on authe
-                        //send fecha
-                        val c = Calendar.getInstance()
-                        val df = SimpleDateFormat("dd/MM/yyyy")
-                        val fechaA = df.format(c.getTime()).toString()
-                        val c2 = Calendar.getInstance()
-                        val df2 = SimpleDateFormat("HH:mm:ss")
-                        val horaA = df2.format(c2.getTime()).toString()
-                        actividad.fecha_hora_asignada = fechaA+" "+horaA
-
-                        saveActividad(actividad)
-                        dialog.dismiss()
+                private fun showDialog(usuario: Usuario) {
+                    //the header from dialog
+                    val dialog = Dialog(context)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+                    dialog.setContentView(R.layout.dialog_actualizar_usuario)
+                    dialog.setCancelable(true)
+                    val lp = WindowManager.LayoutParams()
+                    lp.copyFrom(dialog.window!!.attributes)
+                    lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                    //in this code I get the information on cloud firestore
+                    if (usuario.rol.equals("administrador")) {
+                        (dialog.findViewById<View>(R.id.ac_radio_adminitrador) as AppCompatRadioButton).isChecked = true
+                        (dialog.findViewById<View>(R.id.ac_radio_usuario) as AppCompatRadioButton).isChecked = false
                     } else {
-                        Toast.makeText(context, "Completa los campos", Toast.LENGTH_LONG).show()
+                        (dialog.findViewById<View>(R.id.ac_radio_adminitrador) as AppCompatRadioButton).isChecked = false
+                        (dialog.findViewById<View>(R.id.ac_radio_usuario) as AppCompatRadioButton).isChecked = true
                     }
-                }
-                dialog.show()
-                dialog.window!!.attributes = lp
-            }
 
-            private fun saveActividad(actividad: Actividades) {
-                FirebaseApp.initializeApp(context)
-                val actividadCollection: CollectionReference
-                val userCollection: CollectionReference
-                actividadCollection = FirebaseFirestore.getInstance().collection("Actividades")
-                userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
-                //save the activity
-                actividadCollection.add(actividad).addOnSuccessListener {
-                    actividadCollection.document(it.id).update("id", it.id).addOnSuccessListener {
-                    }.addOnFailureListener { }
-                    val empleado = userCollection.whereEqualTo("id", actividad.id_usuario)
-                    //beggin with consult
-                    empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                        if (task.isSuccessful) {
-                            for (document in task.result!!) {
-                                val token = document.get("token").toString()
-                                sendNotificationToPatner(token)
-                            }
+                    (dialog.findViewById<View>(R.id.btnActualizarUsuario) as Button).setOnClickListener {
+                        //after that I get the data
+                        if ((dialog.findViewById<View>(R.id.ac_radio_adminitrador) as AppCompatRadioButton).isChecked)
+                            usuario.rol = "administrador"
+                        if ((dialog.findViewById<View>(R.id.ac_radio_usuario) as AppCompatRadioButton).isChecked)
+                            usuario.rol = "usuario"
+                        //first save the user on authe
+                        updateUsuario(usuario)
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                    dialog.window!!.attributes = lp
+                }
+
+                private fun updateUsuario(usuario: Usuario) {
+                    FirebaseApp.initializeApp(context)
+                    val eventoCollection: CollectionReference
+                    eventoCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+                    //only this source I update the status,
+                    eventoCollection.document(usuario.id).update("rol", usuario.rol).addOnSuccessListener {
+                        Toast.makeText(context, "El rol se ha actualizado correctamente", Toast.LENGTH_LONG).show()
+                    }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
+                }//end for hanlder
+
+            })
+            vh.actividad.setOnClickListener(object : View.OnClickListener {
+                var calendario = Calendar.getInstance()
+                override fun onClick(position: View?) {
+                    var usuario = Usuario()
+                    usuario.email = email
+                    usuario.ubicacion = ubicacion
+                    usuario.name = fullName
+                    usuario.rol = rol
+                    usuario.direccion = direccion
+                    usuario.edad = edad
+                    usuario.telefono = telefono
+                    usuario.id = id
+                    usuario.id_empresa = id
+                    showDialog(usuario)
+                }
+
+                private fun showDialog(usuario: Usuario) {
+                    //the header from dialog
+                    val dialog = Dialog(context)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+                    dialog.setContentView(R.layout.dialog_actividad_usuario)
+                    dialog.setCancelable(true)
+                    val lp = WindowManager.LayoutParams()
+                    lp.copyFrom(dialog.window!!.attributes)
+                    lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                    //in this code I get the information on cloud firestore
+                    var txt1 = (dialog.findViewById<View>(R.id.txtDescriptionActividad) as EditText)
+                    (dialog.findViewById<View>(R.id.btnSaveActividad) as Button).setOnClickListener {
+                        var dactividad = txt1.text.toString()
+                        if (!dactividad.isNullOrEmpty()) {
+                            var actividad = Actividades()
+                            actividad.actividad = dactividad//get the field for the view
+                            actividad.correo = usuario.email
+                            actividad.estatus = "pendiente"
+                            actividad.id = ""
+                            actividad.fecha_hora_terminada = ""
+                            actividad.id_usuario = usuario.id
+                            //first save the user on authe
+                            //send fecha
+                            val c = Calendar.getInstance()
+                            val df = SimpleDateFormat("dd/MM/yyyy")
+                            val fechaA = df.format(c.getTime()).toString()
+                            val c2 = Calendar.getInstance()
+                            val df2 = SimpleDateFormat("HH:mm:ss")
+                            val horaA = df2.format(c2.getTime()).toString()
+                            actividad.fecha_hora_asignada = fechaA + " " + horaA
+
+                            saveActividad(actividad)
+                            dialog.dismiss()
                         } else {
-                            Log.w("saasas", "Error getting documents.", task.exception)
+                            Toast.makeText(context, "Completa los campos", Toast.LENGTH_LONG).show()
                         }
-                    })//end for expression lambdas this very cool
-
-                    Toast.makeText(context, "Se ha asignado correctamente la actividad", Toast.LENGTH_LONG).show()
-                }.addOnFailureListener {
-                    Toast.makeText(context, "Error asignando la actividad", Toast.LENGTH_LONG).show()
-                }
-            }//end for hanlder
-
-            private fun sendNotificationToPatner(token: String) {
-                val notification = Notification("Se te asigno una actividad", "Actividad")
-                val requestNotificaton = RequestNotificaton()
-                //token is id , whom you want to send notification ,
-                requestNotificaton.token = token
-                requestNotificaton.notification = notification
-                val apiService = ApiClient.getClient().create(ApiInter::class.java)
-                val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
-                responseBodyCall.enqueue(object : Callback<ResponseBody> {
-                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                     }
+                    dialog.show()
+                    dialog.window!!.attributes = lp
+                }
 
-                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
-                })
-            }
+                private fun saveActividad(actividad: Actividades) {
+                    FirebaseApp.initializeApp(context)
+                    val actividadCollection: CollectionReference
+                    val userCollection: CollectionReference
+                    actividadCollection = FirebaseFirestore.getInstance().collection("Actividades")
+                    userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+                    //save the activity
+                    actividadCollection.add(actividad).addOnSuccessListener {
+                        actividadCollection.document(it.id).update("id", it.id).addOnSuccessListener {
+                        }.addOnFailureListener { }
+                        val empleado = userCollection.whereEqualTo("id", actividad.id_usuario)
+                        //beggin with consult
+                        empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                            if (task.isSuccessful) {
+                                for (document in task.result!!) {
+                                    val token = document.get("token").toString()
+                                    sendNotificationToPatner(token)
+                                }
+                            } else {
+                                Log.w("saasas", "Error getting documents.", task.exception)
+                            }
+                        })//end for expression lambdas this very cool
 
-        })
+                        Toast.makeText(context, "Se ha asignado correctamente la actividad", Toast.LENGTH_LONG).show()
+                    }.addOnFailureListener {
+                        Toast.makeText(context, "Error asignando la actividad", Toast.LENGTH_LONG).show()
+                    }
+                }//end for hanlder
+
+                private fun sendNotificationToPatner(token: String) {
+                    val notification = Notification("Se te asigno una actividad", "Actividad")
+                    val requestNotificaton = RequestNotificaton()
+                    //token is id , whom you want to send notification ,
+                    requestNotificaton.token = token
+                    requestNotificaton.notification = notification
+                    val apiService = ApiClient.getClient().create(ApiInter::class.java)
+                    val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+                    responseBodyCall.enqueue(object : Callback<ResponseBody> {
+                        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                        }
+
+                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+                    })
+                }
+
+            })
+        } catch (e: java.lang.Exception) {
+        }
+
         return view
     }
 }

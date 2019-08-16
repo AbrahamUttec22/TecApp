@@ -20,17 +20,24 @@ import com.google.zxing.common.BitMatrix;
 import com.journeyapps.barcodescanner.BarcodeEncoder;
 import com.material.components.R;
 import com.material.components.drawer.DashboarActivity;
+import com.material.components.utils.Base64KotiKt;
 import com.material.components.utils.Tools;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Random;
 
 /**
  * @author Abraham
  */
 public class GenerarQrJActivity extends AppCompatActivity {
-
     ImageView imageView;
     String id_empresa = "";
+    private final int TIEMPO = 5000;
+    private static final String TAG = "MainActivity";
+    Handler handler = new Handler(); // En esta zona creamos el objeto Handler
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +50,6 @@ public class GenerarQrJActivity extends AppCompatActivity {
         initToolbar();
     }
 
-    private final int TIEMPO = 2000;
-    private static final String TAG = "MainActivity";
-    Handler handler = new Handler(); // En esta zona creamos el objeto Handler
-
     public void ejecutarTarea() {
         handler.postDelayed(new Runnable() {
             public void run() {
@@ -56,19 +59,29 @@ public class GenerarQrJActivity extends AppCompatActivity {
                 try {
                     int i1 = r.nextInt(9);
                     String re = String.valueOf(i1);
-                    String valor = id_empresa + re;
-                    bitMatrix = multiFormatWriter.encode(valor, BarcodeFormat.QR_CODE, 500, 500);
+                    SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+                    String dateString = format.format(new Date());
+
+                    Calendar c = Calendar.getInstance();
+                    SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                    String fechaHoy = df.format(c.getTime()).toString();
+
+                    String valor = id_empresa + dateString + fechaHoy;
+                    String encodee= Base64KotiKt.encodeBase64ToString(valor);
+
+                    bitMatrix = multiFormatWriter.encode(encodee, BarcodeFormat.QR_CODE, 500, 500);
                     String cadena = "";
-                    cadena = valor.substring(0, valor.length() - 1);
-                  //  Toast.makeText(GenerarQrJActivity.this, cadena, Toast.LENGTH_SHORT).show();
+                    cadena = valor.substring(id_empresa.length(), valor.length());
+                    //Toast.makeText(GenerarQrJActivity.this, cadena, Toast.LENGTH_SHORT).show();
                     BarcodeEncoder barcodeEncoder = new BarcodeEncoder();
                     Bitmap bitmap = barcodeEncoder.createBitmap(bitMatrix);
                     imageView.setImageBitmap(bitmap);
                     handler.postDelayed(this, TIEMPO);
                 } catch (WriterException e) {
                     e.printStackTrace();
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
-
             }
         }, TIEMPO);
     }
@@ -105,4 +118,5 @@ public class GenerarQrJActivity extends AppCompatActivity {
         Intent intent = new Intent(this, DashboarActivity.class);
         startActivity(intent);
     }
+
 }

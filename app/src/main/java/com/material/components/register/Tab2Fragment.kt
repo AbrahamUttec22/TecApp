@@ -1,5 +1,4 @@
 package com.material.components.register
-
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
@@ -29,7 +28,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.activity.MainMenu
-
 /**
  * @author Abraham
  * Empresa
@@ -81,10 +79,10 @@ class Tab2Fragment : Fragment() {
                         usuario.ubicacion = imag
                         usuario.rol = "usuario"
                         usuario.direccion = ""
-                        usuario.uid=""
+                        usuario.uid = ""
                         usuario.id = ""
-                        usuario.edad=""
-                        usuario.token=""
+                        usuario.edad = ""
+                        usuario.token = ""
                         usuario.telefono = ""
                         //first save the user on authentication firebase, after that save the user on cloud firestore
                         validCode(email, password, usuario, view)
@@ -160,7 +158,6 @@ class Tab2Fragment : Fragment() {
         //the first case is Valid if the id_empresa already exists
         usuariosCollection.add(usuario).addOnSuccessListener {
             usuariosCollection.document(it.id).update("id", it.id).addOnSuccessListener {
-
             }.addOnFailureListener {
                 Toast.makeText(context, "" + it, Toast.LENGTH_LONG).show()
             }
@@ -172,6 +169,7 @@ class Tab2Fragment : Fragment() {
     //handler
 //this is the dialog confirm, afther that register a new user
     private fun showConfirmDialog() {
+        mAuth.signOut()
         //the header from dialog
         val dialog = Dialog(context)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before

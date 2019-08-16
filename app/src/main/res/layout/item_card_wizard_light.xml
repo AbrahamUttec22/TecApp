@@ -47,8 +47,8 @@
 
             <ImageView
                 android:id="@+id/imagenItem"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/spacing_xlarge"
                 android:layout_marginRight="@dimen/spacing_xlarge"
                 android:padding="@dimen/spacing_xlarge"

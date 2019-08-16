@@ -5,11 +5,8 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.alejandrolora.finalapp.goToActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.material.components.activity.dashboard.DashboardGridFab
-import com.material.components.activity.dashboard.DashboardStatistics
 import com.material.components.activity.login.LoginCardOverlap
 import com.material.components.drawer.DashboarActivity
-import com.material.components.drawer.InicioKActivity
 
 /**
  * @author Abraham

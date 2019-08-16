@@ -77,11 +77,32 @@
 
                 <EditText
                     android:id="@+id/etBirthday"
-                    android:hint="Fecha de evento"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="date"
-                    android:focusable="false"/>
+                    android:focusable="false"
+                    android:hint="Fecha de evento"
+                    android:inputType="date" />
+
+            </android.support.design.widget.TextInputLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/spacing_middle" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColorHint="@color/grey_40">
+
+
+                <EditText
+                    android:id="@+id/hora_evento"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:focusable="false"
+                    android:hint="Hora del evento"
+                    android:inputType="time" />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -89,9 +110,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/grey_40">
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/spacing_middle" />
+
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/spacing_middle" />
@@ -118,6 +141,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:textColorHint="@color/grey_40">
+
                     <ImageButton
                         android:id="@+id/btnGaleriaEvento"
                         android:layout_width="match_parent"
@@ -131,6 +155,7 @@
             <View
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_middle" />
+
             <Button
                 android:id="@+id/registrarEvento"
                 android:layout_width="match_parent"
@@ -139,11 +164,11 @@
                 android:background="@drawable/btn_rounded_accent"
                 android:text="REGISTRAR"
                 android:textColor="@android:color/white" />
+
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textColorHint="@color/grey_40">
-
 
 
             </android.support.design.widget.TextInputLayout>
@@ -152,7 +177,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/spacing_mxlarge" />
 
-         </LinearLayout>
+        </LinearLayout>
 
     </android.support.v4.widget.NestedScrollView>
 

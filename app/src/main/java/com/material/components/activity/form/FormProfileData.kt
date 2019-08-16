@@ -12,9 +12,9 @@ import com.material.components.utils.Tools
 import kotlinx.android.synthetic.main.activity_form_profile_data.*
 import java.util.*
 import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.content.Intent
 import android.net.Uri
-import android.os.Handler
 import android.widget.*
 import com.alejandrolora.finalapp.toast
 import com.google.firebase.FirebaseApp
@@ -30,10 +30,8 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import com.material.components.activity.MainMenu
 import com.material.components.drawer.DashboarActivity
 import java.io.IOException
-
 import com.material.components.message.ApiClient
 import com.material.components.message.ApiInter
 import com.material.components.message.Notification
@@ -42,8 +40,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import okhttp3.ResponseBody
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import android.widget.TimePicker
 
 /**
  * @author  Abraham
@@ -82,30 +79,49 @@ class FormProfileData : AppCompatActivity() {
                     .get(Calendar.YEAR), calendario.get(Calendar.MONTH),
                     calendario.get(Calendar.DAY_OF_MONTH)).show()
         }
+
+        hora_evento.setOnClickListener {
+            val cal = Calendar.getInstance()
+            val timelistener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+                cal.set(Calendar.HOUR_OF_DAY, hour)
+                cal.set(Calendar.MINUTE, minute)
+                var hora = SimpleDateFormat("HH:mm").format(cal.time).toString()
+                hora_evento.setText(hora)
+            }
+            TimePickerDialog(this, timelistener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
+        }
+
         registrarEvento.setOnClickListener {
             val description = txtDescription.text.toString()
             val fecha = etBirthday.text.toString()
             val titulo = txtTitulo.text.toString()
-            if (isValid(description, fecha, titulo) && btnGaleriaEvento.getDrawable() != null) {
+            val hora_event = hora_evento.text.toString()
+            if (isValid(description, fecha, titulo, hora_event) && btnGaleriaEvento.getDrawable() != null) {
                 //agregar linea del valor de la imagen
-                var builder = AlertDialog.Builder(this)
-                var dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
-                val message = dialogView.findViewById<TextView>(R.id.mensaje)
-                message.text = "Registrando..."
-                builder.setView(dialogView)
-                val evento = Evento()
-                val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-                sharedPreference.getString("id_empresa", "")
-                evento.id_empresa = sharedPreference.getString("id_empresa", "").toString()
-                evento.description = description
-                evento.fecha = fecha
-                evento.titulo = titulo
-                evento.id = ""
-                upload(evento)
-                builder.setCancelable(false)
-                dialog = builder.create()
-                dialog.show()
-                //  Handler().postDelayed({ dialog.dismiss() }, 1500)
+                try {
+                    var builder = AlertDialog.Builder(this)
+                    var dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
+                    val message = dialogView.findViewById<TextView>(R.id.mensaje)
+                    message.text = "Registrando..."
+                    builder.setView(dialogView)
+                    val evento = Evento()
+                    val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                    sharedPreference.getString("id_empresa", "")
+                    evento.id_empresa = sharedPreference.getString("id_empresa", "").toString()
+                    evento.description = description
+                    evento.fecha = fecha
+                    evento.hora = hora_event
+                    evento.titulo = titulo
+                    evento.id = ""
+                    upload(evento)
+                    builder.setCancelable(false)
+                    dialog = builder.create()
+                    dialog.show()
+                    //  Handler().postDelayed({ dialog.dismiss() }, 1500)
+                } catch (e: java.lang.Exception) {
+                    toast(""+e)
+                }
+
             } else {
                 toast("Completa los campos")
             }
@@ -117,6 +133,7 @@ class FormProfileData : AppCompatActivity() {
     }
 
     //backend
+
 
     private fun upload(evento: Evento) {
         //gs://tecapp-25ed3.appspot.com/uploads/image:40366
@@ -233,8 +250,8 @@ class FormProfileData : AppCompatActivity() {
     }
 
     private fun actualizarInput() {
-        val formatoDeFecha = "MM/dd/yy" //In which you need put here
-        val sdf = SimpleDateFormat(formatoDeFecha, Locale.US)
+        val formatoDeFecha = "dd/MM/yy" //In which you need put here
+        val sdf = SimpleDateFormat(formatoDeFecha)
         etBirthday.setText(sdf.format(calendario.time))
     }
 
@@ -264,10 +281,12 @@ class FormProfileData : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun isValid(description: String, fecha: String, titulo: String): Boolean {
+    private fun isValid(description: String, fecha: String, titulo: String, hora: String): Boolean {
         return !description.isNullOrEmpty() &&
                 !fecha.isNullOrEmpty() &&
-                !titulo.isNullOrEmpty()
+                !titulo.isNullOrEmpty() &&
+                !hora.isNullOrEmpty()
+
     }
 
     override fun onBackPressed() {

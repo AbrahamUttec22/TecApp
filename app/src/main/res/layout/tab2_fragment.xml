@@ -36,7 +36,7 @@
                             android:id="@+id/txtNombreEmpleado"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:digits=" ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz"
+                            android:digits=" ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyzóáéíú"
                             android:hint="Nombre Completo"
                             android:inputType="text"
                             android:maxLines="1"

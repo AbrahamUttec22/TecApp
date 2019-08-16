@@ -131,261 +131,261 @@ class EncuestaAdapter(val context: Context, val layout: Int, val list: List<Encu
                 Log.w("EXCEPTION", "Error getting documents.", task.exception)
             }
         })//end for expression lambdas this very cool
+        try {
+            vh.respuesta.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(position: View?) {
+                    val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+                    val pregunta = vh.pregunta.text.toString()
+                    val resp = vh.respuesta.text.toString()
+                    val correo = mAuth.currentUser!!.email.toString()
+                    val voto = Votacion()
+                    voto.id_pregunta = pregunta
+                    voto.id_empresa = id_empresa
+                    voto.respuesta = resp
+                    voto.correo = correo
+                    sentVoto(voto)
+                }
 
-
-        vh.respuesta.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(position: View?) {
-                val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-                val pregunta = vh.pregunta.text.toString()
-                val resp = vh.respuesta.text.toString()
-                val correo = mAuth.currentUser!!.email.toString()
-                val voto = Votacion()
-                voto.id_pregunta = pregunta
-                voto.id_empresa = id_empresa
-                voto.respuesta = resp
-                voto.correo = correo
-                sentVoto(voto)
-            }
-
-            private fun sentVoto(voto: Votacion) {
-                FirebaseApp.initializeApp(context)
-                val userCollection: CollectionReference
-                userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
-                val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
-                //beggin with consult
-                resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                    if (task.isSuccessful) {
-                        var respuestaBD = ""
-                        var documentId = ""
-                        var con = 0
-                        for (document in task.result!!) {
-                            respuestaBD = document.get("respuesta").toString()
-                            documentId = document.id
-                            con++
-                        }
-                        //I need validated the type of the voto
-                        if (con == 0) {
-                            userCollection.add(voto).addOnSuccessListener {
-                                showConfirmDialog()
-                            }.addOnFailureListener {}
-                        }
-                        if (con == 1 && respuestaBD != voto.respuesta) {
+                private fun sentVoto(voto: Votacion) {
+                    FirebaseApp.initializeApp(context)
+                    val userCollection: CollectionReference
+                    userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
+                    val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
+                    //beggin with consult
+                    resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                        if (task.isSuccessful) {
+                            var respuestaBD = ""
+                            var documentId = ""
+                            var con = 0
+                            for (document in task.result!!) {
+                                respuestaBD = document.get("respuesta").toString()
+                                documentId = document.id
+                                con++
+                            }
                             //I need validated the type of the voto
-                            userCollection.document(documentId).update("respuesta", voto.respuesta).addOnSuccessListener {
-                                showConfirmDialogTwo()
-                            }.addOnFailureListener { }
-                        } else if (con == 1) {
-                            Toast.makeText(context, "Ya se ha votado por esa opcion", Toast.LENGTH_SHORT).show()
+                            if (con == 0) {
+                                userCollection.add(voto).addOnSuccessListener {
+                                    showConfirmDialog()
+                                }.addOnFailureListener {}
+                            }
+                            if (con == 1 && respuestaBD != voto.respuesta) {
+                                //I need validated the type of the voto
+                                userCollection.document(documentId).update("respuesta", voto.respuesta).addOnSuccessListener {
+                                    showConfirmDialogTwo()
+                                }.addOnFailureListener { }
+                            } else if (con == 1) {
+                                Toast.makeText(context, "Ya se ha votado por esa opcion", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Log.w("EXCEPTION", "Error getting documents.", task.exception)
                         }
-                    } else {
-                        Log.w("EXCEPTION", "Error getting documents.", task.exception)
+                    })//end for expression lambdas this very cool
+                }//end for hanlder
+
+                private fun showConfirmDialog() {
+                    //the header from dialog
+                    val dialog = Dialog(context)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+                    dialog.setContentView(R.layout.dialog_voto_postulado)
+                    dialog.setCancelable(true)
+                    val lp = WindowManager.LayoutParams()
+                    lp.copyFrom(dialog.window!!.attributes)
+                    lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                    (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
+                        dialog.dismiss()
                     }
-                })//end for expression lambdas this very cool
-            }//end for hanlder
-
-            private fun showConfirmDialog() {
-                //the header from dialog
-                val dialog = Dialog(context)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
-                dialog.setContentView(R.layout.dialog_voto_postulado)
-                dialog.setCancelable(true)
-                val lp = WindowManager.LayoutParams()
-                lp.copyFrom(dialog.window!!.attributes)
-                lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-                lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-                (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
-                    dialog.dismiss()
+                    dialog.show()
+                    dialog.window!!.attributes = lp
                 }
-                dialog.show()
-                dialog.window!!.attributes = lp
-            }
 
-            private fun showConfirmDialogTwo() {
-                //the header from dialog
-                val dialog = Dialog(context)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
-                dialog.setContentView(R.layout.dialog_voto_cambiado)
-                dialog.setCancelable(true)
-                val lp = WindowManager.LayoutParams()
-                lp.copyFrom(dialog.window!!.attributes)
-                lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-                lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-                (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
-                    dialog.dismiss()
-                }
-                dialog.show()
-                dialog.window!!.attributes = lp
-            }
-        })//first question
-        vh.respuestatwo.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(position: View?) {
-                val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-                val pregunta = vh.pregunta.text.toString()
-                val resp = vh.respuestatwo.text.toString()
-                val correo = mAuth.currentUser!!.email.toString()
-                val voto = Votacion()
-                voto.id_pregunta = pregunta
-                voto.respuesta = resp
-                voto.id_empresa = id_empresa
-                voto.correo = correo
-                sentVoto(voto)
-            }
-
-            private fun sentVoto(voto: Votacion) {
-                FirebaseApp.initializeApp(context)
-                val userCollection: CollectionReference
-                userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
-                val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
-                //beggin with consult
-                resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                    if (task.isSuccessful) {
-                        var respuestaBD = ""
-                        var documentId = ""
-                        var con = 0
-                        for (document in task.result!!) {
-                            respuestaBD = document.get("respuesta").toString()
-                            documentId = document.id
-                            con++
-                        }
-                        //I need validated the type of the voto
-                        if (con == 0) {
-                            userCollection.add(voto).addOnSuccessListener {
-                                showConfirmDialog()
-                            }.addOnFailureListener {}
-                        }
-                        if (con == 1 && respuestaBD != voto.respuesta) {
-                            userCollection.document(documentId).update("respuesta", voto.respuesta).addOnSuccessListener {
-                                showConfirmDialogTwo()
-                            }.addOnFailureListener { }
-                        } else if (con == 1) {
-                            Toast.makeText(context, "Ya se ha votado por esa opcion", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Log.w("EXCEPTION", "Error getting documents.", task.exception)
+                private fun showConfirmDialogTwo() {
+                    //the header from dialog
+                    val dialog = Dialog(context)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+                    dialog.setContentView(R.layout.dialog_voto_cambiado)
+                    dialog.setCancelable(true)
+                    val lp = WindowManager.LayoutParams()
+                    lp.copyFrom(dialog.window!!.attributes)
+                    lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                    (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
+                        dialog.dismiss()
                     }
-                })//end for expression lambdas this very cool
-            }//end for hanlder
-
-            private fun showConfirmDialog() {
-                //the header from dialog
-                val dialog = Dialog(context)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
-                dialog.setContentView(R.layout.dialog_voto_postulado)
-                dialog.setCancelable(true)
-                val lp = WindowManager.LayoutParams()
-                lp.copyFrom(dialog.window!!.attributes)
-                lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-                lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-                (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
-                    dialog.dismiss()
+                    dialog.show()
+                    dialog.window!!.attributes = lp
                 }
-                dialog.show()
-                dialog.window!!.attributes = lp
-            }
-
-            private fun showConfirmDialogTwo() {
-                //the header from dialog
-                val dialog = Dialog(context)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
-                dialog.setContentView(R.layout.dialog_voto_cambiado)
-                dialog.setCancelable(true)
-                val lp = WindowManager.LayoutParams()
-                lp.copyFrom(dialog.window!!.attributes)
-                lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-                lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-                (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
-                    dialog.dismiss()
+            })//first question
+            vh.respuestatwo.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(position: View?) {
+                    val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+                    val pregunta = vh.pregunta.text.toString()
+                    val resp = vh.respuestatwo.text.toString()
+                    val correo = mAuth.currentUser!!.email.toString()
+                    val voto = Votacion()
+                    voto.id_pregunta = pregunta
+                    voto.respuesta = resp
+                    voto.id_empresa = id_empresa
+                    voto.correo = correo
+                    sentVoto(voto)
                 }
-                dialog.show()
-                dialog.window!!.attributes = lp
-            }
 
-        })
-        vh.respuestathree.setOnClickListener(object : View.OnClickListener {
-            override fun onClick(position: View?) {
-                val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-                val pregunta = vh.pregunta.text.toString()
-                val resp = vh.respuestathree.text.toString()
-                val correo = mAuth.currentUser!!.email.toString()
-                val voto = Votacion()
-                voto.id_pregunta = pregunta
-                voto.id_empresa = id_empresa
-                voto.respuesta = resp
-                voto.correo = correo
-                sentVoto(voto)
-            }
+                private fun sentVoto(voto: Votacion) {
+                    FirebaseApp.initializeApp(context)
+                    val userCollection: CollectionReference
+                    userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
+                    val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
+                    //beggin with consult
+                    resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                        if (task.isSuccessful) {
+                            var respuestaBD = ""
+                            var documentId = ""
+                            var con = 0
+                            for (document in task.result!!) {
+                                respuestaBD = document.get("respuesta").toString()
+                                documentId = document.id
+                                con++
+                            }
+                            //I need validated the type of the voto
+                            if (con == 0) {
+                                userCollection.add(voto).addOnSuccessListener {
+                                    showConfirmDialog()
+                                }.addOnFailureListener {}
+                            }
+                            if (con == 1 && respuestaBD != voto.respuesta) {
+                                userCollection.document(documentId).update("respuesta", voto.respuesta).addOnSuccessListener {
+                                    showConfirmDialogTwo()
+                                }.addOnFailureListener { }
+                            } else if (con == 1) {
+                                Toast.makeText(context, "Ya se ha votado por esa opcion", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Log.w("EXCEPTION", "Error getting documents.", task.exception)
+                        }
+                    })//end for expression lambdas this very cool
+                }//end for hanlder
 
-            private fun sentVoto(voto: Votacion) {
-                FirebaseApp.initializeApp(context)
-                val userCollection: CollectionReference
-                userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
-                val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
-                //beggin with consult
-                resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                    if (task.isSuccessful) {
-                        var respuestaBD = ""
-                        var documentId = ""
-                        var con = 0
-                        for (document in task.result!!) {
-                            respuestaBD = document.get("respuesta").toString()
-                            documentId = document.id
-                            con++
-                        }
-                        //I need validated the type of the voto
-                        if (con == 0) {
-                            userCollection.add(voto).addOnSuccessListener {
-                                showConfirmDialog()
-                            }.addOnFailureListener {}
-                        }
-
-                        if (con == 1 && respuestaBD != voto.respuesta) {
-                            userCollection.document(documentId).update("respuesta", voto.respuesta).addOnSuccessListener {
-                                showConfirmDialogTwo()
-                            }.addOnFailureListener { }
-                        } else if (con == 1) {
-                            Toast.makeText(context, "Ya se ha votado por esa opcion", Toast.LENGTH_SHORT).show()
-                        }
-                    } else {
-                        Log.w("EXCEPTION", "Error getting documents.", task.exception)
+                private fun showConfirmDialog() {
+                    //the header from dialog
+                    val dialog = Dialog(context)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+                    dialog.setContentView(R.layout.dialog_voto_postulado)
+                    dialog.setCancelable(true)
+                    val lp = WindowManager.LayoutParams()
+                    lp.copyFrom(dialog.window!!.attributes)
+                    lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                    (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
+                        dialog.dismiss()
                     }
-                })//end for expression lambdas this very cool
-            }//end for hanlder
-
-            private fun showConfirmDialog() {
-                //the header from dialog
-                val dialog = Dialog(context)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
-                dialog.setContentView(R.layout.dialog_voto_postulado)
-                dialog.setCancelable(true)
-                val lp = WindowManager.LayoutParams()
-                lp.copyFrom(dialog.window!!.attributes)
-                lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-                lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-                (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
-                    dialog.dismiss()
+                    dialog.show()
+                    dialog.window!!.attributes = lp
                 }
-                dialog.show()
-                dialog.window!!.attributes = lp
-            }
 
-            private fun showConfirmDialogTwo() {
-                //the header from dialog
-                val dialog = Dialog(context)
-                dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
-                dialog.setContentView(R.layout.dialog_voto_cambiado)
-                dialog.setCancelable(true)
-                val lp = WindowManager.LayoutParams()
-                lp.copyFrom(dialog.window!!.attributes)
-                lp.width = WindowManager.LayoutParams.WRAP_CONTENT
-                lp.height = WindowManager.LayoutParams.WRAP_CONTENT
-                (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
-                    dialog.dismiss()
+                private fun showConfirmDialogTwo() {
+                    //the header from dialog
+                    val dialog = Dialog(context)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+                    dialog.setContentView(R.layout.dialog_voto_cambiado)
+                    dialog.setCancelable(true)
+                    val lp = WindowManager.LayoutParams()
+                    lp.copyFrom(dialog.window!!.attributes)
+                    lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                    (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                    dialog.window!!.attributes = lp
                 }
-                dialog.show()
-                dialog.window!!.attributes = lp
-            }
-        })
 
+            })
+            vh.respuestathree.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(position: View?) {
+                    val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+                    val pregunta = vh.pregunta.text.toString()
+                    val resp = vh.respuestathree.text.toString()
+                    val correo = mAuth.currentUser!!.email.toString()
+                    val voto = Votacion()
+                    voto.id_pregunta = pregunta
+                    voto.id_empresa = id_empresa
+                    voto.respuesta = resp
+                    voto.correo = correo
+                    sentVoto(voto)
+                }
+
+                private fun sentVoto(voto: Votacion) {
+                    FirebaseApp.initializeApp(context)
+                    val userCollection: CollectionReference
+                    userCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
+                    val resultado = userCollection.whereEqualTo("correo", voto.correo).whereEqualTo("id_pregunta", voto.id_pregunta)
+                    //beggin with consult
+                    resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                        if (task.isSuccessful) {
+                            var respuestaBD = ""
+                            var documentId = ""
+                            var con = 0
+                            for (document in task.result!!) {
+                                respuestaBD = document.get("respuesta").toString()
+                                documentId = document.id
+                                con++
+                            }
+                            //I need validated the type of the voto
+                            if (con == 0) {
+                                userCollection.add(voto).addOnSuccessListener {
+                                    showConfirmDialog()
+                                }.addOnFailureListener {}
+                            }
+
+                            if (con == 1 && respuestaBD != voto.respuesta) {
+                                userCollection.document(documentId).update("respuesta", voto.respuesta).addOnSuccessListener {
+                                    showConfirmDialogTwo()
+                                }.addOnFailureListener { }
+                            } else if (con == 1) {
+                                Toast.makeText(context, "Ya se ha votado por esa opcion", Toast.LENGTH_SHORT).show()
+                            }
+                        } else {
+                            Log.w("EXCEPTION", "Error getting documents.", task.exception)
+                        }
+                    })//end for expression lambdas this very cool
+                }//end for hanlder
+
+                private fun showConfirmDialog() {
+                    //the header from dialog
+                    val dialog = Dialog(context)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+                    dialog.setContentView(R.layout.dialog_voto_postulado)
+                    dialog.setCancelable(true)
+                    val lp = WindowManager.LayoutParams()
+                    lp.copyFrom(dialog.window!!.attributes)
+                    lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                    (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                    dialog.window!!.attributes = lp
+                }
+
+                private fun showConfirmDialogTwo() {
+                    //the header from dialog
+                    val dialog = Dialog(context)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+                    dialog.setContentView(R.layout.dialog_voto_cambiado)
+                    dialog.setCancelable(true)
+                    val lp = WindowManager.LayoutParams()
+                    lp.copyFrom(dialog.window!!.attributes)
+                    lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                    (dialog.findViewById<View>(R.id.bt_close) as AppCompatButton).setOnClickListener { v ->
+                        dialog.dismiss()
+                    }
+                    dialog.show()
+                    dialog.window!!.attributes = lp
+                }
+            })
+        } catch (e: java.lang.Exception) {
+        }
         return view
     }
 }

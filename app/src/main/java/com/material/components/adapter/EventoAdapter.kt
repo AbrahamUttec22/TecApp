@@ -41,8 +41,9 @@ class EventoAdapter(val context: Context, val layout: Int, val list: List<Evento
         }
         //val fullName = "${list[position].titulo}"
         vh.fecha.text = "${list[position].fecha}"
-        vh.description.text = "${list[position].description}"
         vh.titulo.text = "${list[position].titulo}"
+        vh.description.text = "${list[position].description}"
+        vh.hora.text = "${list[position].hora}"
         Glide
                 .with(this.context)
                 .load("${list[position].ubicacion}")
@@ -56,4 +57,5 @@ private class EventoViewHolder(view: View) {
     val fecha: TextView = view.textFecha
     val description: TextView = view.textDescription
     val titulo: TextView = view.textTitulo
+    val hora: TextView = view.textHora
 }

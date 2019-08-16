@@ -1,4 +1,5 @@
 package com.material.components.adapter
+
 import android.content.Context
 import android.util.Log
 import android.view.View
@@ -51,51 +52,56 @@ class EstatusChecadorAdapter(val context: Context, val layout: Int, val list: Li
         val fecha = "${list[position].fecha}"
 
 
-        vh.fechaChecador.text=fecha
-        vh.horaChecador.text="${list[position].hora}"
+        vh.fechaChecador.text = fecha
+        vh.horaChecador.text = "${list[position].hora}"
 
         FirebaseApp.initializeApp(context)
         val usuarioCollection: CollectionReference
         val checadorCollection: CollectionReference
         usuarioCollection = FirebaseFirestore.getInstance().collection("Usuarios")
-       // checadorCollection = FirebaseFirestore.getInstance().collection("Checador")
+        // checadorCollection = FirebaseFirestore.getInstance().collection("Checador")
 
-        //only this source I update the status,
-        val consulta = usuarioCollection.whereEqualTo("id", id_usuario)
-        //beggin with consult
-        consulta.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-            if (task.isSuccessful) {
-                for (document in task.result!!) {
-                    val nombreEmpleado = document.get("name").toString()
-                    val ubicacion = document.get("ubicacion").toString()
-                    vh.nombreEmpleado.text=nombreEmpleado
-                    Glide
-                            .with(this.context)
-                            .load(ubicacion)
-                            .into(view.imageUser)
+        try {
+            //only this source I update the status,
+            val consulta = usuarioCollection.whereEqualTo("id", id_usuario)
+            //beggin with consult
+            consulta.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result!!) {
+                        val nombreEmpleado = document.get("name").toString()
+                        val ubicacion = document.get("ubicacion").toString()
+                        vh.nombreEmpleado.text = nombreEmpleado
+                        Glide
+                                .with(this.context)
+                                .load(ubicacion)
+                                .into(view.imageUser)
+                    }
+                } else {
+                    Log.w("saasas", "Error getting documents.", task.exception)
                 }
-            } else {
-                Log.w("saasas", "Error getting documents.", task.exception)
-            }
-        })//end for expression lambdas this very cool
+            })//end for expression lambdas this very cool
 
-   /*     val consultaChecador = checadorCollection.whereEqualTo("fecha", fecha).
-                whereEqualTo("id_usuario", id_usuario).whereEqualTo("id_empresa", id_empresa)
-        //beggin with consult
-        consultaChecador.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-            if (task.isSuccessful) {
-                var horasEmpleado=""
-                for (document in task.result!!) {
-                    horasEmpleado = document.get("hora").toString()+""
-                }
-                vh.horaChecador.text=horasEmpleado
+        } catch (e: java.lang.Exception) {
+        }
 
-            } else {
-                Log.w("saasas", "Error getting documents.", task.exception)
-            }
-        })//end for expression lambdas this very cool
 
-*/
+        /*     val consultaChecador = checadorCollection.whereEqualTo("fecha", fecha).
+                     whereEqualTo("id_usuario", id_usuario).whereEqualTo("id_empresa", id_empresa)
+             //beggin with consult
+             consultaChecador.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                 if (task.isSuccessful) {
+                     var horasEmpleado=""
+                     for (document in task.result!!) {
+                         horasEmpleado = document.get("hora").toString()+""
+                     }
+                     vh.horaChecador.text=horasEmpleado
+
+                 } else {
+                     Log.w("saasas", "Error getting documents.", task.exception)
+                 }
+             })//end for expression lambdas this very cool
+
+     */
 
         return view
     }

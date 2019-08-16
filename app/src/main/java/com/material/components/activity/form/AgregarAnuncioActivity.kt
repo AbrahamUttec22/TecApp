@@ -76,26 +76,31 @@ class AgregarAnuncioActivity : AppCompatActivity() {
             val description = txtDescriptionAnuncio.text.toString()
             val titulo = txtTituloAnuncio.text.toString()
             if (isValid(description, titulo) && imgAnuncio.getDrawable() != null) {
-                val builder = AlertDialog.Builder(this)
-                val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
-                val message = dialogView.findViewById<TextView>(R.id.mensaje)
-                message.text = "Registrando..."
-                val obj = Anuncio()
-                var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-                var id_empresa = sharedPreference.getString("id_empresa", "")
-                obj.id_empresa = id_empresa
-                obj.description = description
-                obj.titulo = titulo
-                val c = Calendar.getInstance()
-                val df = SimpleDateFormat("dd/MM/yyyy")
-                val formattedDate = df.format(c.getTime()).toString()
-                obj.fecha = formattedDate
-                upload(obj)
-                builder.setView(dialogView)
-                builder.setCancelable(false)
-                dialog = builder.create()
-                dialog.show()
-                // Handler().postDelayed({ dialog.dismiss() }, 1600)
+                try {
+                    val builder = AlertDialog.Builder(this)
+                    val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
+                    val message = dialogView.findViewById<TextView>(R.id.mensaje)
+                    message.text = "Registrando..."
+                    val obj = Anuncio()
+                    var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                    var id_empresa = sharedPreference.getString("id_empresa", "")
+                    obj.id_empresa = id_empresa
+                    obj.description = description
+                    obj.titulo = titulo
+                    val c = Calendar.getInstance()
+                    val df = SimpleDateFormat("dd/MM/yyyy")
+                    val formattedDate = df.format(c.getTime()).toString()
+                    obj.fecha = formattedDate
+                    upload(obj)
+                    builder.setView(dialogView)
+                    builder.setCancelable(false)
+                    dialog = builder.create()
+                    dialog.show()
+                    // Handler().postDelayed({ dialog.dismiss() }, 1600)
+                } catch (e: java.lang.Exception) {
+                    toast("" + e)
+                }
+
             } else {
                 toast("Completa los campos")
             }

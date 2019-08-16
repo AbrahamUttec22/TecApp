@@ -14,14 +14,30 @@
         android:roundIcon="@drawable/logo_tecgurus"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".drawer.DashboarActivity"></activity>
-        <activity android:name=".drawer.InicioKActivity" />
-        <activity android:name=".checador.GenerarQrJActivity" />
-        <activity android:name=".activity.about.EstatusChecadorActivity" />
-        <activity android:name=".activity.login.ForgotPasswordActivity" />
-        <activity android:name=".message.PruevaActivity" />
-        <activity android:name=".activity.button.ActividadesActivity" />
-        <activity android:name=".message.NotificacionActivity" />
+        <activity
+            android:name=".drawer.DashboarActivity"
+            android:screenOrientation="portrait"></activity>
+        <activity
+            android:name=".drawer.InicioKActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".checador.GenerarQrJActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.about.EstatusChecadorActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.login.ForgotPasswordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.PruevaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.button.ActividadesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".message.NotificacionActivity"
+            android:screenOrientation="portrait" />
 
         <service android:name=".message.MyFirebaseMessagingService">
             <intent-filter>
@@ -29,21 +45,51 @@
             </intent-filter>
         </service>
 
-        <activity android:name=".checador.GenerarQRActivity" />
-        <activity android:name=".checador.CheckActivity" />
-        <activity android:name=".register.RegistrosActivity" />
-        <activity android:name=".activity.card.PerfilEmpresaActivity" />
-        <activity android:name=".activity.card.AdministrarAnunciosActivity" />
-        <activity android:name=".activity.form.AdministrarEventoActivity" />
-        <activity android:name=".activity.form.EstadisticaActivity" />
-        <activity android:name=".activity.settings.ClaveActivity" />
-        <activity android:name=".activity.settings.StorageActivity" />
-        <activity android:name=".activity.login.SignUpActivity" />
-        <activity android:name=".activity.settings.ImagenesActivity" />
-        <activity android:name=".activity.form.AgregarAnuncioActivity" />
-        <activity android:name=".activity.form.AgregarEncuestaActivity" />
-        <activity android:name=".activity.dialog.EncuestaActivity" />
-        <activity android:name=".activity.bottomsheet.UserActivity" /> <!-- Add Google Map Library -->
+        <activity
+            android:name=".checador.GenerarQRActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".checador.CheckActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".register.RegistrosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.card.PerfilEmpresaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.card.AdministrarAnunciosActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.form.AdministrarEventoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.form.EstadisticaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.settings.ClaveActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.settings.StorageActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.login.SignUpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.settings.ImagenesActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.form.AgregarAnuncioActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.form.AgregarEncuestaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.dialog.EncuestaActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.bottomsheet.UserActivity"
+            android:screenOrientation="portrait" /> <!-- Add Google Map Library -->
         <uses-library android:name="com.google.android.maps" /> <!-- Google API Key -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
@@ -315,9 +361,7 @@
         <activity
             android:name=".activity.bottomsheet.BottomSheetFloating"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.bottomsheet.BottomSheetFull"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.bottomnavigation.BottomNavigationLight"
             android:screenOrientation="portrait" />
@@ -336,9 +380,7 @@
         <activity
             android:name=".activity.tabs.TabsDark"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.form.FormSignUp"
-            android:screenOrientation="portrait" />
+
         <activity
             android:name=".activity.gridlist.GridCaller"
             android:screenOrientation="portrait" />
@@ -584,9 +626,6 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.bottomnavigation.BottomNavigationMapBlue"
-            android:screenOrientation="portrait" />
-        <activity
-            android:name=".activity.dashboard.DashboardGridFab"
             android:screenOrientation="portrait" />
         <activity
             android:name=".activity.dashboard.DashboardStatistics"
