@@ -144,8 +144,6 @@ class EncuestaActivity : AppCompatActivity() {
             }
 
         })//end for expression lambdas this very cool
-
-
     }
 
 

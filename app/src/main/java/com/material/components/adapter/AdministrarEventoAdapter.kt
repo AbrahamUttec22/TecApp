@@ -3,6 +3,7 @@ package com.material.components.adapter
 import android.app.AlertDialog
 import android.app.DatePickerDialog
 import android.app.Dialog
+import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.support.v7.widget.AppCompatSeekBar
@@ -57,6 +58,7 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
         val description = "${list[position].description}"
         val fecha = "${list[position].fecha}"
         val id_empresa = "${list[position].id_empresa}"
+        val hora = "${list[position].hora}"
         vh.titulo.text = titulo
         val id = "${list[position].id}"
 
@@ -93,6 +95,7 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                     evento.titulo = titulo
                     evento.description = description
                     evento.fecha = fecha
+                    evento.hora = hora
                     showDialog(evento)
                 }
 
@@ -110,9 +113,24 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                     (dialog.findViewById<View>(R.id.txtTituloEvento) as TextView).text = eveto.titulo
                     (dialog.findViewById<View>(R.id.txtDescriptionEvento) as TextView).text = eveto.description
                     (dialog.findViewById<View>(R.id.txtFechaEvento) as EditText).setText(eveto.fecha)
+                    (dialog.findViewById<View>(R.id.txtHoraEvento) as EditText).setText(eveto.hora)
+                    val cal = Calendar.getInstance()
+
                     var txt1 = (dialog.findViewById<View>(R.id.txtTituloEvento) as TextView)
                     var txt2 = (dialog.findViewById<View>(R.id.txtDescriptionEvento) as TextView)
                     var txt3 = (dialog.findViewById<View>(R.id.txtFechaEvento) as EditText)
+                    var txt4 = (dialog.findViewById<View>(R.id.txtHoraEvento) as EditText)
+
+                    txt4.setOnClickListener {
+                        val timelistener = TimePickerDialog.OnTimeSetListener { timePicker, hour, minute ->
+                            cal.set(Calendar.HOUR_OF_DAY, hour)
+                            cal.set(Calendar.MINUTE, minute)
+                            var hora = SimpleDateFormat("HH:mm").format(cal.time).toString()
+                            txt4.setText(hora)
+                        }
+                        TimePickerDialog(context, timelistener, cal.get(Calendar.HOUR_OF_DAY), cal.get(Calendar.MINUTE), true).show()
+
+                    }
 
                     //see views front end
                     var date: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
@@ -129,16 +147,20 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                                 .get(Calendar.YEAR), calendario.get(Calendar.MONTH),
                                 calendario.get(Calendar.DAY_OF_MONTH)).show()
                     }
+
+
                     //update the event
                     (dialog.findViewById<View>(R.id.btnActualizarEvento2) as Button).setOnClickListener {
                         //after that I get the data
                         var tituloNuevo = txt1.text.toString()
                         var descriptionNuevo = txt2.text.toString()
                         var fechaNuevo = txt3.text.toString()
-                        if (!tituloNuevo.isNullOrEmpty() && !descriptionNuevo.isNullOrEmpty() && !fechaNuevo.isNullOrEmpty()) {
+                        var horaNuevo = txt4.text.toString()
+                        if (!tituloNuevo.isNullOrEmpty() && !descriptionNuevo.isNullOrEmpty() && !fechaNuevo.isNullOrEmpty() && !horaNuevo.isNullOrEmpty()) {
                             eveto.titulo = tituloNuevo
                             eveto.description = descriptionNuevo
                             eveto.fecha = fechaNuevo
+                            eveto.hora = horaNuevo
                             updateEvent(eveto)
                             dialog.dismiss()
                             Toast.makeText(context, "El evento se ha actualizado correctamente", Toast.LENGTH_LONG).show()
@@ -156,7 +178,7 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                     eventoCollection = FirebaseFirestore.getInstance().collection("Eventos")
                     //only this source I update the status,
                     eventoCollection.document(evento.id).update("titulo", evento.titulo,
-                            "description", evento.description, "fecha", evento.fecha).addOnSuccessListener {
+                            "description", evento.description, "fecha", evento.fecha, "hora", evento.hora).addOnSuccessListener {
                     }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
                 }//end for hanlder
 

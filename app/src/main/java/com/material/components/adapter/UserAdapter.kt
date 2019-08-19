@@ -79,6 +79,9 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
         var telefono = "${list[position].telefono}"//telefono
         val id = "${list[position].id}"
         var id_empresa = "${list[position].id_empresa}"//id_empresa
+
+        vh.Correo.text = email
+
         //val uid = "${list[position].uid}"//uid
         Glide
                 .with(this.context)
@@ -286,7 +289,10 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
 
 private class UserViewHolder(view: View) {
     val fullName: TextView = view.textViewName
-    val actualizar: Button = view.btnActualizarUsuario
-    val actividad: Button = view.btnAsignarActividad
+    val actualizar: ImageButton = view.btnActualizarUsuario
+    val actividad: ImageButton = view.btnAsignarActividad
     val EmailUser: TextView = view.textemail
+    val Correo: TextView = view.textemailtwo
+
+
 }

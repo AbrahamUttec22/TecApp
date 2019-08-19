@@ -103,6 +103,7 @@ class AdministrarEventoActivity : AppCompatActivity() {
                     evento.image = document.get("image").toString()
                     evento.titulo = document.get("titulo").toString()
                     evento.ubicacion = document.get("ubicacion").toString()
+                    evento.hora = document.get("hora").toString()
                     itemEvento.add(evento)
                 }
                 if (con == 0) {

@@ -1,4 +1,5 @@
 package com.material.components.adapter
+
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
@@ -40,10 +41,9 @@ class EventoAdapter(val context: Context, val layout: Int, val list: List<Evento
             vh = view.tag as EventoViewHolder
         }
         //val fullName = "${list[position].titulo}"
-        vh.fecha.text = "${list[position].fecha}"
+        vh.fecha.text = "${list[position].fecha}" + " " + "${list[position].hora}"
         vh.titulo.text = "${list[position].titulo}"
         vh.description.text = "${list[position].description}"
-        vh.hora.text = "${list[position].hora}"
         Glide
                 .with(this.context)
                 .load("${list[position].ubicacion}")
@@ -57,5 +57,4 @@ private class EventoViewHolder(view: View) {
     val fecha: TextView = view.textFecha
     val description: TextView = view.textDescription
     val titulo: TextView = view.textTitulo
-    val hora: TextView = view.textHora
 }

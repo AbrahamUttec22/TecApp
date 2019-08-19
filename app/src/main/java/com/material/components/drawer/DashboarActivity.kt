@@ -1,4 +1,5 @@
 package com.material.components.drawer
+
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
@@ -13,6 +14,7 @@ import android.support.v7.widget.AppCompatButton
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
+import android.widget.AdapterView
 import android.widget.Toast
 import com.alejandrolora.finalapp.goToActivity
 import com.alejandrolora.finalapp.toast
@@ -30,12 +32,24 @@ import com.material.components.activity.card.*
 import com.material.components.activity.dialog.EncuestaActivity
 import com.material.components.activity.form.*
 import com.material.components.activity.login.LoginCardOverlap
+import com.material.components.adapter.ActividadesAdapter
+import com.material.components.adapter.EncuestaAdapter
+import com.material.components.adapter.EventoAdapter
+import com.material.components.adapter.UserAdapter
 import com.material.components.checador.CheckActivity
 import com.material.components.checador.GenerarQrJActivity
+import com.material.components.model.*
 import com.material.components.utils.Tools
+import kotlinx.android.synthetic.main.activity_actividades.*
+import kotlinx.android.synthetic.main.activity_actividades.listView
+import kotlinx.android.synthetic.main.activity_card_basic.*
 import kotlinx.android.synthetic.main.activity_dashboard_administrador.*
 import kotlinx.android.synthetic.main.activity_dashboard_empresa.*
 import kotlinx.android.synthetic.main.activity_dashboard_usuario.*
+import kotlinx.android.synthetic.main.activity_encuesta.*
+import kotlinx.android.synthetic.main.activity_user.*
+import kotlinx.android.synthetic.main.list_view_usuario.view.*
+import java.util.ArrayList
 
 /**
  * @author Abraham Casas Aguilar
@@ -49,6 +63,17 @@ class DashboarActivity : AppCompatActivity() {
     //declare val for save the collection
     private val empresaCollection: CollectionReference
     private var name: String = ""
+    var id_empresa = ""
+    //declare val for save the collection
+    private val eventosCollection: CollectionReference
+    //declare val for save the collection
+    private val encuestasCollection: CollectionReference
+    //declare val for save the collection
+    private val anuncioCollection: CollectionReference
+    //declare val for save the collection
+    private val usuariosCollection: CollectionReference
+    //declare val for save the collection
+    private val actividadesCollection: CollectionReference
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -56,17 +81,25 @@ class DashboarActivity : AppCompatActivity() {
         //save the collection marks on val maksCollection
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
         empresaCollection = FirebaseFirestore.getInstance().collection("Empresas")
+
+        eventosCollection = FirebaseFirestore.getInstance().collection("Eventos")
+        encuestasCollection = FirebaseFirestore.getInstance().collection("Encuestas")
+        anuncioCollection = FirebaseFirestore.getInstance().collection("Anuncios")
+        usuariosCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+        actividadesCollection = FirebaseFirestore.getInstance().collection("Actividades")
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var rol = sharedPreference.getString("rol", "").toString()
+        var sharedPreferencet = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        id_empresa = sharedPreferencet.getString("id_empresa", "")
 
         if (rol.equals("empresa")) {
             setContentView(R.layout.activity_dashboard_empresa)
-
+            consultasEmpresaNotificaciones()
             //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
             MiPerfilE.setOnClickListener {
                 //403 USUARIOS,404 EMPRESA
@@ -196,6 +229,8 @@ class DashboarActivity : AppCompatActivity() {
             }
         } else if (rol.equals("usuario")) {
             setContentView(R.layout.activity_dashboard_usuario)
+            consultasUsuarioNotificaciones()
+
             //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
             MiPerfilU.setOnClickListener {
                 //403 USUARIOS,404 EMPRESA
@@ -270,6 +305,7 @@ class DashboarActivity : AppCompatActivity() {
             }
         } else if (rol.equals("administrador")) {
             setContentView(R.layout.activity_dashboard_administrador)
+            consultasAdministradorNotificaciones()
             //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
             MiPerfilA.setOnClickListener {
                 //403 USUARIOS,404 EMPRESA
@@ -412,6 +448,281 @@ class DashboarActivity : AppCompatActivity() {
 
         getDataUser()
         //apartir de aqui se van a hacer instancias a las ventanas correspondientes
+    }
+
+    private fun consultasEmpresaNotificaciones() {
+        val consultaUsuario = userCollection.whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        consultaUsuario.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                val itemUsuario = ArrayList<Usuario>()//lista local de una sola instancia
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    EmpresaUsuariosN.text = "0"
+                } else {
+                    EmpresaUsuariosN.text = con.toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+        //____________________________________________________________________
+        val consultaEvento = eventosCollection.whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        consultaEvento.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    EmpresaVerEventoN.text = "0"
+                } else {
+                    EmpresaVerEventoN.text = con.toString()
+                }
+
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+        //____________________________________________________________________
+        val consultaEncuestas = encuestasCollection.whereEqualTo("status", "1").whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        consultaEncuestas.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    EmpresaVerEncuestaN.text = "0"
+
+                } else {
+                    EmpresaVerEncuestaN.text = con.toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+        //____________________________________________________________________
+
+        val anuncioConsulta = anuncioCollection.whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        anuncioConsulta.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    EmpresaVerAnuncioN.text = "0"
+                } else {
+                    EmpresaVerAnuncioN.text = con.toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+    }
+
+    private fun consultasAdministradorNotificaciones() {
+        val consultaUsuario = userCollection.whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        consultaUsuario.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                val itemUsuario = ArrayList<Usuario>()//lista local de una sola instancia
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    AdministradorUsuariosN.text = "0"
+                } else {
+                    AdministradorUsuariosN.text = con.toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+        //____________________________________________________________________
+        var email = mAuth.currentUser!!.email.toString()
+        val consultaActividad = actividadesCollection.whereEqualTo("correo", email)
+        //beggin with consult
+        consultaActividad.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    AdministradorActividadesN.text = "0"
+
+                } else {
+                    AdministradorActividadesN.text = con.toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+        //____________________________________________________________________
+        val consultaEvento = eventosCollection.whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        consultaEvento.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    AdministradorVerEventosN.text = "0"
+
+                } else {
+                    AdministradorVerEventosN.text = con.toString()
+                }
+
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+        //____________________________________________________________________
+        val consultaEncuestas = encuestasCollection.whereEqualTo("status", "1").whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        consultaEncuestas.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    AdministradorVerEncuestasN.text = "0"
+
+                } else {
+                    AdministradorVerEncuestasN.text = con.toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+        //____________________________________________________________________
+
+        val anuncioConsulta = anuncioCollection.whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        anuncioConsulta.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    AdministradorVerAnunciosN.text = "0"
+                } else {
+                    AdministradorVerAnunciosN.text = con.toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+    }
+
+    private fun consultasUsuarioNotificaciones() {
+        //____________________________________________________________________
+        var email = mAuth.currentUser!!.email.toString()
+        val consultaActividad = actividadesCollection.whereEqualTo("correo", email)
+        //beggin with consult
+        consultaActividad.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    UsuarioVerActividadesN.text = "0"
+
+                } else {
+                    UsuarioVerActividadesN.text = con.toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+        //____________________________________________________________________
+        val consultaEvento = eventosCollection.whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        consultaEvento.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    UsuarioVerEventosN.text = "0"
+
+                } else {
+                    UsuarioVerEventosN.text = con.toString()
+                }
+
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+        //____________________________________________________________________
+        val consultaEncuestas = encuestasCollection.whereEqualTo("status", "1").whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        consultaEncuestas.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    UsuarioVerEncuestasN.text = "0"
+
+                } else {
+                    UsuarioVerEncuestasN.text = con.toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+        //____________________________________________________________________
+
+        val anuncioConsulta = anuncioCollection.whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        anuncioConsulta.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var con = 0
+                for (document in task.result!!) {
+                    con++
+                }
+                if (con == 0) {
+                    UsuarioVerAnunciosN.text = "0"
+
+                } else {
+                    UsuarioVerAnunciosN.text = con.toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
     }
 
     private fun showConfirmDialog() {
