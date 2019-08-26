@@ -9,14 +9,15 @@
     <application
         android:allowBackup="true"
         android:hardwareAccelerated="true"
-        android:icon="@drawable/logo_tecgurus"
+        android:icon="@drawable/ic_logo_one"
         android:label="@string/app_name"
-        android:roundIcon="@drawable/logo_tecgurus"
+        android:roundIcon="@drawable/ic_logo_one"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".utils.SplashActivity"></activity>
         <activity
             android:name=".drawer.DashboarActivity"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
         <activity
             android:name=".drawer.InicioKActivity"
             android:screenOrientation="portrait" />
@@ -99,7 +100,9 @@
             android:name=".activity.MainMenu"
             android:label="@string/app_name"
             android:screenOrientation="portrait" />
-        <activity android:name=".activity.MainEmptyActivity">
+        <activity android:name=".activity.MainEmptyActivity"
+            android:theme="@style/AppTheme"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -361,7 +364,6 @@
         <activity
             android:name=".activity.bottomsheet.BottomSheetFloating"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.bottomnavigation.BottomNavigationLight"
             android:screenOrientation="portrait" />
@@ -380,7 +382,6 @@
         <activity
             android:name=".activity.tabs.TabsDark"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".activity.gridlist.GridCaller"
             android:screenOrientation="portrait" />
