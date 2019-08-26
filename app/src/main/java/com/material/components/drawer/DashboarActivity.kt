@@ -771,10 +771,10 @@ class DashboarActivity : AppCompatActivity() {
 
                     if (rol == "administrador") {
                         MostrarCodigoA.text = "Fue creado el 17/06/2019"
-                        tituloCodigoA.text = "Tg-Empresa-Empleados"
+                        tituloCodigoA.text = "Hola! Comunícate"
                     } else {
                         MostrarCodigoU.text = "Fue creado el 17/06/2019"
-                        tituloCodigoU.text = "Tg-Empresa-Empleados"
+                        tituloCodigoU.text = "Hola! Comunícate"
                         //deshabilitar funciones
                         val color = Color.parseColor("#D3D3D3")
                         var filter = LightingColorFilter(Color.GRAY, Color.GRAY)

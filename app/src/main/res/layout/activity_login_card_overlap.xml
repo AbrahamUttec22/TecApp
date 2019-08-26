@@ -50,7 +50,7 @@
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="@dimen/spacing_middle"
                     android:layout_marginBottom="@dimen/spacing_xlarge"
-                    android:text="TG EMPRESA-EMPLEADOS"
+                    android:text="Hola! Comunícate"
                     android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
                     android:textColor="@color/green_500"
                     android:textStyle="bold" />
@@ -116,7 +116,7 @@
                 android:layout_marginLeft="-4dp"
                 android:layout_marginRight="-4dp"
                 android:background="@drawable/btn_rounded_primary"
-                android:text="L O G I N"
+                android:text="INICIAR SESIÓN"
                 android:textAllCaps="false"
                 android:textColor="@android:color/white"
                 android:textStyle="bold" />
@@ -128,7 +128,7 @@
                     android:layout_marginLeft="-4dp"
                     android:layout_marginRight="-4dp"
                     android:background="@drawable/btn_rounded_signup"
-                    android:text="S I G N  U P"
+                    android:text="REGÍSTRATE"
                     android:textAllCaps="false"
                     android:textColor="@android:color/white"
                     android:textStyle="bold" />
