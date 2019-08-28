@@ -88,7 +88,6 @@ class UserActivity : AppCompatActivity() {
         }
     }
 
-
     private fun listenerDb() {
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var id_empresa = sharedPreference.getString("id_empresa", "")
@@ -134,10 +133,7 @@ class UserActivity : AppCompatActivity() {
             }
 
         })//end for expression lambdas this very cool
-
-
     }
-
 
     /**
      * @param changes

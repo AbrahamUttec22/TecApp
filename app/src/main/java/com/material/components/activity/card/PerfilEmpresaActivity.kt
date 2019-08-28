@@ -159,6 +159,7 @@ class PerfilEmpresaActivity : AppCompatActivity() {
         empresaCollection.document(idDocument).update("nombre", name, "giro", giro, "direccion", direccion, "telefono", telefono).addOnSuccessListener {
             dialog.dismiss()
             Toast.makeText(this, "Informacion actulizada", Toast.LENGTH_LONG).show()
+            onBackPressed()
             //  onBackPressed()
         }.addOnFailureListener {
             dialog.dismiss()

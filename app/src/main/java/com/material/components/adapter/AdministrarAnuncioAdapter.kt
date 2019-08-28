@@ -22,6 +22,8 @@ import java.util.*
 import android.R.string.cancel
 import android.content.DialogInterface
 import android.app.AlertDialog
+import com.bumptech.glide.Glide
+import kotlinx.android.synthetic.main.list_view_evento.view.*
 
 /**
  * @author Abraham
@@ -57,6 +59,11 @@ class AdministrarAnuncioAdapter(val context: Context, val layout: Int, val list:
             vh.titulo.text = titulo
             val id = "${list[position].id}"
             val description = "${list[position].description}"
+            val foto = "${list[position].ubicacion}"
+            Glide
+                    .with(this.context)
+                    .load(foto)
+                    .into(view.imageAnuncioAdmin)
             vh.eliminar.setOnClickListener(object : View.OnClickListener {
                 override fun onClick(position: View?) {
                     val anuncio = Anuncio()
@@ -140,6 +147,6 @@ class AdministrarAnuncioAdapter(val context: Context, val layout: Int, val list:
 
 class AdministrarAnuncioViewHolder(view: View) {
     val titulo: TextView = view.txtAnuncio
-    val actualizar: Button = view.btnActualizarAnuncio
-    val eliminar: Button = view.btnEliminarAnuncio
+    val actualizar: ImageView = view.btnActualizarAnuncio
+    val eliminar: ImageView = view.btnEliminarAnuncio
 }

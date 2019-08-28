@@ -1,5 +1,4 @@
 package com.material.components.activity.form
-
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -57,7 +56,6 @@ class FormProfileData : AppCompatActivity() {
     private val marksCollection: CollectionReference
     private val userCollection: CollectionReference
 
-
     //init the val for get the collection the Firebase with cloud firestore
     init {
         FirebaseApp.initializeApp(this)
@@ -75,9 +73,11 @@ class FormProfileData : AppCompatActivity() {
         array_states = resources.getStringArray(R.array.states)
         initToolbar()
         etBirthday.setOnClickListener {
-            DatePickerDialog(this, date, calendario
-                    .get(Calendar.YEAR), calendario.get(Calendar.MONTH),
-                    calendario.get(Calendar.DAY_OF_MONTH)).show()
+           var datePickerDialog= DatePickerDialog(this, date, calendario.get(Calendar.YEAR),
+                    calendario.get(Calendar.MONTH),
+                    calendario.get(Calendar.DAY_OF_MONTH))
+            datePickerDialog.datePicker.minDate=System.currentTimeMillis()
+            datePickerDialog.show()
         }
 
         hora_evento.setOnClickListener {
@@ -119,7 +119,7 @@ class FormProfileData : AppCompatActivity() {
                     dialog.show()
                     //  Handler().postDelayed({ dialog.dismiss() }, 1500)
                 } catch (e: java.lang.Exception) {
-                    toast(""+e)
+                    toast("" + e)
                 }
 
             } else {
@@ -133,8 +133,6 @@ class FormProfileData : AppCompatActivity() {
     }
 
     //backend
-
-
     private fun upload(evento: Evento) {
         //gs://tecapp-25ed3.appspot.com/uploads/image:40366
         var mReference = mStorageRef!!.child("eventos/" + uri.lastPathSegment)

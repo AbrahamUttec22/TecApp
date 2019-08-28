@@ -6,13 +6,19 @@ import android.app.Dialog
 import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.net.Uri
+import android.support.v4.app.ActivityCompat.startActivityForResult
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatSeekBar
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.view.WindowManager
 import android.widget.*
 import com.alejandrolora.finalapp.inflate
+import com.bumptech.glide.Glide
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
@@ -20,10 +26,14 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.R
 import com.material.components.model.Encuesta
 import com.material.components.model.Evento
+import com.mikhaellopez.circularimageview.CircularImageView
 import kotlinx.android.synthetic.main.activity_form_profile_data.*
 import kotlinx.android.synthetic.main.list_view_administrar_eveto.view.*
+import kotlinx.android.synthetic.main.list_view_evento.view.*
+import kotlinx.android.synthetic.main.list_view_usuario.view.*
 import java.text.SimpleDateFormat
 import java.util.*
+import android.content.Intent.createChooser as createChooser1
 
 /**
  * @author Abraham
@@ -59,6 +69,11 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
         val fecha = "${list[position].fecha}"
         val id_empresa = "${list[position].id_empresa}"
         val hora = "${list[position].hora}"
+        val foto = "${list[position].ubicacion}"
+        Glide
+                .with(this.context)
+                .load(foto)
+                .into(view.imageEventoAdmin)
         vh.titulo.text = titulo
         val id = "${list[position].id}"
 
@@ -96,6 +111,7 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                     evento.description = description
                     evento.fecha = fecha
                     evento.hora = hora
+                    evento.ubicacion = foto
                     showDialog(evento)
                 }
 
@@ -148,7 +164,6 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                                 calendario.get(Calendar.DAY_OF_MONTH)).show()
                     }
 
-
                     //update the event
                     (dialog.findViewById<View>(R.id.btnActualizarEvento2) as Button).setOnClickListener {
                         //after that I get the data
@@ -181,18 +196,32 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                             "description", evento.description, "fecha", evento.fecha, "hora", evento.hora).addOnSuccessListener {
                     }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
                 }//end for hanlder
+            })
+
+            vh.imgEvento.setOnClickListener(object : View.OnClickListener {
+                private val PICK_PHOTO = 1
+                override fun onClick(position: View?) {
+                    var evento = Evento()
+                    evento.id = id
+                    evento.id_empresa = id_empresa
+                    evento.titulo = titulo
+                    evento.description = description
+                    evento.fecha = fecha
+                    evento.hora = hora
+                    evento.ubicacion = foto
+                }
 
             })
 
         } catch (e: java.lang.Exception) {
         }
-
         return view
     }//end for handler
 }
 
 class AdministrarEventoViewHolder(view: View) {
     val titulo: TextView = view.txtTitulo
-    val actualizar: Button = view.btnActualizarEvento
-    val eliminar: Button = view.btnEliminarEvento
+    val actualizar: ImageButton = view.btnActualizarEvento
+    val eliminar: ImageButton = view.btnEliminarEvento
+    val imgEvento: CircularImageView = view.imageEventoAdmin
 }

@@ -99,9 +99,10 @@
                                 android:id="@+id/btnAsignarActividad"
                                 android:layout_width="?attr/actionBarSize"
                                 android:layout_height="?attr/actionBarSize"
-                                android:background="@android:color/transparent"
-                                android:tint="@color/grey_20"
-                                app:srcCompat="@drawable/ic_border_outer" />
+                                android:tint="@android:color/white"
+                                android:background="@drawable/btn_rounded_signup"
+                                app:backgroundTint="@color/purple_400"
+                                app:srcCompat="@drawable/ic_activities" />
 
                             <TextView
                                 android:layout_width="wrap_content"
@@ -109,6 +110,7 @@
                                 android:text="Asignar actividad"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                                 android:textColor="@color/colorPrimary" />
+
 
                         </LinearLayout>
 
@@ -131,17 +133,18 @@
                                 android:id="@+id/btnActualizarUsuario"
                                 android:layout_width="?attr/actionBarSize"
                                 android:layout_height="?attr/actionBarSize"
-                                android:background="@android:color/transparent"
-                                android:tint="@color/grey_20"
+                                android:tint="@android:color/white"
+                                app:backgroundTint="@color/purple_400"
+                                android:background="@drawable/btn_rounded_signup"
                                 app:srcCompat="@drawable/ic_person_outline" />
 
                             <TextView
-
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Actualizar"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                                 android:textColor="@color/colorPrimary" />
+
 
                         </LinearLayout>
                     </LinearLayout>

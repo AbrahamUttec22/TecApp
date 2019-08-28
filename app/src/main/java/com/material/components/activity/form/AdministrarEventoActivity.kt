@@ -147,6 +147,7 @@ class AdministrarEventoActivity : AppCompatActivity() {
         listView.adapter = adapter
     }//end for handler
 
+
     //front end only
     //here the front end
     private fun initToolbar() {

@@ -148,8 +148,10 @@ class EstadisticaActivity : AppCompatActivity() {
         listView.adapter = adapter
         listView.onItemClickListener = object : AdapterView.OnItemClickListener {
             override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val pregunta = view!!.txtPregunta.text.toString()
-                showDialog(pregunta)
+                view!!.btnVerResultados.setOnClickListener {
+                    val pregunta = view!!.txtPregunta.text.toString()
+                    showDialog(pregunta)
+                }
             }
         }
     }//end for handler
