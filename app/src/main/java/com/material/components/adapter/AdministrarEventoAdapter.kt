@@ -7,11 +7,8 @@ import android.app.TimePickerDialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
-import android.net.Uri
 import android.support.v4.app.ActivityCompat.startActivityForResult
-import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatSeekBar
-import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.view.Window
@@ -33,7 +30,6 @@ import kotlinx.android.synthetic.main.list_view_evento.view.*
 import kotlinx.android.synthetic.main.list_view_usuario.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-import android.content.Intent.createChooser as createChooser1
 
 /**
  * @author Abraham
@@ -198,20 +194,6 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                 }//end for hanlder
             })
 
-            vh.imgEvento.setOnClickListener(object : View.OnClickListener {
-                private val PICK_PHOTO = 1
-                override fun onClick(position: View?) {
-                    var evento = Evento()
-                    evento.id = id
-                    evento.id_empresa = id_empresa
-                    evento.titulo = titulo
-                    evento.description = description
-                    evento.fecha = fecha
-                    evento.hora = hora
-                    evento.ubicacion = foto
-                }
-
-            })
 
         } catch (e: java.lang.Exception) {
         }
