@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat
 import com.material.components.R
 import android.content.Context
 import android.os.Build
+import com.material.components.actividadesfragment.GestionActividadesActivity
 import com.material.components.activity.button.ActividadesActivity
 import com.material.components.activity.card.CardBasic
 import com.material.components.activity.card.CardWizardLight
@@ -79,7 +80,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                 .setAutoCancel(true) // clear notification after click
 
         if (title.equals("Actividad")) {
-            val intent = Intent(applicationContext, ActividadesActivity::class.java)
+            val intent = Intent(applicationContext, GestionActividadesActivity::class.java)
             val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             mBuilder.setContentIntent(pi)
             mNotificationManager.notify(0, mBuilder.build())

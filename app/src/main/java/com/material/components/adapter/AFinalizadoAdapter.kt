@@ -1,29 +1,23 @@
 package com.material.components.adapter
 
-import android.app.DatePickerDialog
-import android.app.Dialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
-import android.widget.*
+import android.widget.BaseAdapter
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import com.alejandrolora.finalapp.inflate
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.material.components.R
 import com.material.components.model.Actividades
-import com.material.components.model.Evento
 import kotlinx.android.synthetic.main.list_view_actividades.view.*
-import java.text.SimpleDateFormat
+import kotlinx.android.synthetic.main.list_view_finalizado.view.*
+import kotlinx.android.synthetic.main.list_view_revision.view.*
 import java.util.*
 
-/**
- * @author Abraham Casas Aguilar
- */
-class ActividadesAdapter(val context: Context?, val layout: Int, val list: List<Actividades>) : BaseAdapter() {
+class AFinalizadoAdapter(val context: Context?, val layout: Int, val list: List<Actividades>) : BaseAdapter() {
 
     override fun getItem(position: Int): Any {
         return list[position]
@@ -40,14 +34,14 @@ class ActividadesAdapter(val context: Context?, val layout: Int, val list: List<
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View
-        val vh: ActividadesViewHolder
+        val vh: ActividadesViewHolderFour
         if (convertView == null) {
             view = parent!!.inflate(layout)
-            vh = ActividadesViewHolder(view)
+            vh = ActividadesViewHolderFour(view)
             view.tag = vh
         } else {
             view = convertView
-            vh = view.tag as ActividadesViewHolder
+            vh = view.tag as ActividadesViewHolderFour
         }
 
         val status = "${list[position].estatus}"//no mostrar
@@ -62,9 +56,10 @@ class ActividadesAdapter(val context: Context?, val layout: Int, val list: List<
         var descripcion = "${list[position].descripcion}"//mostrar
         var fecha_compromiso = "${list[position].fecha_compromiso}"//mostrar
 
-        vh.actividad.text = titulo
-        vh.descripcion.text = descripcion
-        vh.fechaac.text = fecha_compromiso
+        vh.actividadFour.text = titulo
+        vh.descripcionFour.text = descripcion
+        vh.fechaacFour.text = fecha_compromiso
+
 
         vh.mover.setOnClickListener(object : View.OnClickListener {
             var calendario = Calendar.getInstance()
@@ -81,7 +76,7 @@ class ActividadesAdapter(val context: Context?, val layout: Int, val list: List<
                 val actividadesCollection: CollectionReference
                 actividadesCollection = FirebaseFirestore.getInstance().collection("Actividades")
                 //only this source I update the status,
-                actividadesCollection.document(actividad.id).update("estatus", "proceso").addOnSuccessListener {
+                actividadesCollection.document(actividad.id).delete().addOnSuccessListener {
                 }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
         })
@@ -91,11 +86,10 @@ class ActividadesAdapter(val context: Context?, val layout: Int, val list: List<
 
 }
 
-class ActividadesViewHolder(view: View) {
-    val actividad: TextView = view.txtActividad
-    val descripcion: TextView = view.txtDescripcionAc
-    val fechaac: TextView = view.txtFechaActivi
-    val mover: Button = view.moverproceso
-
+class ActividadesViewHolderFour(view: View) {
+    val actividadFour: TextView = view.txtActividadFinalizado
+    val descripcionFour: TextView = view.txtDescripcionAcFinalizado
+    val fechaacFour: TextView = view.txtFechaActiviFinalizado
+    val mover: Button = view.moverEliminar
 
 }

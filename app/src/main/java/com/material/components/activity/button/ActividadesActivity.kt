@@ -24,7 +24,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.R
 import com.material.components.activity.dialog.EncuestaActivity
-import com.material.components.adapter.ActividadesAdapter
+//import com.material.components.adapter.ActividadesAdapter
 import com.material.components.adapter.EncuestaAdapter
 import com.material.components.adapter.EventoAdapter
 import com.material.components.drawer.DashboarActivity
@@ -41,7 +41,7 @@ import java.util.ArrayList
  * @author Abraham Casas Aguilar
  */
 class ActividadesActivity : AppCompatActivity() {
-
+/*
     private lateinit var adapter: ActividadesAdapter
     //declare val for save the collection
     private val actividadesCollection: CollectionReference
@@ -86,9 +86,10 @@ class ActividadesActivity : AppCompatActivity() {
         mNotifyMgr.notify(1, mBuilder.build())
     }
 
+    */
     /**
      * Listener for peopleCollection
-     */
+     *//*
     private fun addMarksListener() {
         //var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         // var id_empresa = sharedPreference.getString("id_empresa", "")
@@ -144,10 +145,11 @@ class ActividadesActivity : AppCompatActivity() {
 
     }
 
+    */
     /**
      * @param changes
      * aqui se hace el recorrido de la coleccion de cloudfirestore
-     */
+     *//*
     private fun addChanges(changes: List<DocumentChange>) {
         val itemActividad = ArrayList<Actividades>()//lista local de una sola instanciavar
         var con = 0
@@ -196,5 +198,5 @@ class ActividadesActivity : AppCompatActivity() {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-    }
+    }*/
 }

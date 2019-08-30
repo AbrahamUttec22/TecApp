@@ -40,6 +40,7 @@ import retrofit2.Response
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.lang.Exception
 
 /**
  * @author Abraham
@@ -176,6 +177,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 }//end for hanlder
 
             })
+
             vh.actividad.setOnClickListener(object : View.OnClickListener {
                 var calendario = Calendar.getInstance()
                 override fun onClick(position: View?) {
@@ -188,11 +190,14 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                     usuario.edad = edad
                     usuario.telefono = telefono
                     usuario.id = id
-                    usuario.id_empresa = id
-                    showDialog(usuario)
+                    usuario.id_empresa = id_empresa
+                    val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+                    var email = mAuth.currentUser!!.email.toString()
+
+                    showDialog(usuario, email)
                 }
 
-                private fun showDialog(usuario: Usuario) {
+                private fun showDialog(usuario: Usuario, email_asigno: String) {
                     //the header from dialog
                     val dialog = Dialog(context)
                     dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
@@ -204,25 +209,44 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                     lp.height = WindowManager.LayoutParams.WRAP_CONTENT
                     //in this code I get the information on cloud firestore
                     var txt1 = (dialog.findViewById<View>(R.id.txtDescriptionActividad) as EditText)
+                    var txt2 = (dialog.findViewById<View>(R.id.txtDescriptionActivida) as EditText)
+                    var txt3 = (dialog.findViewById<View>(R.id.txtFechaActividad) as EditText)
+
+                    //see views front end
+                    var date: DatePickerDialog.OnDateSetListener = DatePickerDialog.OnDateSetListener { view, year, monthOfYear, dayOfMonth ->
+                        // TODO Auto-generated method stub
+                        calendario.set(Calendar.YEAR, year)
+                        calendario.set(Calendar.MONTH, monthOfYear)
+                        calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                        val formatoDeFecha = "dd/MM/yy" //In which you need put here
+                        val sdf = SimpleDateFormat(formatoDeFecha, Locale.US)
+                        txt3.setText(sdf.format(calendario.time))
+                    }
+
+                    txt3.setOnClickListener {
+                        var datee = DatePickerDialog(context, date, calendario
+                                .get(Calendar.YEAR), calendario.get(Calendar.MONTH),
+                                calendario.get(Calendar.DAY_OF_MONTH))
+                        datee.datePicker.minDate = System.currentTimeMillis()
+                        datee.show()
+                    }
+
                     (dialog.findViewById<View>(R.id.btnSaveActividad) as Button).setOnClickListener {
                         var dactividad = txt1.text.toString()
-                        if (!dactividad.isNullOrEmpty()) {
+                        var ddescripcion = txt2.text.toString()
+                        var dfecha = txt3.text.toString()
+
+                        if (!dactividad.isNullOrEmpty() && !ddescripcion.isNullOrEmpty() && !dfecha.isNullOrEmpty()) {
                             var actividad = Actividades()
                             actividad.actividad = dactividad//get the field for the view
                             actividad.correo = usuario.email
-                            actividad.estatus = "pendiente"
-                            actividad.id = ""
-                            actividad.fecha_hora_terminada = ""
+                            actividad.estatus = "actividades"
                             actividad.id_usuario = usuario.id
-                            //first save the user on authe
-                            //send fecha
-                            val c = Calendar.getInstance()
-                            val df = SimpleDateFormat("dd/MM/yyyy")
-                            val fechaA = df.format(c.getTime()).toString()
-                            val c2 = Calendar.getInstance()
-                            val df2 = SimpleDateFormat("HH:mm:ss")
-                            val horaA = df2.format(c2.getTime()).toString()
-                            actividad.fecha_hora_asignada = fechaA + " " + horaA
+                            actividad.id_empresa = usuario.id_empresa
+                            actividad.email_asigno = email_asigno//parametro del frontend
+                            actividad.descripcion = ddescripcion//parametro del frontend
+                            actividad.fecha_compromiso = dfecha//parametro del frontend
+                            actividad.id = ""
 
                             saveActividad(actividad)
                             dialog.dismiss()
@@ -235,32 +259,37 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 }
 
                 private fun saveActividad(actividad: Actividades) {
-                    FirebaseApp.initializeApp(context)
-                    val actividadCollection: CollectionReference
-                    val userCollection: CollectionReference
-                    actividadCollection = FirebaseFirestore.getInstance().collection("Actividades")
-                    userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
-                    //save the activity
-                    actividadCollection.add(actividad).addOnSuccessListener {
-                        actividadCollection.document(it.id).update("id", it.id).addOnSuccessListener {
-                        }.addOnFailureListener { }
-                        val empleado = userCollection.whereEqualTo("id", actividad.id_usuario)
-                        //beggin with consult
-                        empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                            if (task.isSuccessful) {
-                                for (document in task.result!!) {
-                                    val token = document.get("token").toString()
-                                    sendNotificationToPatner(token)
+                    try {
+                        FirebaseApp.initializeApp(context)
+                        val actividadCollection: CollectionReference
+                        val userCollection: CollectionReference
+                        actividadCollection = FirebaseFirestore.getInstance().collection("Actividades")
+                        userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+                        //save the activity
+                        actividadCollection.add(actividad).addOnSuccessListener {
+                            actividadCollection.document(it.id).update("id", it.id).addOnSuccessListener {
+                            }.addOnFailureListener { }
+                            val empleado = userCollection.whereEqualTo("id", actividad.id_usuario)
+                            //beggin with consult
+                            empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                                if (task.isSuccessful) {
+                                    for (document in task.result!!) {
+                                        val token = document.get("token").toString()
+                                        sendNotificationToPatner(token)
+                                    }
+                                } else {
+                                    Log.w("saasas", "Error getting documents.", task.exception)
                                 }
-                            } else {
-                                Log.w("saasas", "Error getting documents.", task.exception)
-                            }
-                        })//end for expression lambdas this very cool
+                            })//end for expression lambdas this very cool
 
-                        Toast.makeText(context, "Se ha asignado correctamente la actividad", Toast.LENGTH_LONG).show()
-                    }.addOnFailureListener {
-                        Toast.makeText(context, "Error asignando la actividad", Toast.LENGTH_LONG).show()
+                            Toast.makeText(context, "Se ha asignado correctamente la actividad", Toast.LENGTH_LONG).show()
+                        }.addOnFailureListener {
+                            Toast.makeText(context, "Error asignando la actividad", Toast.LENGTH_LONG).show()
+                        }
+                    } catch (e: Exception) {
+
                     }
+
                 }//end for hanlder
 
                 private fun sendNotificationToPatner(token: String) {

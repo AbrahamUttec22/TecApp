@@ -1,29 +1,24 @@
 package com.material.components.adapter
 
-import android.app.DatePickerDialog
-import android.app.Dialog
-import android.app.TimePickerDialog
 import android.content.Context
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
-import android.widget.*
+import android.widget.BaseAdapter
+import android.widget.Button
+import android.widget.TextView
+import android.widget.Toast
 import com.alejandrolora.finalapp.inflate
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.material.components.R
 import com.material.components.model.Actividades
-import com.material.components.model.Evento
 import kotlinx.android.synthetic.main.list_view_actividades.view.*
-import java.text.SimpleDateFormat
+import kotlinx.android.synthetic.main.list_view_proceso.view.*
+import kotlinx.android.synthetic.main.list_view_revision.view.*
 import java.util.*
 
-/**
- * @author Abraham Casas Aguilar
- */
-class ActividadesAdapter(val context: Context?, val layout: Int, val list: List<Actividades>) : BaseAdapter() {
+class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Actividades>) : BaseAdapter() {
+
 
     override fun getItem(position: Int): Any {
         return list[position]
@@ -40,14 +35,14 @@ class ActividadesAdapter(val context: Context?, val layout: Int, val list: List<
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View
-        val vh: ActividadesViewHolder
+        val vh: ActividadesViewHolderThree
         if (convertView == null) {
             view = parent!!.inflate(layout)
-            vh = ActividadesViewHolder(view)
+            vh = ActividadesViewHolderThree(view)
             view.tag = vh
         } else {
             view = convertView
-            vh = view.tag as ActividadesViewHolder
+            vh = view.tag as ActividadesViewHolderThree
         }
 
         val status = "${list[position].estatus}"//no mostrar
@@ -62,11 +57,31 @@ class ActividadesAdapter(val context: Context?, val layout: Int, val list: List<
         var descripcion = "${list[position].descripcion}"//mostrar
         var fecha_compromiso = "${list[position].fecha_compromiso}"//mostrar
 
-        vh.actividad.text = titulo
-        vh.descripcion.text = descripcion
-        vh.fechaac.text = fecha_compromiso
+        vh.actividadThree.text = titulo
+        vh.descripcionThree.text = descripcion
+        vh.fechaacThree.text = fecha_compromiso
 
         vh.mover.setOnClickListener(object : View.OnClickListener {
+            var calendario = Calendar.getInstance()
+            override fun onClick(position: View?) {
+                var activid = Actividades()
+                activid.id = id
+                updateActividad(activid)
+            }
+
+            private fun updateActividad(actividad: Actividades) {
+                if (context != null) {
+                    FirebaseApp.initializeApp(context)
+                }
+                val actividadesCollection: CollectionReference
+                actividadesCollection = FirebaseFirestore.getInstance().collection("Actividades")
+                //only this source I update the status,
+                actividadesCollection.document(actividad.id).update("estatus", "finalizado").addOnSuccessListener {
+                }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
+            }//end for hanlder
+        })
+
+        vh.moverre.setOnClickListener(object : View.OnClickListener {
             var calendario = Calendar.getInstance()
             override fun onClick(position: View?) {
                 var activid = Actividades()
@@ -89,13 +104,15 @@ class ActividadesAdapter(val context: Context?, val layout: Int, val list: List<
         return view
     }
 
+
 }
 
-class ActividadesViewHolder(view: View) {
-    val actividad: TextView = view.txtActividad
-    val descripcion: TextView = view.txtDescripcionAc
-    val fechaac: TextView = view.txtFechaActivi
-    val mover: Button = view.moverproceso
+class ActividadesViewHolderThree(view: View) {
+    val actividadThree: TextView = view.txtActividadRevision
+    val descripcionThree: TextView = view.txtDescripcionAcRevision
+    val fechaacThree: TextView = view.txtFechaActiviRevision
+    val mover: Button = view.moverfinalizado
+    val moverre: Button = view.moverprocesoTwo
 
 
 }

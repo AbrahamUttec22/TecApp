@@ -25,6 +25,7 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.R
+import com.material.components.actividadesfragment.GestionActividadesActivity
 import com.material.components.activity.about.EstatusChecadorActivity
 import com.material.components.activity.bottomsheet.UserActivity
 import com.material.components.activity.button.ActividadesActivity
@@ -32,7 +33,7 @@ import com.material.components.activity.card.*
 import com.material.components.activity.dialog.EncuestaActivity
 import com.material.components.activity.form.*
 import com.material.components.activity.login.LoginCardOverlap
-import com.material.components.adapter.ActividadesAdapter
+//import com.material.components.adapter.ActividadesAdapter
 import com.material.components.adapter.EncuestaAdapter
 import com.material.components.adapter.EventoAdapter
 import com.material.components.adapter.UserAdapter
@@ -253,7 +254,12 @@ class DashboarActivity : AppCompatActivity() {
             }
             VerActividadesU.setOnClickListener {
                 //301
-                goToActivity<ActividadesActivity> {
+                /*goToActivity<ActividadesActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)*/
+
+                goToActivity<GestionActividadesActivity> {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -336,7 +342,11 @@ class DashboarActivity : AppCompatActivity() {
             }
             VerActividadesA.setOnClickListener {
                 //301
-                goToActivity<ActividadesActivity> {
+               /* goToActivity<ActividadesActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)*/
+                goToActivity<GestionActividadesActivity> {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)

@@ -19,8 +19,8 @@ import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.R
-import com.material.components.adapter.ActividadesAdapter
-import com.material.components.adapter.ActividadesVerAdapter
+//import com.material.components.adapter.ActividadesAdapter
+//import com.material.components.adapter.ActividadesVerAdapter
 import com.material.components.adapter.UserAdapter
 import com.material.components.drawer.DashboarActivity
 import com.material.components.model.Actividades
@@ -40,7 +40,7 @@ import java.util.ArrayList
 class UserActivity : AppCompatActivity() {
 
     private lateinit var adapter: UserAdapter
-    private lateinit var adapterActividad: ActividadesVerAdapter
+    //private lateinit var adapterActividad: ActividadesVerAdapter
     //declare val for save the collection
     private val userCollection: CollectionReference
     private val actividadesCollection: CollectionReference
@@ -79,7 +79,7 @@ class UserActivity : AppCompatActivity() {
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
-                   // addChanges(changes)
+                    // addChanges(changes)
                     listenerDb()
                 }
             } else {
@@ -91,7 +91,7 @@ class UserActivity : AppCompatActivity() {
     private fun listenerDb() {
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var id_empresa = sharedPreference.getString("id_empresa", "")
-        val consul =userCollection.whereEqualTo("id_empresa", id_empresa)
+        val consul = userCollection.whereEqualTo("id_empresa", id_empresa)
         //beggin with consult
         consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
@@ -102,7 +102,7 @@ class UserActivity : AppCompatActivity() {
                     val usuario = Usuario()
                     usuario.email = document.get("email").toString()
                     usuario.uid = document.get("uid").toString()
-                    usuario.token= document.get("token").toString()
+                    usuario.token = document.get("token").toString()
                     usuario.telefono = document.get("telefono").toString()
                     usuario.edad = document.get("edad").toString()
                     usuario.direccion = document.get("direccion").toString()
@@ -118,20 +118,18 @@ class UserActivity : AppCompatActivity() {
                 } else {
                     iconDefaultUsuarios.setVisibility(View.INVISIBLE)
                 }
-
                 usuarioList = itemUsuario
                 adapter = UserAdapter(this, R.layout.list_view_usuario, usuarioList)
                 listView.adapter = adapter
-                listView.onItemClickListener = object : AdapterView.OnItemClickListener {
-                    override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        val id_usuario = view!!.textemail.text.toString()
-                        showDialog(id_usuario)
-                    }
-                }
+                //listView.onItemClickListener = object : AdapterView.OnItemClickListener {
+                //  override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                //    val id_usuario = view!!.textemail.text.toString()
+                //  showDialog(id_usuario)
+                //}
+                //}
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
             }
-
         })//end for expression lambdas this very cool
     }
 
@@ -139,7 +137,7 @@ class UserActivity : AppCompatActivity() {
      * @param changes
      * aqui se hace el recorrido de la coleccion de cloudfirestore
      */
-    private fun addChanges(changes: List<DocumentChange>) {
+    /*private fun addChanges(changes: List<DocumentChange>) {
         val itemUsuario = ArrayList<Usuario>()//lista local de una sola instancia
         var con = 0
         for (change in changes) {
@@ -162,68 +160,68 @@ class UserActivity : AppCompatActivity() {
             }
         }
     }
+*/
+    /* private fun showDialog(id_usuario: String) {
+         //the header from dialog
+         val dialog = Dialog(this)
+         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+         dialog.setContentView(R.layout.dialog_actividades_usuarios)
+         dialog.setCancelable(true)
+         val lp = WindowManager.LayoutParams()
+         lp.copyFrom(dialog.window!!.attributes)
+         lp.width = WindowManager.LayoutParams.MATCH_PARENT
+         lp.height = WindowManager.LayoutParams.MATCH_PARENT
+         var listViewActividadesVe = (dialog.findViewById<View>(R.id.listViewActividadesVer) as ListView)
+         var verver = (dialog.findViewById<View>(R.id.iconDefaultActividadver) as TextView)
+         //in this code I get the information on cloud firestore
+         val itemActividad = ArrayList<Actividades>()//lista local de una sola instancia
+         usuarioList.forEach {
+             if (it.id == id_usuario) {
+                 val resultado = actividadesCollection.whereEqualTo("id_usuario", id_usuario)
+                 //beggin with consult
+                 resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                     if (task.isSuccessful) {
+                         var con=0
+                         for (document in task.result!!) {
+                             con++
+                             val actividadName = document.get("actividad").toString()
+                             val correo = document.get("correo").toString()
+                             val status = document.get("estatus").toString()
+                             val id = document.get("id").toString()
+                             val id_usuario = document.get("id_usuario").toString()
+                             val terminada = document.get("fecha_hora_terminada").toString()
+                             val asignada = document.get("fecha_hora_asignada").toString()
 
-    private fun showDialog(id_usuario: String) {
-        //the header from dialog
-        val dialog = Dialog(this)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
-        dialog.setContentView(R.layout.dialog_actividades_usuarios)
-        dialog.setCancelable(true)
-        val lp = WindowManager.LayoutParams()
-        lp.copyFrom(dialog.window!!.attributes)
-        lp.width = WindowManager.LayoutParams.MATCH_PARENT
-        lp.height = WindowManager.LayoutParams.MATCH_PARENT
-        var listViewActividadesVe = (dialog.findViewById<View>(R.id.listViewActividadesVer) as ListView)
-        var verver = (dialog.findViewById<View>(R.id.iconDefaultActividadver) as TextView)
-        //in this code I get the information on cloud firestore
-        val itemActividad = ArrayList<Actividades>()//lista local de una sola instancia
-        usuarioList.forEach {
-            if (it.id == id_usuario) {
-                val resultado = actividadesCollection.whereEqualTo("id_usuario", id_usuario)
-                //beggin with consult
-                resultado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                    if (task.isSuccessful) {
-                        var con=0
-                        for (document in task.result!!) {
-                            con++
-                            val actividadName = document.get("actividad").toString()
-                            val correo = document.get("correo").toString()
-                            val status = document.get("estatus").toString()
-                            val id = document.get("id").toString()
-                            val id_usuario = document.get("id_usuario").toString()
-                            val terminada = document.get("fecha_hora_terminada").toString()
-                            val asignada = document.get("fecha_hora_asignada").toString()
+                             //
+                             var actividad = Actividades()
+                             actividad.actividad = actividadName
+                             actividad.correo = correo
+                             actividad.estatus = status
+                             actividad.id = id
+                             actividad.id_usuario = id_usuario
+                             actividad.fecha_hora_terminada=terminada
+                             actividad.fecha_hora_asignada=asignada
+                             itemActividad.add(actividad)
+                         }//end for
+                         if (con == 0) {
+                             verver.setVisibility(View.VISIBLE)
+                             verver.text="No se le han asignado actividades a este usuario"
+                         } else {
+                             verver.setVisibility(View.INVISIBLE)
+                         }
 
-                            //
-                            var actividad = Actividades()
-                            actividad.actividad = actividadName
-                            actividad.correo = correo
-                            actividad.estatus = status
-                            actividad.id = id
-                            actividad.id_usuario = id_usuario
-                            actividad.fecha_hora_terminada=terminada
-                            actividad.fecha_hora_asignada=asignada
-                            itemActividad.add(actividad)
-                        }//end for
-                        if (con == 0) {
-                            verver.setVisibility(View.VISIBLE)
-                            verver.text="No se le han asignado actividades a este usuario"
-                        } else {
-                            verver.setVisibility(View.INVISIBLE)
-                        }
+                         actividadesList = itemActividad
+                         adapterActividad = ActividadesVerAdapter(this, R.layout.list_view_actividades_ver, actividadesList)
+                         listViewActividadesVe.adapter = adapterActividad
+                     }
+                 })//end for expression lambdas this very cool
+             }
+         }//for each
 
-                        actividadesList = itemActividad
-                        adapterActividad = ActividadesVerAdapter(this, R.layout.list_view_actividades_ver, actividadesList)
-                        listViewActividadesVe.adapter = adapterActividad
-                    }
-                })//end for expression lambdas this very cool
-            }
-        }//for each
-
-        dialog.show()
-        dialog.window!!.attributes = lp
-    }
-
+         dialog.show()
+         dialog.window!!.attributes = lp
+     }
+ */
     /**
      * initToolbar(header)
      */

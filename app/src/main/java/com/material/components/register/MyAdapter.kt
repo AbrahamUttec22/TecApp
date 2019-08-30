@@ -1,5 +1,4 @@
 package com.material.components.register
-
 import android.support.v4.app.FragmentPagerAdapter
 import android.content.Context;
 import android.support.v4.app.Fragment
@@ -13,7 +12,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.material.components.R
 import com.material.components.model.Empresa
 import kotlinx.android.synthetic.main.tab1_fragment.view.*
-
 /**
  * @author Abraham
  */
@@ -53,7 +51,5 @@ class MyAdapter(private var myContext: Context, fm: FragmentManager, internal va
     override fun getCount(): Int {
         return totalTabs
     }
-
-
 
 }

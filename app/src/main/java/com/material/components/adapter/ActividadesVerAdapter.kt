@@ -20,6 +20,7 @@ import kotlinx.android.synthetic.main.list_view_actividades_ver.view.*
 /**
  * @author Abraham Casas Aguilar
  */
+/*
 class ActividadesVerAdapter(val context: Context, val layout: Int, val list: List<Actividades>) : BaseAdapter() {
 
     override fun getItem(position: Int): Any {
@@ -105,3 +106,4 @@ class ActividadesVerViewHolder(view: View) {
 }
 
 
+*/

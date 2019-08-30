@@ -42,7 +42,7 @@ import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QuerySnapshot
 import com.itextpdf.text.Element
-import com.material.components.adapter.ActividadesAdapter
+//import com.material.components.adapter.ActividadesAdapter
 import com.material.components.drawer.DashboarActivity
 import com.material.components.model.Actividades
 import kotlinx.android.synthetic.main.activity_actividades.*

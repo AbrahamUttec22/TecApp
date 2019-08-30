@@ -150,14 +150,16 @@ class AdministrarEventoAdapter(val context: Context, val layout: Int, val list: 
                         calendario.set(Calendar.YEAR, year)
                         calendario.set(Calendar.MONTH, monthOfYear)
                         calendario.set(Calendar.DAY_OF_MONTH, dayOfMonth)
-                        val formatoDeFecha = "MM/dd/yy" //In which you need put here
+                        val formatoDeFecha = "dd/MM/yy" //In which you need put here
                         val sdf = SimpleDateFormat(formatoDeFecha, Locale.US)
                         txt3.setText(sdf.format(calendario.time))
                     }
                     txt3.setOnClickListener {
-                        DatePickerDialog(context, date, calendario
+                        var datee = DatePickerDialog(context, date, calendario
                                 .get(Calendar.YEAR), calendario.get(Calendar.MONTH),
-                                calendario.get(Calendar.DAY_OF_MONTH)).show()
+                                calendario.get(Calendar.DAY_OF_MONTH))
+                        datee.datePicker.minDate = System.currentTimeMillis()
+                        datee.show()
                     }
 
                     //update the event
