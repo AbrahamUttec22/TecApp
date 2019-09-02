@@ -62,7 +62,7 @@
                                 android:layout_marginTop="@dimen/spacing_small"
                                 android:gravity="center_vertical"
                                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
-                                android:textColor="@color/grey_60" />
+                                android:textColor="@android:color/black" />
 
                         </LinearLayout>
 
@@ -85,9 +85,16 @@
 
 
                         <TextView
+                            android:id="@+id/txInfoAcFinalizado"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black" />
+
+                        <TextView
                             android:id="@+id/txtDescripcionAcFinalizado"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
+
                         <Button
                             android:id="@+id/moverEliminar"
                             android:layout_width="match_parent"

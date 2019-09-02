@@ -16,13 +16,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.model.Actividades
 import kotlinx.android.synthetic.main.list_view_actividades.view.*
-import kotlinx.android.synthetic.main.list_view_proceso.view.*
-import java.util.*
+import kotlinx.android.synthetic.main.list_view_actividades_admin.view.*
 
 /**
  * @author Abraham Casas Aguilar
  */
-class AProcesoAdapter(val context: Context?, val layout: Int, val list: List<Actividades>) : BaseAdapter() {
+class ActividadesAAdapter(val context: Context?, val layout: Int, val list: List<Actividades>) : BaseAdapter() {
 
     override fun getItem(position: Int): Any {
         return list[position]
@@ -39,14 +38,14 @@ class AProcesoAdapter(val context: Context?, val layout: Int, val list: List<Act
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
         val view: View
-        val vh: ActividadesViewHolderTwo
+        val vh: ActividadesViewHolderAdmin
         if (convertView == null) {
             view = parent!!.inflate(layout)
-            vh = ActividadesViewHolderTwo(view)
+            vh = ActividadesViewHolderAdmin(view)
             view.tag = vh
         } else {
             view = convertView
-            vh = view.tag as ActividadesViewHolderTwo
+            vh = view.tag as ActividadesViewHolderAdmin
         }
 
         val status = "${list[position].estatus}"//no mostrar
@@ -61,9 +60,10 @@ class AProcesoAdapter(val context: Context?, val layout: Int, val list: List<Act
         var descripcion = "${list[position].descripcion}"//mostrar
         var fecha_compromiso = "${list[position].fecha_compromiso}"//mostrar
 
-        vh.actividadTwo.text = titulo
-        vh.descripcionTwo.text = descripcion
-        vh.fechaacTwo.text = "Fecha Compromiso: "+fecha_compromiso
+        vh.actividad.text = titulo
+        vh.descripcion.text = descripcion
+        vh.fechaac.text = "Fecha Compromiso: " + fecha_compromiso
+
 
         val userCollection: CollectionReference
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
@@ -72,12 +72,30 @@ class AProcesoAdapter(val context: Context?, val layout: Int, val list: List<Act
         empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
                 for (document in task.result!!) {
-                    vh.info.text = "Actividad Asignada por: " + document.get("name")
+                    vh.info.text = "Le has asignado esta actividad a: " + document.get("name")
                 }
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
             }
         })//end for expression lambdas this very cool
+
+
+        val empresaCollection: CollectionReference
+        empresaCollection = FirebaseFirestore.getInstance().collection("Empresas")
+        val empresa = empresaCollection.whereEqualTo("correo", email_asigno).whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    vh.info.text = "Le has asignado esta actividad a: " + document.get("nombre")
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+        })//end for expression lambdas this very cool
+
+
+
 
         vh.mover.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
@@ -89,24 +107,26 @@ class AProcesoAdapter(val context: Context?, val layout: Int, val list: List<Act
             private fun updateActividad(actividad: Actividades) {
                 if (context != null) {
                     FirebaseApp.initializeApp(context)
-                } else {
                 }
                 val actividadesCollection: CollectionReference
                 actividadesCollection = FirebaseFirestore.getInstance().collection("Actividades")
                 //only this source I update the status,
-                actividadesCollection.document(actividad.id).update("estatus", "revision").addOnSuccessListener {
-                    Toast.makeText(context, "Se ha movido la actividad a: En Revisión", Toast.LENGTH_LONG).show()
+                actividadesCollection.document(actividad.id).update("estatus", "proceso").addOnSuccessListener {
+                    Toast.makeText(context, "Se ha movido la actividad a: En Proceso", Toast.LENGTH_LONG).show()
+
                 }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
         })
         return view
     }
+
+
 }
 
-class ActividadesViewHolderTwo(view: View) {
-    val actividadTwo: TextView = view.txtActividadProceso
-    val descripcionTwo: TextView = view.txtDescripcionAcProceso
-    val info: TextView = view.txInfoAcProceso
-    val fechaacTwo: TextView = view.txtFechaActiviProceso
-    val mover: Button = view.moverrevision
+class ActividadesViewHolderAdmin(view: View) {
+    val actividad: TextView = view.txtActividadAdmin
+    val descripcion: TextView = view.txtDescripcionAcAdmin
+    val info: TextView = view.txInfoAcAdmin
+    val fechaac: TextView = view.txtFechaActiviAdmin
+    val mover: Button = view.moverprocesoAdmin
 }

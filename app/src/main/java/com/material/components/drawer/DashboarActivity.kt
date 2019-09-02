@@ -26,6 +26,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.R
 import com.material.components.actividadesfragment.GestionActividadesActivity
+import com.material.components.actividadesfragmentadmin.GestionActividadesAActivity
 import com.material.components.activity.about.EstatusChecadorActivity
 import com.material.components.activity.bottomsheet.UserActivity
 import com.material.components.activity.button.ActividadesActivity
@@ -145,6 +146,13 @@ class DashboarActivity : AppCompatActivity() {
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 
+            }
+
+            AdministradorActividadesAdminE.setOnClickListener {
+                goToActivity<GestionActividadesAActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
 
             //Eventos  (9) YA TIENE PROGRAMACION REACTIVA
@@ -342,10 +350,10 @@ class DashboarActivity : AppCompatActivity() {
             }
             VerActividadesA.setOnClickListener {
                 //301
-               /* goToActivity<ActividadesActivity> {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                }
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)*/
+                /* goToActivity<ActividadesActivity> {
+                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                 }
+                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)*/
                 goToActivity<GestionActividadesActivity> {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
@@ -374,6 +382,13 @@ class DashboarActivity : AppCompatActivity() {
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 
+            }
+
+            AdministradorActividadesAdmin.setOnClickListener {
+                goToActivity<GestionActividadesAActivity> {
+                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                }
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
             }
 
             //Eventos  (9) YA TIENE PROGRAMACION REACTIVA

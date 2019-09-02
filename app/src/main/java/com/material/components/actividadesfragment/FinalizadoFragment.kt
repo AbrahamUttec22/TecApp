@@ -36,8 +36,6 @@ class FinalizadoFragment : Fragment() {
     // private val channelId = "com.material.components.activity"
     private val channelId = "com.example.vicky.notificationexample"
     private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val itemActividadReactivo = ArrayList<Actividades>()//lista local de una sola instanciavar
-
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -51,11 +49,23 @@ class FinalizadoFragment : Fragment() {
 
     }
 
+    override fun onResume() {
+        listenerDb()
+        super.onResume()
+    }
+
+    override fun onPause() {
+        listenerDb()
+        super.onPause()
+    }
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_finalizado, container, false)
     }
+
+
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         listenerDb()
@@ -64,15 +74,12 @@ class FinalizadoFragment : Fragment() {
             listenerDb()
             swipeRefreshLayout!!.setRefreshing(false)
         })
-        addMarksListener()
     }
 
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
 
         super.onViewStateRestored(savedInstanceState)
         listenerDb()
-
-
     }
 
     private fun addMarksListener() {
@@ -83,7 +90,7 @@ class FinalizadoFragment : Fragment() {
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
-                    listenerDbTwo()
+                    listenerDb()
                 }
             } else {
                 Toast.makeText(context, "Ha ocurrido un error intenta de nuevo", Toast.LENGTH_SHORT).show()
@@ -102,37 +109,13 @@ class FinalizadoFragment : Fragment() {
                     var con = 0
                     for (document in task.result!!) {
                         con++
-                        itemActividadReactivo.add(document.toObject(Actividades::class.java))//ir agregando los datos a la lista
+                        itemActividad.add(document.toObject(Actividades::class.java))//ir agregando los datos a la lista
                     }
                     try {
-                        adapter = AFinalizadoAdapter(context, R.layout.list_view_finalizado, itemActividadReactivo)
+                        adapter = AFinalizadoAdapter(context, R.layout.list_view_finalizado, itemActividad)
                         listViewActividadFinalizado!!.adapter = adapter
                     } catch (e: Exception) {
 
-                    }
-
-                } else {
-                    Log.w("saasas", "Error getting documents.", task.exception)
-                }
-            })//end for expression lambdas this very cool
-
-        } catch (e: Exception) {
-
-        }
-    }
-
-    private fun listenerDbTwo() {
-        var email = mAuth.currentUser!!.email.toString()
-        val consul = actividadesCollection.whereEqualTo("correo", email).whereEqualTo("estatus", "actividades")
-        //beggin with consult
-        try {
-            itemActividadReactivo.clear()
-            consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                if (task.isSuccessful) {
-                    var con = 0
-                    for (document in task.result!!) {
-                        con++
-                        itemActividadReactivo.add(document.toObject(Actividades::class.java))//ir agregando los datos a la lista
                     }
 
                 } else {

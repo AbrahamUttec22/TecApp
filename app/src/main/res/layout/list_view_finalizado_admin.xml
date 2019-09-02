@@ -48,7 +48,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/txtActividad"
+                                android:id="@+id/txtActividadFinalizadoAdmin"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
@@ -56,7 +56,7 @@
                                 android:textColor="@android:color/black" />
 
                             <TextView
-                                android:id="@+id/txtFechaActivi"
+                                android:id="@+id/txtFechaActiviFinalizadoAdmin"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_small"
@@ -83,24 +83,25 @@
                         android:paddingRight="@dimen/spacing_large"
                         android:paddingBottom="@dimen/spacing_middle">
 
-                        <TextView
-                            android:id="@+id/txInfoAc"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@android:color/black"/>
 
                         <TextView
-                            android:id="@+id/txtDescripcionAc"
+                            android:id="@+id/txInfoAcFinalizadoAdmin"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@android:color/black" />
+
+                        <TextView
+                            android:id="@+id/txtDescripcionAcFinalizadoAdmin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
                         <Button
-                            android:id="@+id/moverproceso"
+                            android:id="@+id/moverEliminarAdmin"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/spacing_large"
-                            android:background="@drawable/btn_rounded_green"
-                            android:text="Mover a: En Proceso"
+                            android:background="@drawable/btn_rounded_accent"
+                            android:text="Eliminar Actividad"
                             android:textColor="@android:color/white" />
 
                     </LinearLayout>

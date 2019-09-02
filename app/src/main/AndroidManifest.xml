@@ -14,7 +14,11 @@
         android:roundIcon="@drawable/ic_logo_one"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".actividadesfragment.GestionActividadesActivity"></activity>
+        <activity
+            android:name=".actividadesfragmentadmin.GestionActividadesAActivity"
+            android:label="@string/title_activity_gestion_actividades_a"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".actividadesfragment.GestionActividadesActivity" />
         <activity android:name=".utils.SplashActivity" />
         <activity
             android:name=".drawer.DashboarActivity"

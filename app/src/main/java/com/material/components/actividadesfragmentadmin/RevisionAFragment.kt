@@ -1,5 +1,7 @@
-package com.material.components.actividadesfragment
+package com.material.components.actividadesfragmentadmin
 
+import android.content.Context
+import android.net.Uri
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.widget.SwipeRefreshLayout
@@ -15,18 +17,18 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 
 import com.material.components.R
-import com.material.components.adapter.ActividadesAAdapter
-import com.material.components.adapter.ActividadesAdapter
+import com.material.components.adapter.ARevisionAAdapter
+import com.material.components.adapter.ARevisionAdapter
 import com.material.components.model.Actividades
-import kotlinx.android.synthetic.main.fragment_actividades.*
+import kotlinx.android.synthetic.main.fragment_revision.*
 import java.lang.Exception
 
 /**
  * @author Abraham Casas Aguilar
  */
-class ActividadesFragment : Fragment() {
+class RevisionAFragment : Fragment() {
 
-    private lateinit var adapter: ActividadesAdapter
+    private lateinit var adapter: ARevisionAAdapter
     //declare val for save the collection
     private val actividadesCollection: CollectionReference
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
@@ -41,29 +43,24 @@ class ActividadesFragment : Fragment() {
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-
         super.onCreate(savedInstanceState)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
+                              savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_actividades, container, false)
+        return inflater.inflate(R.layout.fragment_revision_a, container, false)
     }
 
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-        listenerDb()
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         listenerDb()
-        swipeRefreshLayout = view!!.findViewById(R.id.swipeActividades)
+        swipeRefreshLayout = view!!.findViewById(R.id.swipeActividadesRevision)
+
         swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
             listenerDb()
             swipeRefreshLayout!!.setRefreshing(false)
         })
-
 
     }
 
@@ -71,7 +68,7 @@ class ActividadesFragment : Fragment() {
         //var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         // var id_empresa = sharedPreference.getString("id_empresa", "")
         var email = mAuth.currentUser!!.email.toString()
-        actividadesCollection.whereEqualTo("correo", email).addSnapshotListener { snapshots, error ->
+        actividadesCollection.whereEqualTo("email_asigno", email).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
@@ -85,7 +82,7 @@ class ActividadesFragment : Fragment() {
 
     private fun listenerDb() {
         var email = mAuth.currentUser!!.email.toString()
-        val consul = actividadesCollection.whereEqualTo("correo", email).whereEqualTo("estatus", "actividades")
+        val consul = actividadesCollection.whereEqualTo("correo", email).whereEqualTo("estatus", "revision")
         //beggin with consult
         try {
             consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
@@ -97,9 +94,8 @@ class ActividadesFragment : Fragment() {
                         itemActividad.add(document.toObject(Actividades::class.java))//ir agregando los datos a la lista
                     }
                     try {
-                        adapter = ActividadesAdapter(context, R.layout.list_view_actividades, itemActividad)
-                        listViewActividad!!.adapter = adapter
-                        // adapter.notifyDataSetChanged()
+                        adapter = ARevisionAAdapter(context, R.layout.list_view_revision_admin, itemActividad)
+                        listViewActividadRevision!!.adapter = adapter
                     } catch (e: Exception) {
 
                     }

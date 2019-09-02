@@ -1,31 +1,33 @@
-package com.material.components.actividadesfragment
+package com.material.components.actividadesfragmentadmin
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.design.widget.Snackbar
 import android.support.design.widget.TabLayout
 import android.support.v4.view.ViewPager
+import android.support.v7.app.AppCompatActivity;
 import com.alejandrolora.finalapp.goToActivity
 import com.material.components.R
-import com.material.components.activity.login.ForgotPasswordActivity
+import com.material.components.actividadesfragment.GestionActividadesAdapter
 import com.material.components.drawer.DashboarActivity
-import com.material.components.register.MyAdapter
+
+import kotlinx.android.synthetic.main.activity_gestion_actividades_a.*
 
 /**
  * @author Abraham Casas Aguilar
  */
-class GestionActividadesActivity : AppCompatActivity() {
+class GestionActividadesAActivity : AppCompatActivity() {
 
     var tabLayout: TabLayout? = null
     var viewPager: ViewPager? = null
     private var exitTime: Long = 0
 
-    //this class is for
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_gestion_actividades)
-        tabLayout = findViewById<TabLayout>(R.id.tabLayoutActividades)//id_layout from activity_gestion
-        viewPager = findViewById<ViewPager>(R.id.viewPagerActividades)//id_view_pager from activity_gestion
+        setContentView(R.layout.activity_gestion_actividades_a)
+        tabLayout = findViewById<TabLayout>(R.id.tabLayoutActividadesA)//id_layout from activity_gestion
+        viewPager = findViewById<ViewPager>(R.id.viewPagerActividadesA)//id_view_pager from activity_gestion
         //actividades
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Actividades"))//pestañas de actividades
         tabLayout!!.addTab(tabLayout!!.newTab().setText("En proceso"))
@@ -35,7 +37,7 @@ class GestionActividadesActivity : AppCompatActivity() {
         tabLayout!!.addTab(tabLayout!!.newTab().setText("Finalizado"))
 
         // tabLayout!!.tabGravity = TabLayout.GRAVITY_FILL
-        val adapter = GestionActividadesAdapter(this, supportFragmentManager, tabLayout!!.tabCount)
+        val adapter = GestionActividadesAAdapter(this, supportFragmentManager, tabLayout!!.tabCount)
         viewPager!!.adapter = adapter
         viewPager!!.addOnPageChangeListener(TabLayout.TabLayoutOnPageChangeListener(tabLayout))
         tabLayout!!.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {

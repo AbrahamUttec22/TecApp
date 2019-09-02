@@ -48,7 +48,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/txtActividad"
+                                android:id="@+id/txtActividadAdmin"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
@@ -56,7 +56,7 @@
                                 android:textColor="@android:color/black" />
 
                             <TextView
-                                android:id="@+id/txtFechaActivi"
+                                android:id="@+id/txtFechaActiviAdmin"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_small"
@@ -84,18 +84,18 @@
                         android:paddingBottom="@dimen/spacing_middle">
 
                         <TextView
-                            android:id="@+id/txInfoAc"
+                            android:id="@+id/txInfoAcAdmin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@android:color/black"/>
+                            android:textColor="@android:color/black" />
 
                         <TextView
-                            android:id="@+id/txtDescripcionAc"
+                            android:id="@+id/txtDescripcionAcAdmin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
                         <Button
-                            android:id="@+id/moverproceso"
+                            android:id="@+id/moverprocesoAdmin"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/spacing_large"

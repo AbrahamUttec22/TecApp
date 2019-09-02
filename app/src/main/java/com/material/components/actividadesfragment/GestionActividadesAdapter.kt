@@ -1,8 +1,10 @@
 package com.material.components.actividadesfragment
+
 import android.content.Context
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.widget.Toast
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -19,11 +21,12 @@ class GestionActividadesAdapter(private var myContext: Context, fm: FragmentMana
     override fun getItem(position: Int): Fragment? {
         when (position) {
             0 -> {
-                //
                 return ActividadesFragment()
+
             }
             1 -> {
                 return ProcesoFragment()
+
             }
             2 -> {
                 return RevisionFragment()

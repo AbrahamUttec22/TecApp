@@ -36,8 +36,6 @@ class ProcesoFragment : Fragment() {
     // private val channelId = "com.material.components.activity"
     private val channelId = "com.example.vicky.notificationexample"
     private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val itemActividadReactivo = ArrayList<Actividades>()//lista local de una sola instanciavar
-
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -50,16 +48,15 @@ class ProcesoFragment : Fragment() {
         super.onCreate(savedInstanceState)
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-
-        super.onViewStateRestored(savedInstanceState)
-        listenerDb()
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_proceso, container, false)
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        listenerDb()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -69,7 +66,6 @@ class ProcesoFragment : Fragment() {
             listenerDb()
             swipeRefreshLayout!!.setRefreshing(false)
         })
-        addMarksListener()
     }
 
     private fun addMarksListener() {
@@ -80,7 +76,7 @@ class ProcesoFragment : Fragment() {
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
-                    listenerDbTwo()
+                    listenerDb()
                 }
             } else {
                 Toast.makeText(context, "Ha ocurrido un error intenta de nuevo", Toast.LENGTH_SHORT).show()
@@ -99,10 +95,10 @@ class ProcesoFragment : Fragment() {
                     var con = 0
                     for (document in task.result!!) {
                         con++
-                        itemActividadReactivo.add(document.toObject(Actividades::class.java))//ir agregando los datos a la lista
+                        itemActividad.add(document.toObject(Actividades::class.java))//ir agregando los datos a la lista
                     }
                     try {
-                        adapter = AProcesoAdapter(context, R.layout.list_view_proceso, itemActividadReactivo)
+                        adapter = AProcesoAdapter(context, R.layout.list_view_proceso, itemActividad)
                         listViewActividadProceso!!.adapter = adapter
                     } catch (e: Exception) {
 
@@ -118,29 +114,5 @@ class ProcesoFragment : Fragment() {
         }
     }
 
-
-    private fun listenerDbTwo() {
-        var email = mAuth.currentUser!!.email.toString()
-        val consul = actividadesCollection.whereEqualTo("correo", email).whereEqualTo("estatus", "actividades")
-        //beggin with consult
-        try {
-            itemActividadReactivo.clear()
-            consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
-                if (task.isSuccessful) {
-                    var con = 0
-                    for (document in task.result!!) {
-                        con++
-                        itemActividadReactivo.add(document.toObject(Actividades::class.java))//ir agregando los datos a la lista
-                    }
-
-                } else {
-                    Log.w("saasas", "Error getting documents.", task.exception)
-                }
-            })//end for expression lambdas this very cool
-
-        } catch (e: Exception) {
-
-        }
-    }
 
 }

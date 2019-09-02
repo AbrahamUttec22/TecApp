@@ -48,7 +48,7 @@
                             android:orientation="vertical">
 
                             <TextView
-                                android:id="@+id/txtActividad"
+                                android:id="@+id/txtActividadProcesoAdmin"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:gravity="center_vertical"
@@ -56,7 +56,7 @@
                                 android:textColor="@android:color/black" />
 
                             <TextView
-                                android:id="@+id/txtFechaActivi"
+                                android:id="@+id/txtFechaActiviProcesoAdmin"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_small"
@@ -84,23 +84,23 @@
                         android:paddingBottom="@dimen/spacing_middle">
 
                         <TextView
-                            android:id="@+id/txInfoAc"
+                            android:id="@+id/txInfoAcProcesoAdmin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:textColor="@android:color/black"/>
+                            android:textColor="@android:color/black" />
 
                         <TextView
-                            android:id="@+id/txtDescripcionAc"
+                            android:id="@+id/txtDescripcionAcProcesoAdmin"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content" />
 
                         <Button
-                            android:id="@+id/moverproceso"
+                            android:id="@+id/moverrevisionAdmin"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/spacing_large"
                             android:background="@drawable/btn_rounded_green"
-                            android:text="Mover a: En Proceso"
+                            android:text="Mover a: En revisión"
                             android:textColor="@android:color/white" />
 
                     </LinearLayout>

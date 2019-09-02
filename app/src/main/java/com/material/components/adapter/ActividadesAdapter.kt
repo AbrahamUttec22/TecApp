@@ -1,24 +1,19 @@
 package com.material.components.adapter
 
-import android.app.DatePickerDialog
-import android.app.Dialog
-import android.app.TimePickerDialog
 import android.content.Context
+import android.support.v4.widget.SwipeRefreshLayout
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.view.WindowManager
 import android.widget.*
 import com.alejandrolora.finalapp.inflate
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
-import com.material.components.R
+import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.model.Actividades
-import com.material.components.model.Evento
 import kotlinx.android.synthetic.main.list_view_actividades.view.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 /**
  * @author Abraham Casas Aguilar
@@ -64,10 +59,24 @@ class ActividadesAdapter(val context: Context?, val layout: Int, val list: List<
 
         vh.actividad.text = titulo
         vh.descripcion.text = descripcion
-        vh.fechaac.text = fecha_compromiso
+        vh.fechaac.text = "Fecha Compromiso: " + fecha_compromiso
+
+
+        val userCollection: CollectionReference
+        userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+        val empleado = userCollection.whereEqualTo("email", email_asigno).whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    vh.info.text = "Actividad Asignada por: " + document.get("name")
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+        })//end for expression lambdas this very cool
 
         vh.mover.setOnClickListener(object : View.OnClickListener {
-            var calendario = Calendar.getInstance()
             override fun onClick(position: View?) {
                 var activid = Actividades()
                 activid.id = id
@@ -82,20 +91,21 @@ class ActividadesAdapter(val context: Context?, val layout: Int, val list: List<
                 actividadesCollection = FirebaseFirestore.getInstance().collection("Actividades")
                 //only this source I update the status,
                 actividadesCollection.document(actividad.id).update("estatus", "proceso").addOnSuccessListener {
+                    Toast.makeText(context, "Se ha movido la actividad a: En Proceso", Toast.LENGTH_LONG).show()
+
                 }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
         })
-
         return view
     }
+
 
 }
 
 class ActividadesViewHolder(view: View) {
     val actividad: TextView = view.txtActividad
     val descripcion: TextView = view.txtDescripcionAc
+    val info: TextView = view.txInfoAc
     val fechaac: TextView = view.txtFechaActivi
     val mover: Button = view.moverproceso
-
-
 }

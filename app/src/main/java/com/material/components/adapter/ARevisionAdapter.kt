@@ -1,6 +1,7 @@
 package com.material.components.adapter
 
 import android.content.Context
+import android.util.Log
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
@@ -8,17 +9,21 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import com.alejandrolora.finalapp.inflate
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.model.Actividades
 import kotlinx.android.synthetic.main.list_view_actividades.view.*
 import kotlinx.android.synthetic.main.list_view_proceso.view.*
 import kotlinx.android.synthetic.main.list_view_revision.view.*
 import java.util.*
 
+/**
+ * @author Abraham Casas Aguilar
+ */
 class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Actividades>) : BaseAdapter() {
-
 
     override fun getItem(position: Int): Any {
         return list[position]
@@ -59,10 +64,23 @@ class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Ac
 
         vh.actividadThree.text = titulo
         vh.descripcionThree.text = descripcion
-        vh.fechaacThree.text = fecha_compromiso
+        vh.fechaacThree.text = "Fecha Compromiso: " + fecha_compromiso
+
+        val userCollection: CollectionReference
+        userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+        val empleado = userCollection.whereEqualTo("email", email_asigno).whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    vh.info.text = "Actividad Asignada por: " + document.get("name")
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+        })//end for expression lambdas this very cool
 
         vh.mover.setOnClickListener(object : View.OnClickListener {
-            var calendario = Calendar.getInstance()
             override fun onClick(position: View?) {
                 var activid = Actividades()
                 activid.id = id
@@ -77,12 +95,12 @@ class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Ac
                 actividadesCollection = FirebaseFirestore.getInstance().collection("Actividades")
                 //only this source I update the status,
                 actividadesCollection.document(actividad.id).update("estatus", "finalizado").addOnSuccessListener {
+                    Toast.makeText(context, "Se ha movido la actividad a: En Proceso", Toast.LENGTH_LONG).show()
+
                 }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
         })
-
         vh.moverre.setOnClickListener(object : View.OnClickListener {
-            var calendario = Calendar.getInstance()
             override fun onClick(position: View?) {
                 var activid = Actividades()
                 activid.id = id
@@ -97,22 +115,19 @@ class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Ac
                 actividadesCollection = FirebaseFirestore.getInstance().collection("Actividades")
                 //only this source I update the status,
                 actividadesCollection.document(actividad.id).update("estatus", "proceso").addOnSuccessListener {
+                    Toast.makeText(context, "Se ha movido la actividad a: En Proceso", Toast.LENGTH_LONG).show()
                 }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
         })
-
         return view
     }
-
-
 }
 
 class ActividadesViewHolderThree(view: View) {
     val actividadThree: TextView = view.txtActividadRevision
     val descripcionThree: TextView = view.txtDescripcionAcRevision
+    val info: TextView = view.txInfoAcRevision
     val fechaacThree: TextView = view.txtFechaActiviRevision
     val mover: Button = view.moverfinalizado
     val moverre: Button = view.moverprocesoTwo
-
-
 }
