@@ -92,6 +92,7 @@
                                 app:srcCompat="@drawable/ic_add_ob" />
 
                             <TextView
+                                android:id="@+id/txtcerrarEncu"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Cerrar"

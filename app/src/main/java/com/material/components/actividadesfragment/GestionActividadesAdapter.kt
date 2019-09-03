@@ -21,18 +21,24 @@ class GestionActividadesAdapter(private var myContext: Context, fm: FragmentMana
     override fun getItem(position: Int): Fragment? {
         when (position) {
             0 -> {
-                return ActividadesFragment()
+                var a = ActividadesFragment()
+                return a
 
             }
             1 -> {
-                return ProcesoFragment()
+                var a = ProcesoFragment()
+                return a
 
             }
             2 -> {
-                return RevisionFragment()
+                var a = RevisionFragment()
+
+                return a
             }
             3 -> {
-                return FinalizadoFragment()
+                var a = FinalizadoFragment()
+
+                return a
             }
             else -> return null
         }

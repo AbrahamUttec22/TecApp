@@ -100,6 +100,11 @@ class ProcesoFragment : Fragment() {
                     try {
                         adapter = AProcesoAdapter(context, R.layout.list_view_proceso, itemActividad)
                         listViewActividadProceso!!.adapter = adapter
+                        if (con == 0) {
+                            iconDefaultProceso.setVisibility(View.VISIBLE)
+                        } else {
+                            iconDefaultProceso.setVisibility(View.INVISIBLE)
+                        }
                     } catch (e: Exception) {
 
                     }

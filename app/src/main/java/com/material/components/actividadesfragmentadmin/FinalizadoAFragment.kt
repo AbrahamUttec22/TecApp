@@ -20,7 +20,10 @@ import com.material.components.R
 import com.material.components.adapter.AFinalizadoAAdapter
 import com.material.components.adapter.AFinalizadoAdapter
 import com.material.components.model.Actividades
+import kotlinx.android.synthetic.main.fragment_actividades.*
 import kotlinx.android.synthetic.main.fragment_finalizado.*
+import kotlinx.android.synthetic.main.fragment_finalizado.listViewActividadFinalizado
+import kotlinx.android.synthetic.main.fragment_finalizado_a.*
 import java.lang.Exception
 
 /**
@@ -86,7 +89,7 @@ class FinalizadoAFragment : Fragment() {
 
     private fun listenerDb() {
         var email = mAuth.currentUser!!.email.toString()
-        val consul = actividadesCollection.whereEqualTo("correo", email).whereEqualTo("estatus", "finalizado")
+        val consul = actividadesCollection.whereEqualTo("email_asigno", email).whereEqualTo("estatus", "finalizado")
         //beggin with consult
         try {
             consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
@@ -100,6 +103,11 @@ class FinalizadoAFragment : Fragment() {
                     try {
                         adapter = AFinalizadoAAdapter(context, R.layout.list_view_finalizado_admin, itemActividad)
                         listViewActividadFinalizado!!.adapter = adapter
+                        if (con == 0) {
+                            iconDefaultFinalizadoAdmin.setVisibility(View.VISIBLE)
+                        } else {
+                            iconDefaultFinalizadoAdmin.setVisibility(View.INVISIBLE)
+                        }
                     } catch (e: Exception) {
 
                     }

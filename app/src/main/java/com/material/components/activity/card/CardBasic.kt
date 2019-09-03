@@ -42,6 +42,7 @@ import retrofit2.Response
 import okhttp3.ResponseBody
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.text.SimpleDateFormat
 
 /**
  * @author abraham
@@ -107,17 +108,31 @@ class CardBasic : AppCompatActivity() {
                 val itemUsuario = ArrayList<Evento>()//lista local de una sola instancia
                 var con = 0
                 for (document in task.result!!) {
-                    con++
-                    val evento = Evento()
-                    evento.hora= document.get("hora").toString()
-                    evento.description = document.get("description").toString()
-                    evento.fecha = document.get("fecha").toString()
-                    evento.id = document.get("id").toString()
-                    evento.id_empresa = document.get("id_empresa").toString()
-                    evento.image = document.get("image").toString()
-                    evento.titulo = document.get("titulo").toString()
-                    evento.ubicacion = document.get("ubicacion").toString()
-                    itemUsuario.add(evento)
+                    var fechaBD = document.get("fecha").toString()
+                    var diaBD = fechaBD.substring(0, 2).toInt()//dd
+                    var mesBD = fechaBD.substring(3, 5).toInt()//mm
+                    var anoBD = fechaBD.substring(6, 8).toInt()//yyyy
+
+                    val c = Calendar.getInstance()
+                    val df = SimpleDateFormat("dd/MM/yy")
+                    val fechaCalendar = df.format(c.getTime()).toString()
+                    var diaCalendar = fechaCalendar.substring(0, 2).toInt()//dd
+                    var mesCalendar = fechaCalendar.substring(3, 5).toInt()//mm
+                    var anoCalendar = fechaCalendar.substring(6, 8).toInt()//yyyy
+
+                    if (diaCalendar <= diaBD && mesCalendar <= mesBD && anoCalendar<= anoBD) {
+                            con++
+                            val evento = Evento()
+                            evento.hora = document.get("hora").toString()
+                            evento.description = document.get("description").toString()
+                            evento.fecha = document.get("fecha").toString()
+                            evento.id = document.get("id").toString()
+                            evento.id_empresa = document.get("id_empresa").toString()
+                            evento.image = document.get("image").toString()
+                            evento.titulo = document.get("titulo").toString()
+                            evento.ubicacion = document.get("ubicacion").toString()
+                            itemUsuario.add(evento)
+                    }
                 }
                 if (con == 0) {
                     iconDefaultEvento.setVisibility(View.VISIBLE)
@@ -129,12 +144,8 @@ class CardBasic : AppCompatActivity() {
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
             }
-
         })//end for expression lambdas this very cool
-
-
     }
-
 
     /**
      * @param changes

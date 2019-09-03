@@ -66,7 +66,6 @@ class FinalizadoFragment : Fragment() {
     }
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         listenerDb()
         swipeRefreshLayout = view!!.findViewById(R.id.swipeActividadesFinalizado)
@@ -114,6 +113,11 @@ class FinalizadoFragment : Fragment() {
                     try {
                         adapter = AFinalizadoAdapter(context, R.layout.list_view_finalizado, itemActividad)
                         listViewActividadFinalizado!!.adapter = adapter
+                        if (con == 0) {
+                            iconDefaultFinalizado.setVisibility(View.VISIBLE)
+                        } else {
+                            iconDefaultFinalizado.setVisibility(View.INVISIBLE)
+                        }
                     } catch (e: Exception) {
 
                     }

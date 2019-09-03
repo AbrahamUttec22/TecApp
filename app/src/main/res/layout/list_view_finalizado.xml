@@ -64,6 +64,13 @@
                                 android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
                                 android:textColor="@android:color/black" />
 
+                            <TextView
+                                android:id="@+id/txtEstatusFechaFinalizado"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:textColor="@android:color/holo_red_dark" />
+
                         </LinearLayout>
 
                     </LinearLayout>

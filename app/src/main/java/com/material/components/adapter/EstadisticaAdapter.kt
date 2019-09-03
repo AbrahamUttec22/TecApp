@@ -67,10 +67,12 @@ class EstadisticaAdapter(val context: Context, val layout: Int, val list: List<E
         val status = "${list[position].status}"
 
         if (status == "1") {//el evento esta aun abierto, por lo tanto permite cerrar
+            vh.textocerrar.text = "Cerrar"
         } else {//ele vento esta cerrado se debe deshabilitar el boton
-            val color = Color.parseColor("#999999")
-            vh.cerrar.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+            //val color = Color.parseColor("#999999")
+            //   vh.cerrar.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
             vh.cerrar.setVisibility(View.INVISIBLE)
+            vh.textocerrar.text = "La encuesta se ha cerrado"
         }
 
         try {
@@ -230,7 +232,6 @@ class EstadisticaAdapter(val context: Context, val layout: Int, val list: List<E
             })
         } catch (e: java.lang.Exception) {
         }
-
         return view
     }
 }
@@ -240,5 +241,7 @@ class EncuestaViewHolderTwo(view: View) {
     val cerrar: ImageButton = view.btnCerrarEncuesta
     val eliminar: ImageButton = view.btnEliminarEncuesta
     val progreso: ImageButton = view.btnVerResultados
+    val textocerrar: TextView = view.txtcerrarEncu
+
 
 }

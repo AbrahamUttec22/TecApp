@@ -20,7 +20,10 @@ import com.material.components.R
 import com.material.components.adapter.ARevisionAAdapter
 import com.material.components.adapter.ARevisionAdapter
 import com.material.components.model.Actividades
+import kotlinx.android.synthetic.main.fragment_actividades.*
 import kotlinx.android.synthetic.main.fragment_revision.*
+import kotlinx.android.synthetic.main.fragment_revision.listViewActividadRevision
+import kotlinx.android.synthetic.main.fragment_revision_a.*
 import java.lang.Exception
 
 /**
@@ -82,7 +85,7 @@ class RevisionAFragment : Fragment() {
 
     private fun listenerDb() {
         var email = mAuth.currentUser!!.email.toString()
-        val consul = actividadesCollection.whereEqualTo("correo", email).whereEqualTo("estatus", "revision")
+        val consul = actividadesCollection.whereEqualTo("email_asigno", email).whereEqualTo("estatus", "revision")
         //beggin with consult
         try {
             consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
@@ -96,6 +99,11 @@ class RevisionAFragment : Fragment() {
                     try {
                         adapter = ARevisionAAdapter(context, R.layout.list_view_revision_admin, itemActividad)
                         listViewActividadRevision!!.adapter = adapter
+                        if (con == 0) {
+                            iconDefaultRevisionAdmin.setVisibility(View.VISIBLE)
+                        } else {
+                            iconDefaultRevisionAdmin.setVisibility(View.INVISIBLE)
+                        }
                     } catch (e: Exception) {
 
                     }

@@ -1,5 +1,4 @@
 package com.material.components.actividadesfragmentadmin
-
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -20,6 +19,7 @@ import com.material.components.R
 import com.material.components.adapter.ActividadesAAdapter
 import com.material.components.adapter.ActividadesAdapter
 import com.material.components.model.Actividades
+import kotlinx.android.synthetic.main.fragment_actividadades_a.*
 import kotlinx.android.synthetic.main.fragment_actividades.*
 import java.lang.Exception
 
@@ -60,7 +60,7 @@ class ActividadadesAFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         listenerDb()
-        swipeRefreshLayout = view!!.findViewById(R.id.swipeActividades)
+        swipeRefreshLayout = view!!.findViewById(R.id.swipeActividadesa)
         swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
             listenerDb()
             swipeRefreshLayout!!.setRefreshing(false)
@@ -73,6 +73,7 @@ class ActividadadesAFragment : Fragment() {
         //var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         // var id_empresa = sharedPreference.getString("id_empresa", "")
         var email = mAuth.currentUser!!.email.toString()
+
         actividadesCollection.whereEqualTo("email_asigno", email).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
@@ -87,7 +88,7 @@ class ActividadadesAFragment : Fragment() {
 
     private fun listenerDb() {
         var email = mAuth.currentUser!!.email.toString()
-        val consul = actividadesCollection.whereEqualTo("correo", email).whereEqualTo("estatus", "actividades")
+        val consul = actividadesCollection.whereEqualTo("email_asigno", email).whereEqualTo("estatus", "actividades")
         //beggin with consult
         try {
             consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
@@ -100,7 +101,12 @@ class ActividadadesAFragment : Fragment() {
                     }
                     try {
                         adapter = ActividadesAAdapter(context, R.layout.list_view_actividades_admin, itemActividad)
-                        listViewActividad!!.adapter = adapter
+                        listViewActividada!!.adapter = adapter
+                        if (con == 0) {
+                            iconDefaultActividadesAdmin.setVisibility(View.VISIBLE)
+                        } else {
+                            iconDefaultActividadesAdmin.setVisibility(View.INVISIBLE)
+                        }
                         // adapter.notifyDataSetChanged()
                     } catch (e: Exception) {
 

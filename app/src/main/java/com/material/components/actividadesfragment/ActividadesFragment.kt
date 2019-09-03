@@ -18,6 +18,7 @@ import com.material.components.R
 import com.material.components.adapter.ActividadesAAdapter
 import com.material.components.adapter.ActividadesAdapter
 import com.material.components.model.Actividades
+import kotlinx.android.synthetic.main.activity_card_basic.*
 import kotlinx.android.synthetic.main.fragment_actividades.*
 import java.lang.Exception
 
@@ -99,6 +100,11 @@ class ActividadesFragment : Fragment() {
                     try {
                         adapter = ActividadesAdapter(context, R.layout.list_view_actividades, itemActividad)
                         listViewActividad!!.adapter = adapter
+                        if (con == 0) {
+                            iconDefaultActividades.setVisibility(View.VISIBLE)
+                        } else {
+                            iconDefaultActividades.setVisibility(View.INVISIBLE)
+                        }
                         // adapter.notifyDataSetChanged()
                     } catch (e: Exception) {
 

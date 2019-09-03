@@ -1,5 +1,4 @@
 package com.material.components.actividadesfragment
-
 import android.content.Context
 import android.net.Uri
 import android.os.Bundle
@@ -53,6 +52,13 @@ class RevisionFragment : Fragment() {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_revision, container, false)
         listenerDb()
+        updateFragment1ListView()
+    }
+
+    private fun updateFragment1ListView() {
+        if (adapter != null) {
+            adapter.notifyDataSetChanged()
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -98,6 +104,11 @@ class RevisionFragment : Fragment() {
                     try {
                         adapter = ARevisionAdapter(context, R.layout.list_view_revision, itemActividad)
                         listViewActividadRevision!!.adapter = adapter
+                        if (con == 0) {
+                            iconDefaultRevision.setVisibility(View.VISIBLE)
+                        } else {
+                            iconDefaultRevision.setVisibility(View.INVISIBLE)
+                        }
                     } catch (e: Exception) {
 
                     }

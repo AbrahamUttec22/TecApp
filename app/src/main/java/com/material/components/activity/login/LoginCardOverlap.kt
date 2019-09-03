@@ -167,6 +167,7 @@ class LoginCardOverlap : AppCompatActivity() {
                         }
                     })//end for expression lambdas this very cool
                     //case for empresa
+
                     val empresa = empresaCollection.whereEqualTo("correo", email)
                     empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                         if (task.isSuccessful) {
@@ -174,9 +175,8 @@ class LoginCardOverlap : AppCompatActivity() {
                                 //here i send the id_empresa
                                 val id_empresa = document.get("id_empresa").toString()
                                 val token = FirebaseInstanceId.getInstance().token.toString()
-                                userCollection.document(id_empresa).update("token", token).addOnSuccessListener {
-                                }.addOnFailureListener {}
-                                userCollection.document(id_empresa).update("uid", mAuth.uid.toString()).addOnSuccessListener {
+                                val id = document.id
+                                empresaCollection.document(id).update("token", token).addOnSuccessListener {
                                 }.addOnFailureListener {}
                                 val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                                 var sesion = sharedPreference.edit()

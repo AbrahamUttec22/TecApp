@@ -20,7 +20,10 @@ import com.material.components.R
 import com.material.components.adapter.AProcesoAAdapter
 import com.material.components.adapter.AProcesoAdapter
 import com.material.components.model.Actividades
+import kotlinx.android.synthetic.main.fragment_actividades.*
 import kotlinx.android.synthetic.main.fragment_proceso.*
+import kotlinx.android.synthetic.main.fragment_proceso.listViewActividadProceso
+import kotlinx.android.synthetic.main.fragment_proceso_a.*
 import java.lang.Exception
 
 /**
@@ -87,7 +90,7 @@ class ProcesoAFragment : Fragment() {
 
     private fun listenerDb() {
         var email = mAuth.currentUser!!.email.toString()
-        val consul = actividadesCollection.whereEqualTo("correo", email).whereEqualTo("estatus", "proceso")
+        val consul = actividadesCollection.whereEqualTo("email_asigno", email).whereEqualTo("estatus", "proceso")
         //beggin with consult
         try {
             consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
@@ -101,6 +104,11 @@ class ProcesoAFragment : Fragment() {
                     try {
                         adapter = AProcesoAAdapter(context, R.layout.list_view_proceso_admin, itemActividad)
                         listViewActividadProceso!!.adapter = adapter
+                        if (con == 0) {
+                            iconDefaultProcesoAdmin.setVisibility(View.VISIBLE)
+                        } else {
+                            iconDefaultProcesoAdmin.setVisibility(View.INVISIBLE)
+                        }
                     } catch (e: Exception) {
 
                     }

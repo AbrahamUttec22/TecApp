@@ -51,7 +51,8 @@ import kotlinx.android.synthetic.main.activity_dashboard_usuario.*
 import kotlinx.android.synthetic.main.activity_encuesta.*
 import kotlinx.android.synthetic.main.activity_user.*
 import kotlinx.android.synthetic.main.list_view_usuario.view.*
-import java.util.ArrayList
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * @author Abraham Casas Aguilar
@@ -236,6 +237,7 @@ class DashboarActivity : AppCompatActivity() {
             InfoCodigoEmpresaE.setOnClickListener {
                 showConfirmDialog()
             }
+
         } else if (rol.equals("usuario")) {
             setContentView(R.layout.activity_dashboard_usuario)
             consultasUsuarioNotificaciones()
@@ -317,6 +319,7 @@ class DashboarActivity : AppCompatActivity() {
                 }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
                         .show()
             }
+
         } else if (rol.equals("administrador")) {
             setContentView(R.layout.activity_dashboard_administrador)
             consultasAdministradorNotificaciones()
@@ -469,8 +472,8 @@ class DashboarActivity : AppCompatActivity() {
                 }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
                         .show()
             }
-        }
 
+        }
         getDataUser()
         //apartir de aqui se van a hacer instancias a las ventanas correspondientes
     }
@@ -503,7 +506,21 @@ class DashboarActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 var con = 0
                 for (document in task.result!!) {
-                    con++
+                    var fechaBD = document.get("fecha").toString()
+                    var diaBD = fechaBD.substring(0, 2).toInt()//dd
+                    var mesBD = fechaBD.substring(3, 5).toInt()//mm
+                    var anoBD = fechaBD.substring(6, 8).toInt()//yyyy
+
+                    val c = Calendar.getInstance()
+                    val df = SimpleDateFormat("dd/MM/yy")
+                    val fechaCalendar = df.format(c.getTime()).toString()
+                    var diaCalendar = fechaCalendar.substring(0, 2).toInt()//dd
+                    var mesCalendar = fechaCalendar.substring(3, 5).toInt()//mm
+                    var anoCalendar = fechaCalendar.substring(6, 8).toInt()//yyyy
+
+                    if (diaCalendar <= diaBD && mesCalendar <= mesBD && anoCalendar <= anoBD) {
+                        con++
+                    }
                 }
                 if (con == 0) {
                     EmpresaVerEventoN.text = "0"
@@ -607,7 +624,21 @@ class DashboarActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 var con = 0
                 for (document in task.result!!) {
-                    con++
+                    var fechaBD = document.get("fecha").toString()
+                    var diaBD = fechaBD.substring(0, 2).toInt()//dd
+                    var mesBD = fechaBD.substring(3, 5).toInt()//mm
+                    var anoBD = fechaBD.substring(6, 8).toInt()//yyyy
+
+                    val c = Calendar.getInstance()
+                    val df = SimpleDateFormat("dd/MM/yy")
+                    val fechaCalendar = df.format(c.getTime()).toString()
+                    var diaCalendar = fechaCalendar.substring(0, 2).toInt()//dd
+                    var mesCalendar = fechaCalendar.substring(3, 5).toInt()//mm
+                    var anoCalendar = fechaCalendar.substring(6, 8).toInt()//yyyy
+
+                    if (diaCalendar <= diaBD && mesCalendar <= mesBD && anoCalendar <= anoBD) {
+                        con++
+                    }
                 }
                 if (con == 0) {
                     AdministradorVerEventosN.text = "0"
@@ -693,7 +724,21 @@ class DashboarActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 var con = 0
                 for (document in task.result!!) {
-                    con++
+                    var fechaBD = document.get("fecha").toString()
+                    var diaBD = fechaBD.substring(0, 2).toInt()//dd
+                    var mesBD = fechaBD.substring(3, 5).toInt()//mm
+                    var anoBD = fechaBD.substring(6, 8).toInt()//yyyy
+
+                    val c = Calendar.getInstance()
+                    val df = SimpleDateFormat("dd/MM/yy")
+                    val fechaCalendar = df.format(c.getTime()).toString()
+                    var diaCalendar = fechaCalendar.substring(0, 2).toInt()//dd
+                    var mesCalendar = fechaCalendar.substring(3, 5).toInt()//mm
+                    var anoCalendar = fechaCalendar.substring(6, 8).toInt()//yyyy
+
+                    if (diaCalendar <= diaBD && mesCalendar <= mesBD && anoCalendar <= anoBD) {
+                        con++
+                    }
                 }
                 if (con == 0) {
                     UsuarioVerEventosN.text = "0"
@@ -918,4 +963,5 @@ class DashboarActivity : AppCompatActivity() {
             finish()
         }
     }
+
 }

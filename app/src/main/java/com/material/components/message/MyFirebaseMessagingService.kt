@@ -15,6 +15,7 @@ import com.material.components.R
 import android.content.Context
 import android.os.Build
 import com.material.components.actividadesfragment.GestionActividadesActivity
+import com.material.components.actividadesfragmentadmin.GestionActividadesAActivity
 import com.material.components.activity.button.ActividadesActivity
 import com.material.components.activity.card.CardBasic
 import com.material.components.activity.card.CardWizardLight
@@ -96,6 +97,11 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             mNotificationManager.notify(0, mBuilder.build())
         } else if (title.equals("Anuncios")) {
             val intent = Intent(applicationContext, CardWizardLight::class.java)
+            val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            mBuilder.setContentIntent(pi)
+            mNotificationManager.notify(0, mBuilder.build())
+        }else if (title.equals("Administrar Actividades")) {
+            val intent = Intent(applicationContext, GestionActividadesAActivity::class.java)
             val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             mBuilder.setContentIntent(pi)
             mNotificationManager.notify(0, mBuilder.build())

@@ -46,6 +46,7 @@ import java.lang.Exception
  * @author Abraham
  */
 class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>) : BaseAdapter() {
+
     override fun getItem(position: Int): Any {
         return list[position]
     }
@@ -91,6 +92,41 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
         vh.EmailUser.setVisibility(View.INVISIBLE)
         //vh.eliminar.setVisibility(View.INVISIBLE)
         vh.EmailUser.text = id
+
+        var nombre_asigno = ""
+        val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+        var email_asigno = mAuth.currentUser!!.email.toString()
+        val userCollection: CollectionReference
+        userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+        val empleado = userCollection.whereEqualTo("email", email_asigno).whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    nombre_asigno = document.get("name").toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+        })//end for expression lambdas this very cool
+
+
+        val empresaCollection: CollectionReference
+        empresaCollection = FirebaseFirestore.getInstance().collection("Empresas")
+        val empresa = empresaCollection.whereEqualTo("correo", email_asigno).whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    nombre_asigno = document.get("nombre").toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+        })//end for expression lambdas this very cool
+
+
+
         /* vh.eliminar.setOnClickListener(object : View.OnClickListener {
              override fun onClick(position: View?) {
                  val usuario = Usuario()
@@ -293,7 +329,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 }//end for hanlder
 
                 private fun sendNotificationToPatner(token: String) {
-                    val notification = Notification("Se te asigno una actividad", "Actividad")
+                    val notification = Notification(nombre_asigno+" te asigno una actividad", "Actividad")
                     val requestNotificaton = RequestNotificaton()
                     //token is id , whom you want to send notification ,
                     requestNotificaton.token = token

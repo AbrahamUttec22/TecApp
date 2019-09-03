@@ -16,6 +16,15 @@
         android:fitsSystemWindows="true"
         android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/iconDefaultFinalizadoAdmin"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fontFamily="Arial"
+            android:text="No hay actividades finalizadas"
+            android:textSize="65dp"
+            android:typeface="monospace"
+            app:srcCompat="@drawable/image_1" />
 
         <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swipeActividadesFinalizado"
