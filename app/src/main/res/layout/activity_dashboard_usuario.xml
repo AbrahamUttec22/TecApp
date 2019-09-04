@@ -99,6 +99,7 @@
                                 app:srcCompat="@drawable/ic_person" />
 
                             <TextView
+                                android:id="@+id/MiPerfilU2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -149,6 +150,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/VerActividadesU2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -210,6 +212,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/VerEventosU2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -258,6 +261,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/VerEncuestasU2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -292,7 +296,7 @@
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/VerAnuncioU"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:clickable="true"
                                     android:tint="@android:color/white"
                                     app:backgroundTint="@color/deep_orange_A400"
@@ -318,6 +322,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/VerAnuncioU2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -347,6 +352,7 @@
                                 app:srcCompat="@drawable/ic_check" />
 
                             <TextView
+                                android:id="@+id/ChecarU2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -389,6 +395,7 @@
                                 app:srcCompat="@drawable/ic_sign_out" />
 
                             <TextView
+                                android:id="@+id/CerrarSesionU2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"

@@ -14,10 +14,19 @@
         android:roundIcon="@drawable/ic_logo_one"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".admin.PerfilAdminActivity"></activity>
+        <activity
+            android:name=".admin.PanelEmpresasActivity"
+            android:label="@string/title_activity_panel_empresas"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".admin.AdminDashboardActivity"
+            android:label="@string/title_activity_admin_dashboard"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".actividadesfragmentadmin.GestionActividadesAActivity"
             android:label="@string/title_activity_gestion_actividades_a"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".actividadesfragment.GestionActividadesActivity" />
         <activity android:name=".utils.SplashActivity" />
         <activity

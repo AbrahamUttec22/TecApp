@@ -10,6 +10,7 @@ import com.material.components.activity.login.LoginCardOverlap
 import com.material.components.drawer.DashboarActivity
 import android.view.animation.AnimationUtils
 import android.view.animation.Animation
+import com.material.components.admin.AdminDashboardActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 /**
  * @author Abraham
@@ -37,10 +38,19 @@ class MainEmptyActivity : AppCompatActivity() {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 
             } else {
-                goToActivity<DashboarActivity> {
-                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                var correo=mAuth.currentUser!!.email.toString()
+                if(correo.equals("guerrerog@gmail.com")){
+                    goToActivity<AdminDashboardActivity> {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                }else{
+                    goToActivity<DashboarActivity> {
+                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    }
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+
             }
         }, 4100)
 

@@ -100,6 +100,7 @@
 
 
                             <TextView
+                                android:id="@+id/MiPerfilA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -151,6 +152,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/PanelUsuariosA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -199,6 +201,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/VerActividadesA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -227,6 +230,7 @@
                                 app:srcCompat="@drawable/ic_admin_ob" />
 
                             <TextView
+                                android:id="@+id/AdministradorActividadesAdmin2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -270,6 +274,7 @@
                                 app:srcCompat="@drawable/ic_events" />
 
                             <TextView
+                                android:id="@+id/AgregarEventosA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -318,6 +323,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/VerEventosA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -346,6 +352,7 @@
                                 app:srcCompat="@drawable/ic_admin_ob" />
 
                             <TextView
+                                android:id="@+id/AdministrarEventosA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -374,6 +381,7 @@
                                 app:srcCompat="@drawable/ic_add_ob" />
 
                             <TextView
+                                android:id="@+id/AgregarEncuestaA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -436,6 +444,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/VerEncuestasA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -464,6 +473,7 @@
                                 app:srcCompat="@drawable/ic_admin_ob" />
 
                             <TextView
+                                android:id="@+id/AdministrarEncuestasA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -492,6 +502,7 @@
                                 app:srcCompat="@drawable/ic_add_ob" />
 
                             <TextView
+                                android:id="@+id/AgregarAnuncioA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -540,6 +551,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/VerAnuncioA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -582,6 +594,7 @@
                                 app:srcCompat="@drawable/ic_admin_ob" />
 
                             <TextView
+                                android:id="@+id/AdministrarAnunciosA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -610,6 +623,7 @@
                                 app:srcCompat="@drawable/ic_check" />
 
                             <TextView
+                                android:id="@+id/ChecarA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -638,6 +652,7 @@
                                 app:srcCompat="@drawable/ic_qr" />
 
                             <TextView
+                                android:id="@+id/GenerarQRA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -667,6 +682,7 @@
                                 app:srcCompat="@drawable/ic_estatus_checador" />
 
                             <TextView
+                                android:id="@+id/EstatusChecadorA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -705,6 +721,7 @@
                                 app:srcCompat="@drawable/ic_sign_out" />
 
                             <TextView
+                                android:id="@+id/CerrarSesionA2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"

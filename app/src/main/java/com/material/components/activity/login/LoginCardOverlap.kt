@@ -33,6 +33,7 @@ import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.R
 import com.material.components.activity.MainMenu
 import com.material.components.activity.dialog.*
+import com.material.components.admin.AdminDashboardActivity
 import com.material.components.drawer.DashboarActivity
 import com.material.components.model.Encuesta
 import com.material.components.register.RegistrosActivity
@@ -56,6 +57,8 @@ class LoginCardOverlap : AppCompatActivity() {
     private val codeCollection: CollectionReference
     //declare val for save the collection
     private val empresaCollection: CollectionReference
+    //declare val for save the collection
+    private val adminCollection: CollectionReference
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -64,6 +67,7 @@ class LoginCardOverlap : AppCompatActivity() {
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
         codeCollection = FirebaseFirestore.getInstance().collection("registros")
         empresaCollection = FirebaseFirestore.getInstance().collection("Empresas")
+        adminCollection = FirebaseFirestore.getInstance().collection("Administrador")
     }
 
     /**
@@ -120,6 +124,29 @@ class LoginCardOverlap : AppCompatActivity() {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {//when the credentials are corrects
                 if (mAuth.currentUser!!.isEmailVerified) {
+                    val admin = adminCollection.whereEqualTo("correo", email)
+                    admin.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                        if (task.isSuccessful) {
+                            for (document in task.result!!) {
+                                //here i send the id_empresa
+                                val token = FirebaseInstanceId.getInstance().token.toString()
+                                val id = document.id
+                                adminCollection.document(id).update("token", token).addOnSuccessListener {
+                                    toast("" + token)
+                                }.addOnFailureListener {}
+
+                                goToActivity<AdminDashboardActivity> {
+                                    flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                }
+                                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                            }
+                        } else {
+                            Log.w("saasas", "Error getting documents.", task.exception)
+                        }
+
+                    })//end for expression lambdas this very cool
+
+
                     val empleado = userCollection.whereEqualTo("email", email)
                     //beggin with consult
                     empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
@@ -167,7 +194,6 @@ class LoginCardOverlap : AppCompatActivity() {
                         }
                     })//end for expression lambdas this very cool
                     //case for empresa
-
                     val empresa = empresaCollection.whereEqualTo("correo", email)
                     empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                         if (task.isSuccessful) {
@@ -195,6 +221,8 @@ class LoginCardOverlap : AppCompatActivity() {
                         }
 
                     })//end for expression lambdas this very cool
+
+
                 } else {
                     toast("Confirma tu cuenta, se envio un correo con el que te registraste a tu bandeja")
                 }
@@ -202,6 +230,8 @@ class LoginCardOverlap : AppCompatActivity() {
                 toast("Email o Contraseña incorrectas intenta de nuevo")
             }
         }
+
+
     }
 
     //I need valid the access

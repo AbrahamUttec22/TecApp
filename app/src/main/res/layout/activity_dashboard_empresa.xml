@@ -104,6 +104,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/MiPerfilE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -153,6 +154,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/PanelUsuariosE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -182,6 +184,7 @@
                                 app:srcCompat="@drawable/ic_admin_ob" />
 
                             <TextView
+                                android:id="@+id/AdministradorActividadesAdminE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -217,6 +220,7 @@
 
 
                             <TextView
+                                android:id="@+id/AgregarEventosE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -278,6 +282,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/VerEventosE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -312,6 +317,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/AdministrarEventosE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -347,6 +353,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/AgregarEncuestaE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -396,6 +403,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/VerEncuestasE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -443,6 +451,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/AdministrarEncuestasE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -491,6 +500,7 @@
                             </FrameLayout>
 
                             <TextView
+                                android:id="@+id/VerAnuncioE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -520,6 +530,7 @@
                                 app:srcCompat="@drawable/ic_admin_ob" />
 
                             <TextView
+                                android:id="@+id/AdministrarAnunciosE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -548,6 +559,7 @@
                                 app:srcCompat="@drawable/ic_add_ob" />
 
                             <TextView
+                                android:id="@+id/AgregarAnuncioE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -590,6 +602,7 @@
                                 app:srcCompat="@drawable/ic_qr" />
 
                             <TextView
+                                android:id="@+id/GenerarQRE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -619,6 +632,7 @@
                                 app:srcCompat="@drawable/ic_estatus_checador" />
 
                             <TextView
+                                android:id="@+id/EstatusChecadorE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -647,10 +661,11 @@
                                 app:srcCompat="@drawable/ic_sign_out" />
 
                             <TextView
+                                android:id="@+id/CerrarSesionE2"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
-                                android:text="Cerrar Sesion"
+                                android:text="Cerrar Sesión"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
                         </LinearLayout>

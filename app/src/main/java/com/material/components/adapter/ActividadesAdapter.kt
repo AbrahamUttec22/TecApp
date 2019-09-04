@@ -1,5 +1,4 @@
 package com.material.components.adapter
-
 import android.content.Context
 import android.support.v4.widget.SwipeRefreshLayout
 import android.util.Log
@@ -16,7 +15,6 @@ import com.material.components.model.Actividades
 import kotlinx.android.synthetic.main.list_view_actividades.view.*
 import java.text.SimpleDateFormat
 import java.util.*
-
 /**
  * @author Abraham Casas Aguilar
  */
