@@ -110,6 +110,10 @@
                             android:text="Mover a: En Proceso"
                             android:textColor="@android:color/white" />
 
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="10dp" />
+
                     </LinearLayout>
 
 

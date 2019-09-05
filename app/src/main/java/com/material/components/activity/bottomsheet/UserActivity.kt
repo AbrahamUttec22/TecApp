@@ -92,6 +92,7 @@ class UserActivity : AppCompatActivity() {
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var id_empresa = sharedPreference.getString("id_empresa", "")
         val consul = userCollection.whereEqualTo("id_empresa", id_empresa)
+                .whereEqualTo("estatus", "1")
         //beggin with consult
         consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {

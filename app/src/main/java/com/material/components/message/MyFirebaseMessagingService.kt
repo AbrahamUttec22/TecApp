@@ -20,6 +20,7 @@ import com.material.components.activity.button.ActividadesActivity
 import com.material.components.activity.card.CardBasic
 import com.material.components.activity.card.CardWizardLight
 import com.material.components.activity.dialog.EncuestaActivity
+import com.material.components.admin.PanelEmpresasActivity
 
 /**
  * @author Abraham
@@ -100,12 +101,23 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             mBuilder.setContentIntent(pi)
             mNotificationManager.notify(0, mBuilder.build())
-        }else if (title.equals("Administrar Actividades")) {
+        } else if (title.equals("Administrar Actividades")) {
             val intent = Intent(applicationContext, GestionActividadesAActivity::class.java)
             val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             mBuilder.setContentIntent(pi)
             mNotificationManager.notify(0, mBuilder.build())
-        }else{
+        } else if (title.equals("Mis Actividades")) {
+            val intent = Intent(applicationContext, GestionActividadesActivity::class.java)
+            val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            mBuilder.setContentIntent(pi)
+            mNotificationManager.notify(0, mBuilder.build())
+        } else if (title.equals("Empresas")) {
+            val intent = Intent(applicationContext, PanelEmpresasActivity::class.java)
+            val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
+            mBuilder.setContentIntent(pi)
+            mNotificationManager.notify(0, mBuilder.build())
+
+        } else {
             val intent = Intent(applicationContext, MainMenu::class.java)
             val pi = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT)
             mBuilder.setContentIntent(pi)

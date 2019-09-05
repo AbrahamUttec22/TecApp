@@ -438,6 +438,7 @@
 
                         <TextView
                             android:id="@+id/tituloCodigoU"
+                            android:text="Hola! Comunícate"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Subhead"
@@ -445,6 +446,7 @@
 
                         <TextView
                             android:id="@+id/MostrarCodigoU"
+                            android:text="Fue creado el 17/06/2019"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"

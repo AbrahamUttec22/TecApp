@@ -26,10 +26,27 @@ import kotlin.random.Random
 import android.content.Intent
 import android.os.Handler
 import android.support.v7.widget.AppCompatButton
+import android.util.Log
 import android.view.*
 import com.alejandrolora.finalapp.isValidEmail
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.activity.MainMenu
+import com.material.components.adapter.ActividadesAdapter
+import com.material.components.message.ApiClient
+import com.material.components.message.ApiInter
+import com.material.components.message.Notification
+import com.material.components.message.RequestNotificaton
+import com.material.components.model.Actividades
+import kotlinx.android.synthetic.main.fragment_actividades.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.Exception
+import java.text.SimpleDateFormat
+import java.util.*
 
 /**
  * @author Abraham
@@ -45,6 +62,8 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
     private var btnTEST: Button? = null
     //declare val for save the collection
     private val marksCollection: CollectionReference
+    private val adminCollection: CollectionReference
+
     //declare val for save the collection
     private val usuariosCollection: CollectionReference
     private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
@@ -54,6 +73,7 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
         //save the collection marks on val maksCollection
         marksCollection = FirebaseFirestore.getInstance().collection("Empresas")
         usuariosCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+        adminCollection = FirebaseFirestore.getInstance().collection("Administrador")
         mAuth.signOut()
     }
 
@@ -83,6 +103,10 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
                         nDialog.setCancelable(true)
                         nDialog.show()
                         val empresa = Empresa()
+                        val c = Calendar.getInstance()
+                        val df = SimpleDateFormat("dd/MM/yyyy")
+                        val formattedDate = df.format(c.getTime()).toString()
+                        empresa.fecha_registro = formattedDate
                         empresa.nombre = name
                         empresa.correo = email
                         empresa.telefono = telefono
@@ -203,11 +227,46 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
         empresa.token = ""
         //add the collection and save the User, this is validated
         marksCollection.add(empresa).addOnSuccessListener {
-
+            sendNotificationToPatner(empresa.nombre)
         }.addOnFailureListener {
             Toast.makeText(context, "Error guardando la empresa, intenta de nuevo", Toast.LENGTH_LONG).show()
         }
     }
+
+    private fun sendNotificationToPatner(nombre: String) {
+        val consul = adminCollection
+        //beggin with consult
+        try {
+            consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                if (task.isSuccessful) {
+                    var token = ""
+                    for (document in task.result!!) {
+                        token = document.get("token").toString()
+                        val notification = Notification(nombre + " se ha registrado a Hola! Comunicate", "Empresas")
+                        val requestNotificaton = RequestNotificaton()
+                        //token is id , whom you want to send notification ,
+                        requestNotificaton.token = token
+                        requestNotificaton.notification = notification
+                        val apiService = ApiClient.getClient().create(ApiInter::class.java)
+                        val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+                        responseBodyCall.enqueue(object : Callback<ResponseBody> {
+                            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                            }
+
+                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+                        })
+                    }
+                } else {
+                    Log.w("saasas", "Error getting documents.", task.exception)
+                }
+            })//end for expression lambdas this very cool
+
+        } catch (e: Exception) {
+
+        }
+
+    }
+
 
     /**
      * @param name

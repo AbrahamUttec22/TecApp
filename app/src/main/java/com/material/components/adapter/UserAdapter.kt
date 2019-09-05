@@ -339,15 +339,47 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                     responseBodyCall.enqueue(object : Callback<ResponseBody> {
                         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                         }
-
                         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
                     })
                 }
+            })
+
+            vh.eliminar.setOnClickListener(object : View.OnClickListener {
+                var calendario = Calendar.getInstance()
+                override fun onClick(position: View?) {
+                    var usuario = Usuario()
+                    usuario.email = email
+                    usuario.ubicacion = ubicacion
+                    usuario.name = fullName
+                    usuario.rol = rol
+                    usuario.direccion = direccion
+                    usuario.edad = edad
+                    usuario.telefono = telefono
+                    usuario.id = id
+                    usuario.id_empresa = id
+
+                    val builder = AlertDialog.Builder(context)
+                    builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Si", DialogInterface.OnClickListener { dialog, id ->
+                        updateUsuario(usuario)
+                    }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+                            .show()
+                }
+
+                private fun updateUsuario(usuario: Usuario) {
+                    FirebaseApp.initializeApp(context)
+                    val eventoCollection: CollectionReference
+                    eventoCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+                    //only this source I update the status,
+                    //0 false 1 true
+                    eventoCollection.document(usuario.id).update("estatus", "0").addOnSuccessListener {
+                        Toast.makeText(context, "El rol se ha actualizado correctamente", Toast.LENGTH_LONG).show()
+                    }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
+                }//end for hanlder
 
             })
+
         } catch (e: java.lang.Exception) {
         }
-
         return view
     }
 }
@@ -358,6 +390,5 @@ private class UserViewHolder(view: View) {
     val actividad: ImageButton = view.btnAsignarActividad
     val EmailUser: TextView = view.textemail
     val Correo: TextView = view.textemailtwo
-
-
+    val eliminar: ImageButton = view.btnEliminarUsuario
 }

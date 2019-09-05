@@ -26,8 +26,10 @@
         <activity
             android:name=".actividadesfragmentadmin.GestionActividadesAActivity"
             android:label="@string/title_activity_gestion_actividades_a"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".actividadesfragment.GestionActividadesActivity" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".actividadesfragment.GestionActividadesActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".utils.SplashActivity" />
         <activity
             android:name=".drawer.DashboarActivity"
@@ -63,6 +65,8 @@
         <activity
             android:name=".checador.GenerarQRActivity"
             android:screenOrientation="portrait" />
+
+
         <activity
             android:name=".checador.CheckActivity"
             android:screenOrientation="portrait" />

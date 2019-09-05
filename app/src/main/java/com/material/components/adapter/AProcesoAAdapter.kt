@@ -14,10 +14,18 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.material.components.message.ApiClient
+import com.material.components.message.ApiInter
+import com.material.components.message.Notification
+import com.material.components.message.RequestNotificaton
 import com.material.components.model.Actividades
 import kotlinx.android.synthetic.main.list_view_actividades_admin.view.*
 import kotlinx.android.synthetic.main.list_view_proceso.view.*
 import kotlinx.android.synthetic.main.list_view_proceso_admin.view.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -65,6 +73,8 @@ class AProcesoAAdapter(val context: Context?, val layout: Int, val list: List<Ac
         var descripcion = "${list[position].descripcion}"//mostrar
         var fecha_compromiso = "${list[position].fecha_compromiso}"//mostrar
 
+        var nombre_asigno = ""
+        var token_asigno = ""
         vh.actividadTwo.text = titulo
         vh.descripcionTwo.text = descripcion
         vh.fechaacTwo.text = "Fecha Compromiso: " + fecha_compromiso
@@ -132,7 +142,8 @@ class AProcesoAAdapter(val context: Context?, val layout: Int, val list: List<Ac
             }
         }
 
-
+        //la empresa o administrador debe de notificar al usuario que el movio su ficha
+        //por lo tanto se debe de enviar una notificacion al usuario no a ti mismo
         val userCollection: CollectionReference
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
         val empleado = userCollection.whereEqualTo("email", email).whereEqualTo("id_empresa", id_empresa)
@@ -141,6 +152,7 @@ class AProcesoAAdapter(val context: Context?, val layout: Int, val list: List<Ac
             if (task.isSuccessful) {
                 for (document in task.result!!) {
                     vh.info.text = "Le has asignado esta actividad a: " + document.get("name")
+                    token_asigno = document.get("token").toString()
                 }
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
@@ -148,6 +160,36 @@ class AProcesoAAdapter(val context: Context?, val layout: Int, val list: List<Ac
         })//end for expression lambdas this very cool
 
 
+        //buscar el nombre de la persona que esta administrando la actividad del usuario
+        val userCollectionTwo: CollectionReference
+        userCollectionTwo = FirebaseFirestore.getInstance().collection("Usuarios")
+        val empleadoTwo = userCollectionTwo.whereEqualTo("email", email_asigno).whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        empleadoTwo.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    nombre_asigno = document.get("name").toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+        })//end for expression lambdas this very cool
+
+
+        //buscar el nombre de la persona que esta administrando la actividad del usuario
+        val empresaCollection: CollectionReference
+        empresaCollection = FirebaseFirestore.getInstance().collection("Empresas")
+        val empresa = empresaCollection.whereEqualTo("correo", email_asigno).whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    nombre_asigno = document.get("nombre").toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+        })//end for expression lambdas this very cool
 
 
         vh.mover.setOnClickListener(object : View.OnClickListener {
@@ -166,13 +208,30 @@ class AProcesoAAdapter(val context: Context?, val layout: Int, val list: List<Ac
                 //only this source I update the status,
                 actividadesCollection.document(actividad.id).update("estatus", "revision").addOnSuccessListener {
                     Toast.makeText(context, "Se ha movido la actividad a: En Revisión", Toast.LENGTH_LONG).show()
-
+                    sendNotificationToPatner()
                 }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
+
+            //cuando la empresa o administrador te mueve la ficha a revision
+            private fun sendNotificationToPatner() {
+                val notification = Notification(nombre_asigno + " movio tu ficha a revisión", "Mis Actividades")
+                val requestNotificaton = RequestNotificaton()
+                //token is id , whom you want to send notification ,
+                requestNotificaton.token = token_asigno
+                requestNotificaton.notification = notification
+                val apiService = ApiClient.getClient().create(ApiInter::class.java)
+                val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+                responseBodyCall.enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+                })
+            }
+
         })
         return view
     }
-
 
 }
 
@@ -183,5 +242,4 @@ class ActividadesViewHolderTwoAdmin(view: View) {
     val fechaacTwo: TextView = view.txtFechaActiviProcesoAdmin
     val mover: Button = view.moverrevisionAdmin
     val estatusFecha: TextView = view.txtEstatusFechaProcesoAdmin
-
 }

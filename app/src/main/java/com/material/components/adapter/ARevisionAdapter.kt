@@ -19,10 +19,18 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.actividadesfragment.GestionActividadesActivity
 import com.material.components.actividadesfragmentadmin.GestionActividadesAActivity
+import com.material.components.message.ApiClient
+import com.material.components.message.ApiInter
+import com.material.components.message.Notification
+import com.material.components.message.RequestNotificaton
 import com.material.components.model.Actividades
 import kotlinx.android.synthetic.main.list_view_actividades.view.*
 import kotlinx.android.synthetic.main.list_view_proceso.view.*
 import kotlinx.android.synthetic.main.list_view_revision.view.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -62,6 +70,7 @@ class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Ac
         var id_usuario = "${list[position].id_usuario}"//no mostrar
         var id_empresa = "${list[position].id_empresa}"//no mostrar
         var email_asigno = "${list[position].email_asigno}"//Actividad Asignada por
+        var correo_usuario = "${list[position].correo}"//Actividad Asignada por
 
 
         var titulo = "${list[position].actividad}"//mostrar
@@ -136,6 +145,8 @@ class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Ac
         }
 
 
+        var token_empresa_administrador = ""
+        var nombre_usuario = ""
         val userCollection: CollectionReference
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
         val empleado = userCollection.whereEqualTo("email", email_asigno).whereEqualTo("id_empresa", id_empresa)
@@ -144,6 +155,21 @@ class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Ac
             if (task.isSuccessful) {
                 for (document in task.result!!) {
                     vh.info.text = "Actividad Asignada por: " + document.get("name")
+                    token_empresa_administrador = document.get("token").toString()
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+        })//end for expression lambdas this very cool
+
+        val userCollectionTwo: CollectionReference
+        userCollectionTwo = FirebaseFirestore.getInstance().collection("Usuarios")
+        val empleadoTwo = userCollectionTwo.whereEqualTo("email", correo_usuario).whereEqualTo("id_empresa", id_empresa)
+        //beggin with consult
+        empleadoTwo.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    nombre_usuario = document.get("name").toString()
                 }
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
@@ -158,6 +184,7 @@ class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Ac
             if (task.isSuccessful) {
                 for (document in task.result!!) {
                     vh.info.text = "Actividad Asignada por: " + document.get("nombre")
+                    token_empresa_administrador = document.get("token").toString()
                 }
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
@@ -181,9 +208,26 @@ class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Ac
                 //only this source I update the status,
                 actividadesCollection.document(actividad.id).update("estatus", "finalizado").addOnSuccessListener {
                     Toast.makeText(context, "Se ha movido la actividad a: Finalizado", Toast.LENGTH_LONG).show()
-
+                    sendNotificationToPatner()
                 }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
             }//end for hanlder
+
+            private fun sendNotificationToPatner() {
+                val notification = Notification(nombre_usuario + " ha movido la actividad a: Finalizado", "Administrar Actividades")
+                val requestNotificaton = RequestNotificaton()
+                //token is id , whom you want to send notification ,
+                requestNotificaton.token = token_empresa_administrador
+                requestNotificaton.notification = notification
+                val apiService = ApiClient.getClient().create(ApiInter::class.java)
+                val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+                responseBodyCall.enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+                })
+            }
+
         })
         vh.moverre.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
@@ -201,10 +245,26 @@ class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Ac
                 //only this source I update the status,
                 actividadesCollection.document(actividad.id).update("estatus", "proceso").addOnSuccessListener {
                     Toast.makeText(context, "Se ha movido la actividad a: En Proceso", Toast.LENGTH_LONG).show()
+                    sendNotificationToPatner()
                 }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
-                list.drop(position)
-                Log.w("wwwww", "as "+list.size.toString())
             }//end for hanlder
+
+            private fun sendNotificationToPatner() {
+                val notification = Notification(nombre_usuario + " ha movido la actividad a: Proceso", "Administrar Actividades")
+                val requestNotificaton = RequestNotificaton()
+                //token is id , whom you want to send notification ,
+                requestNotificaton.token = token_empresa_administrador
+                requestNotificaton.notification = notification
+                val apiService = ApiClient.getClient().create(ApiInter::class.java)
+                val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+                responseBodyCall.enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+                })
+            }
+
         })
         return view
     }

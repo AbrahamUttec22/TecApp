@@ -80,6 +80,28 @@ class AdminDashboardActivity : AppCompatActivity() {
             }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
                     .show()
         }
+        //____________________________________-
+        MiPerfilSuperAdmin2.setOnClickListener {
+            goToActivity<PerfilAdminActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+
+        PanelEmpresas2.setOnClickListener {
+            goToActivity<PanelEmpresasActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+            overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        }
+
+        CerrarSesionAdmin2.setOnClickListener {
+            val builder = AlertDialog.Builder(this)
+            builder.setMessage("Estas seguro de cerrar sesión?").setPositiveButton("Si", DialogInterface.OnClickListener { dialog, id ->
+                goToActivity<LoginCardOverlap> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
+            }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+                    .show()
+        }
 
         val anuncioConsulta = empresaCollection
         //beggin with consult

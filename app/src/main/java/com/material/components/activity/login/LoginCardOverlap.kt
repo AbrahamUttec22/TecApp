@@ -154,45 +154,54 @@ class LoginCardOverlap : AppCompatActivity() {
                             for (document in task.result!!) {
                                 val rol = document.get("rol").toString()
                                 val id_empresa = document.get("id_empresa").toString()
+                                val estatus = document.get("estatus").toString()
+
                                 val id = document.id
-                                if (rol == "administrador") {
-                                    val token = FirebaseInstanceId.getInstance().token.toString()
-                                    userCollection.document(id).update("token", token).addOnSuccessListener {
-                                    }.addOnFailureListener {}
-                                    userCollection.document(id).update("id", id).addOnSuccessListener {
-                                    }.addOnFailureListener {}
-                                    val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-                                    var sesion = sharedPreference.edit()
-                                    sesion.putString("id_empresa", id_empresa)
-                                    sesion.putString("rol", "administrador")
-                                    sesion.putString("token", token)
-                                    sesion.commit()
-                                    goToActivity<DashboarActivity> {
-                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                if(estatus.equals("1")){
+                                    if (rol == "administrador") {
+                                        val token = FirebaseInstanceId.getInstance().token.toString()
+                                        userCollection.document(id).update("token", token).addOnSuccessListener {
+                                        }.addOnFailureListener {}
+                                        userCollection.document(id).update("id", id).addOnSuccessListener {
+                                        }.addOnFailureListener {}
+                                        val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                                        var sesion = sharedPreference.edit()
+                                        sesion.putString("id_empresa", id_empresa)
+                                        sesion.putString("rol", "administrador")
+                                        sesion.putString("token", token)
+                                        sesion.commit()
+                                        goToActivity<DashboarActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                                    } else {
+                                        val token = FirebaseInstanceId.getInstance().token.toString()
+                                        userCollection.document(id).update("token", token).addOnSuccessListener {
+                                        }.addOnFailureListener {}
+                                        userCollection.document(id).update("uid", mAuth.uid.toString()).addOnSuccessListener {
+                                        }.addOnFailureListener {}
+                                        val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+                                        var sesion = sharedPreference.edit()
+                                        sesion.putString("id_empresa", id_empresa)
+                                        sesion.putString("rol", "usuario")
+                                        sesion.putString("token", token)
+                                        sesion.commit()
+                                        goToActivity<DashboarActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                                     }
-                                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                                } else {
-                                    val token = FirebaseInstanceId.getInstance().token.toString()
-                                    userCollection.document(id).update("token", token).addOnSuccessListener {
-                                    }.addOnFailureListener {}
-                                    userCollection.document(id).update("uid", mAuth.uid.toString()).addOnSuccessListener {
-                                    }.addOnFailureListener {}
-                                    val sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-                                    var sesion = sharedPreference.edit()
-                                    sesion.putString("id_empresa", id_empresa)
-                                    sesion.putString("rol", "usuario")
-                                    sesion.putString("token", token)
-                                    sesion.commit()
-                                    goToActivity<DashboarActivity> {
-                                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                                    }
-                                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                                }else{
+                                    mAuth.signOut()
+                                    toast("Email o Contraseña incorrectas intenta de nuevo")
                                 }
+
                             }
                         } else {
                             Log.w("saasas", "Error getting documents.", task.exception)
                         }
                     })//end for expression lambdas this very cool
+
                     //case for empresa
                     val empresa = empresaCollection.whereEqualTo("correo", email)
                     empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->

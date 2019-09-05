@@ -1,5 +1,4 @@
 package com.material.components.adapter
-
 import android.content.Context
 import android.util.Log
 import android.view.View
@@ -138,7 +137,7 @@ class AProcesoAdapter(val context: Context?, val layout: Int, val list: List<Act
             }
         }
 
-        var token_usuario = ""
+        var token_empresa_admin = ""
 
         val userCollection: CollectionReference
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
@@ -148,7 +147,7 @@ class AProcesoAdapter(val context: Context?, val layout: Int, val list: List<Act
             if (task.isSuccessful) {
                 for (document in task.result!!) {
                     vh.info.text = "Actividad Asignada por: " + document.get("name")
-                    token_usuario = document.get("token").toString()
+                    token_empresa_admin = document.get("token").toString()
                 }
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
@@ -179,8 +178,7 @@ class AProcesoAdapter(val context: Context?, val layout: Int, val list: List<Act
             if (task.isSuccessful) {
                 for (document in task.result!!) {
                     vh.info.text = "Actividad Asignada por: " + document.get("nombre")
-                    token_usuario = document.get("token").toString()
-
+                    token_empresa_admin = document.get("token").toString()
                 }
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
@@ -205,16 +203,15 @@ class AProcesoAdapter(val context: Context?, val layout: Int, val list: List<Act
                 //only this source I update the status,
                 actividadesCollection.document(actividad.id).update("estatus", "revision").addOnSuccessListener {
                     Toast.makeText(context, "Se ha movido la actividad a: En Revisión", Toast.LENGTH_LONG).show()
+                    sendNotificationToPatner()
                 }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
-                sendNotificationToPatner()
             }//end for hanlder
-
 
             private fun sendNotificationToPatner() {
                 val notification = Notification(nombre_usuario + " ha movido la actividad a: En revisión", "Administrar Actividades")
                 val requestNotificaton = RequestNotificaton()
                 //token is id , whom you want to send notification ,
-                requestNotificaton.token = token_usuario
+                requestNotificaton.token = token_empresa_admin
                 requestNotificaton.notification = notification
                 val apiService = ApiClient.getClient().create(ApiInter::class.java)
                 val responseBodyCall = apiService.sendChatNotification(requestNotificaton)

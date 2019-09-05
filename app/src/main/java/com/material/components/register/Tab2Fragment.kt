@@ -1,4 +1,5 @@
 package com.material.components.register
+
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.Intent
@@ -28,6 +29,7 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.iid.FirebaseInstanceId
 import com.material.components.activity.MainMenu
+
 /**
  * @author Abraham
  * Empresa
@@ -75,6 +77,7 @@ class Tab2Fragment : Fragment() {
                         val usuario = Usuario()
                         usuario.name = name
                         usuario.id_empresa = codigo
+                        usuario.estatus = "1"
                         usuario.email = email
                         usuario.ubicacion = imag
                         usuario.rol = "usuario"
