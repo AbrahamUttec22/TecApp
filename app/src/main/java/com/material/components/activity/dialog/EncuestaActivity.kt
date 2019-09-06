@@ -33,6 +33,7 @@ import android.widget.TextView
 import com.alejandrolora.finalapp.goToActivity
 import com.alejandrolora.finalapp.inflate
 import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.activity.MainMenu
 import com.material.components.adapter.AdministrarEventoAdapter
@@ -42,7 +43,6 @@ import com.material.components.model.Evento
 import kotlinx.android.synthetic.main.activity_administrar_evento.*
 import kotlinx.android.synthetic.main.activity_encuesta.*
 import kotlinx.android.synthetic.main.activity_encuesta.listView
-
 
 /**
  * @author Abraham
@@ -57,6 +57,9 @@ class EncuestaActivity : AppCompatActivity() {
     //declare val for save the collection
     private val encuestaCollection: CollectionReference
     private val votacionCollection: CollectionReference
+    private val detalleEncuestasCollection: CollectionReference
+    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+
 
 
     //init the val for get the collection the Firebase with cloud firestore
@@ -65,11 +68,13 @@ class EncuestaActivity : AppCompatActivity() {
         //save the collection marks on val maksCollection
         encuestaCollection = FirebaseFirestore.getInstance().collection("Encuestas")
         votacionCollection = FirebaseFirestore.getInstance().collection("pruebaVotaciones")
+        detalleEncuestasCollection = FirebaseFirestore.getInstance().collection("detalleEncuestas")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_encuesta)
+        cambiarSatus()
         initToolbar()
         addMarksListenerVoto()
         addMarksListener()
@@ -80,7 +85,6 @@ class EncuestaActivity : AppCompatActivity() {
         })
         //end for click listener a second boton
     }
-
 
     /**
      * Listener for peopleCollection
@@ -118,7 +122,6 @@ class EncuestaActivity : AppCompatActivity() {
         }
     }
 
-
     private fun listenerDb() {
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var id_empresa = sharedPreference.getString("id_empresa", "")
@@ -146,6 +149,32 @@ class EncuestaActivity : AppCompatActivity() {
         })//end for expression lambdas this very cool
     }
 
+    /**
+     * Este metodo es para actualizar el estatus, es decir de que el usuario ya vio las encuestas
+     * y por lo tanto ya no se veria como notificacion ene l dashboard
+     * cambiar status a 1
+     */
+    private fun cambiarSatus() {
+        var email_mio = mAuth.currentUser!!.email.toString()
+        var sharedPreferencet = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa = sharedPreferencet.getString("id_empresa", "")
+        val consultaEvento = detalleEncuestasCollection.whereEqualTo("id_empresa", id_empresa).
+                whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
+        //beggin with consult
+        consultaEvento.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    var id_documento = document.get("id").toString()
+                    detalleEncuestasCollection.document(id_documento).update("estatus", "1").addOnSuccessListener {
+                    }.addOnFailureListener { }
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+    }
 
     /**
      * @param changes

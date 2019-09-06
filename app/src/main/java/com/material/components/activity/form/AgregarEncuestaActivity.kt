@@ -39,6 +39,8 @@ import com.material.components.message.ApiClient
 import com.material.components.message.ApiInter
 import com.material.components.message.Notification
 import com.material.components.message.RequestNotificaton
+import com.material.components.model.detalleEncuestas
+import com.material.components.model.detalleEventos
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -58,6 +60,8 @@ class AgregarEncuestaActivity : AppCompatActivity() {
     private var spiner: Spinner? = null
     private var valorRespuestas = 0
     private val userCollection: CollectionReference
+    private val empresaCollection: CollectionReference
+    private val detalleEncuestasCollection: CollectionReference
 
 
     //init the val for get the collection the Firebase with cloud firestore
@@ -66,6 +70,8 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         //save the collection marks on val maksCollection
         marksCollection = FirebaseFirestore.getInstance().collection("Encuestas")
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+        empresaCollection = FirebaseFirestore.getInstance().collection("Empresas")
+        detalleEncuestasCollection = FirebaseFirestore.getInstance().collection("detalleEncuestas")
     }
 
     lateinit var dialog: AlertDialog
@@ -165,7 +171,6 @@ class AgregarEncuestaActivity : AppCompatActivity() {
         }
     }
 
-
     //backend
     private fun isValid(pregunta: String): Boolean {
         return !pregunta.isNullOrEmpty()
@@ -189,6 +194,7 @@ class AgregarEncuestaActivity : AppCompatActivity() {
                             sendNotificationToPatner(token)
                         }
                     }
+                    saveDetalleEncuesta(encuesta)
                 } else {
                     Log.w("saasas", "Error getting documents.", task.exception)
                 }
@@ -200,8 +206,6 @@ class AgregarEncuestaActivity : AppCompatActivity() {
             toast("Error guardando la encuesta, intenta de nuevo")
         }
     }
-
-
 
     private fun sendNotificationToPatner(token: String) {
         val notification = Notification("Se ha agregado una nueva encuesta", "Encuestas")
@@ -218,6 +222,61 @@ class AgregarEncuestaActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
         })
     }
+
+    /**
+     * @param encuesta
+     */
+    private fun saveDetalleEncuesta(encuesta: Encuesta) {
+        //First I found all users for the company with that id_empresa
+        val consultaUsuarios = userCollection.whereEqualTo("id_empresa", encuesta.id_empresa)
+        //beggin with consult
+        consultaUsuarios.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    //well, now I save on detalleEvento
+                    var detalle = detalleEncuestas()
+                    detalle.correo_usuario = document.get("email").toString()
+                    detalle.id_empresa = encuesta.id_empresa
+                    detalle.estatus = "0"
+                    detalle.id_encuesta = encuesta.pregunta
+                    detalle.id=""
+                    detalleEncuestasCollection.add(detalle).addOnSuccessListener {
+                        detalleEncuestasCollection.document(it.id).update("id", it.id).addOnSuccessListener {
+                        }.addOnFailureListener { }
+                    }.addOnFailureListener {
+                    }
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+        val consultaEmpresa = empresaCollection.whereEqualTo("id_empresa", encuesta.id_empresa)
+        //beggin with consult
+        consultaEmpresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    //well, now I save on detalleEvento
+                    var detalle = detalleEncuestas()
+                    detalle.correo_usuario = document.get("correo").toString()
+                    detalle.id_empresa = encuesta.id_empresa
+                    detalle.estatus = "0"
+                    detalle.id_encuesta = encuesta.pregunta
+                    detalleEncuestasCollection.add(detalle).addOnSuccessListener {
+                        detalleEncuestasCollection.document(it.id).update("id", it.id).addOnSuccessListener {
+                        }.addOnFailureListener { }
+                    }.addOnFailureListener {
+                    }
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+    }
+
 
     //front end
     private fun actualizarInput() {

@@ -38,21 +38,22 @@ class MainEmptyActivity : AppCompatActivity() {
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
 
             } else {
-                var correo=mAuth.currentUser!!.email.toString()
-                if(correo.equals("guerrerog@gmail.com")){
-                    goToActivity<AdminDashboardActivity> {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                if (mAuth.currentUser!!.isEmailVerified) {
+                    var correo=mAuth.currentUser!!.email.toString()
+                    if(correo.equals("guerrerog@gmail.com")){
+                        goToActivity<AdminDashboardActivity> {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                    }else{
+                        goToActivity<DashboarActivity> {
+                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        }
+                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                     }
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-                }else{
-                    goToActivity<DashboarActivity> {
-                        flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    }
-                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                 }
-
             }
-        }, 4100)
+        }, 4200)
 
     }//end for onCreate()
 }

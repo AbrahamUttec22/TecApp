@@ -21,6 +21,7 @@ import com.alejandrolora.finalapp.toast
 import com.bumptech.glide.Glide
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
@@ -53,6 +54,8 @@ class CardWizardLight : AppCompatActivity() {
     private var about_images_array = intArrayOf(R.drawable.img_wizard_1)
     private var ubicacion = arrayOf("")
     private val channelId = "com.example.vicky.notificationexample"
+    private val detalleAnunciosCollection: CollectionReference
+    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
 
     //declare val for save the collection
     private val anuncioCollection: CollectionReference
@@ -62,6 +65,7 @@ class CardWizardLight : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         //save the collection marks on val maksCollection
         anuncioCollection = FirebaseFirestore.getInstance().collection("Anuncios")
+        detalleAnunciosCollection = FirebaseFirestore.getInstance().collection("detalleAnuncios")
     }
 
     //  viewpager change listener
@@ -83,6 +87,7 @@ class CardWizardLight : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_wizard_light)
+        cambiarSatus()
         MAX_STEP = 0
         about_images_array = intArrayOf(0)
         about_title_array = emptyArray()
@@ -130,6 +135,32 @@ class CardWizardLight : AppCompatActivity() {
 
     }
 
+    /**
+     * Este metodo es para actualizar el estatus, es decir de que el usuario ya vio los anuncios
+     * y por lo tanto ya no se veria como notificacion ene l dashboard
+     * cambiar status a 1
+     */
+    private fun cambiarSatus() {
+        var email_mio = mAuth.currentUser!!.email.toString()
+        var sharedPreferencet = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa = sharedPreferencet.getString("id_empresa", "")
+        val consultaEvento = detalleAnunciosCollection.whereEqualTo("id_empresa", id_empresa).
+                whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
+        //beggin with consult
+        consultaEvento.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    var id_documento = document.get("id").toString()
+                    detalleAnunciosCollection.document(id_documento).update("estatus", "1").addOnSuccessListener {
+                    }.addOnFailureListener { }
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+    }
 
     /**
      * @param changes
@@ -272,4 +303,5 @@ class CardWizardLight : AppCompatActivity() {
     companion object {
         private var MAX_STEP = 0
     }
+
 }

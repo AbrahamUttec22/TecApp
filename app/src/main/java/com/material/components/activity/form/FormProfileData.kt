@@ -1,4 +1,5 @@
 package com.material.components.activity.form
+
 import android.os.Bundle
 import android.support.v7.app.AlertDialog
 import android.support.v7.app.AppCompatActivity
@@ -40,6 +41,10 @@ import retrofit2.Callback
 import retrofit2.Response
 import okhttp3.ResponseBody
 import android.widget.TimePicker
+import com.material.components.model.Anuncio
+import com.material.components.model.Usuario
+import com.material.components.model.detalleEventos
+import kotlinx.android.synthetic.main.activity_dashboard_empresa.*
 
 /**
  * @author  Abraham
@@ -55,6 +60,8 @@ class FormProfileData : AppCompatActivity() {
     //declare val for save the collection
     private val marksCollection: CollectionReference
     private val userCollection: CollectionReference
+    private val empresaCollection: CollectionReference
+    private val detalleEventoCollection: CollectionReference
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -63,6 +70,8 @@ class FormProfileData : AppCompatActivity() {
         mStorageRef = FirebaseStorage.getInstance().getReference()
         marksCollection = FirebaseFirestore.getInstance().collection("Eventos")
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
+        empresaCollection = FirebaseFirestore.getInstance().collection("Empresas")
+        detalleEventoCollection = FirebaseFirestore.getInstance().collection("detalleEventos")
     }
 
     lateinit var dialog: AlertDialog
@@ -73,10 +82,10 @@ class FormProfileData : AppCompatActivity() {
         array_states = resources.getStringArray(R.array.states)
         initToolbar()
         etBirthday.setOnClickListener {
-           var datePickerDialog= DatePickerDialog(this, date, calendario.get(Calendar.YEAR),
+            var datePickerDialog = DatePickerDialog(this, date, calendario.get(Calendar.YEAR),
                     calendario.get(Calendar.MONTH),
                     calendario.get(Calendar.DAY_OF_MONTH))
-            datePickerDialog.datePicker.minDate=System.currentTimeMillis()
+            datePickerDialog.datePicker.minDate = System.currentTimeMillis()
             datePickerDialog.show()
         }
 
@@ -172,6 +181,7 @@ class FormProfileData : AppCompatActivity() {
     private fun saveEvento(evento: Evento) {
         //add the collection and save the User, this is validated
         marksCollection.add(evento).addOnSuccessListener {
+            evento.id = it.id
             marksCollection.document(it.id).update("id", it.id).addOnSuccessListener {
                 val empleado = userCollection.whereEqualTo("id_empresa", evento.id_empresa)
                 //beggin with consult
@@ -179,6 +189,7 @@ class FormProfileData : AppCompatActivity() {
                     if (task.isSuccessful) {
                         for (document in task.result!!) {
                             val token = document.get("token").toString()
+                            sendNotificationToPatner(token)
                             var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                             var toke = sharedPreference.getString("token", "").toString()
                             if (toke.equals(token)) {
@@ -187,6 +198,7 @@ class FormProfileData : AppCompatActivity() {
                                 sendNotificationToPatner(token)
                             }
                         }
+                        saveDetalleEvento(evento)
                     } else {
                         Log.w("saasas", "Error getting documents.", task.exception)
                     }
@@ -201,6 +213,9 @@ class FormProfileData : AppCompatActivity() {
         }
     }
 
+    /**
+     * @PARAM token
+     */
     private fun sendNotificationToPatner(token: String) {
         val notification = Notification("Se ha agregado un nuevo evento", "Eventos")
         val requestNotificaton = RequestNotificaton()
@@ -215,6 +230,60 @@ class FormProfileData : AppCompatActivity() {
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
         })
+    }
+
+    /**
+     * @param evento
+     */
+    private fun saveDetalleEvento(evento: Evento) {
+        //First I found all users for the company with that id_empresa
+        val consultaUsuarios = userCollection.whereEqualTo("id_empresa", evento.id_empresa)
+        //beggin with consult
+        consultaUsuarios.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    //well, now I save on detalleEvento
+                    var detalle = detalleEventos()
+                    detalle.correo_usuario = document.get("email").toString()
+                    detalle.id_empresa = evento.id_empresa
+                    detalle.estatus = "0"
+                    detalle.id_evento = evento.id
+                    detalle.id=""
+                    detalleEventoCollection.add(detalle).addOnSuccessListener {
+                        detalleEventoCollection.document(it.id).update("id", it.id).addOnSuccessListener {
+                        }.addOnFailureListener { }
+                    }.addOnFailureListener {
+                    }
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+        val consultaEmpresa = empresaCollection.whereEqualTo("id_empresa", evento.id_empresa)
+        //beggin with consult
+        consultaEmpresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    //well, now I save on detalleEvento
+                    var detalle = detalleEventos()
+                    detalle.correo_usuario = document.get("correo").toString()
+                    detalle.id_empresa = evento.id_empresa
+                    detalle.estatus = "0"
+                    detalle.id_evento = evento.id
+                    detalleEventoCollection.add(detalle).addOnSuccessListener {
+                        detalleEventoCollection.document(it.id).update("id", it.id).addOnSuccessListener {
+                        }.addOnFailureListener { }
+                    }.addOnFailureListener {
+                    }
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
     }
 
     private fun abrirFotoGaleria() {

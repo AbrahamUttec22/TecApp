@@ -87,10 +87,12 @@
                             android:orientation="vertical">
 
                             <android.support.design.widget.FloatingActionButton
+
                                 android:id="@+id/MiPerfilU"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:clickable="true"
+                                android:clickable="false"
                                 android:tint="@android:color/white"
                                 app:backgroundTint="@color/amber_A400"
                                 app:elevation="0dp"
@@ -103,6 +105,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:longClickable="false"
+                                android:clickable="false"
+                                android:saveEnabled="false"
                                 android:text="Mi Perfil"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -295,9 +300,10 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/VerAnuncioU"
+                                    android:saveEnabled="false"
                                     android:layout_width="wrap_content"
                                     android:layout_height="match_parent"
-                                    android:clickable="true"
+                                    android:clickable="false"
                                     android:tint="@android:color/white"
                                     app:backgroundTint="@color/deep_orange_A400"
                                     app:elevation="0dp"
@@ -343,7 +349,8 @@
                                 android:id="@+id/ChecarU"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:clickable="true"
+                                android:clickable="false"
+                                android:saveEnabled="false"
                                 android:tint="@android:color/white"
                                 app:backgroundTint="@color/indigo_600"
                                 app:elevation="0dp"
@@ -353,6 +360,8 @@
 
                             <TextView
                                 android:id="@+id/ChecarU2"
+                                android:saveEnabled="false"
+                                android:clickable="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"

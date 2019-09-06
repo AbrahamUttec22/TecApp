@@ -10,10 +10,11 @@ class Empresa(var nombre: String = "",
               var foto: String = "",
               var giro: String = "",
               var id_empresa: String = "",
+              var estatus: String = "",
               var token: String = "",
               var fecha_registro: String = "",
               var uid: String = "") {
 
     override fun toString() = "$nombre  $correo $telefono $direccion" +
-            " $foto $giro $id_empresa $token $fecha_registro"
+            " $foto $giro $id_empresa $token $fecha_registro $estatus"
 }

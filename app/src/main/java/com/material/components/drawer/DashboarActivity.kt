@@ -1,4 +1,5 @@
 package com.material.components.drawer
+
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
@@ -7,14 +8,16 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.LightingColorFilter
+import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v7.widget.AppCompatButton
+import android.support.v7.widget.AppCompatSeekBar
 import android.support.v7.widget.Toolbar
 import android.util.Log
 import android.view.*
-import android.widget.AdapterView
-import android.widget.Toast
+import android.widget.*
 import com.alejandrolora.finalapp.goToActivity
 import com.alejandrolora.finalapp.toast
 import com.google.android.gms.tasks.OnCompleteListener
@@ -25,7 +28,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.components.R
 import com.material.components.actividadesfragment.GestionActividadesActivity
-import com.material.components.actividadesfragmentadmin.GestionActividadesAActivity
+import com.material.components.actividadesfragmentadmin.*
 import com.material.components.activity.about.EstatusChecadorActivity
 import com.material.components.activity.bottomsheet.UserActivity
 import com.material.components.activity.button.ActividadesActivity
@@ -76,6 +79,12 @@ class DashboarActivity : AppCompatActivity() {
     private val usuariosCollection: CollectionReference
     //declare val for save the collection
     private val actividadesCollection: CollectionReference
+    //declare val for save the collection
+    private val detalleEventosCollection: CollectionReference
+    //declare val for save the collection
+    private val detalleEncuestasCollection: CollectionReference
+    //declare val for save the collection
+    private val detalleAnuncioCollection: CollectionReference
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -83,16 +92,20 @@ class DashboarActivity : AppCompatActivity() {
         //save the collection marks on val maksCollection
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
         empresaCollection = FirebaseFirestore.getInstance().collection("Empresas")
-
         eventosCollection = FirebaseFirestore.getInstance().collection("Eventos")
         encuestasCollection = FirebaseFirestore.getInstance().collection("Encuestas")
         anuncioCollection = FirebaseFirestore.getInstance().collection("Anuncios")
         usuariosCollection = FirebaseFirestore.getInstance().collection("Usuarios")
         actividadesCollection = FirebaseFirestore.getInstance().collection("Actividades")
+        //______
+        detalleEventosCollection = FirebaseFirestore.getInstance().collection("detalleEventos")
+        detalleEncuestasCollection = FirebaseFirestore.getInstance().collection("detalleEncuestas")
+        detalleAnuncioCollection = FirebaseFirestore.getInstance().collection("detalleAnuncios")
 
     }
 
-    var rol2 = ""
+    private var rol2 = ""
+    private var plan_pago = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,9 +121,92 @@ class DashboarActivity : AppCompatActivity() {
                 for (document in task.result!!) {
                     rol2 = document.get("rol").toString()
                 }
+
                 if (rol.equals("empresa")) {
                     setContentView(R.layout.activity_dashboard_empresa)
                     consultasEmpresaNotificaciones()
+                    val empresaEstatus = empresaCollection.whereEqualTo("id_empresa", id_empresa)
+                    empresaEstatus.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                        if (task.isSuccessful) {
+                            for (document in task.result!!) {
+                                plan_pago = document.get("estatus").toString()
+                            }
+                            when (plan_pago) {
+                                "mensual" -> {
+
+                                }
+                                "pruebainicial" -> {
+
+                                }
+                                "gratuita" -> {//empresa
+                                    showDialog()
+                                    val color = Color.parseColor("#D3D3D3")
+                                    MiPerfilE.isEnabled = false
+                                    MiPerfilE.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    PanelUsuariosE.isEnabled = false
+                                    PanelUsuariosE.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AgregarEventosE.isEnabled = false
+                                    AgregarEventosE.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AdministrarEventosE.isEnabled = false
+                                    AdministrarEventosE.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AgregarEncuestaE.isEnabled = false
+                                    AgregarEncuestaE.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AdministrarEncuestasE.isEnabled = false
+                                    AdministrarEncuestasE.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AdministradorActividadesAdminE.isEnabled = false
+                                    AdministradorActividadesAdminE.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AgregarAnuncioE.isEnabled = false
+                                    AgregarAnuncioE.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AdministrarAnunciosE.isEnabled = false
+                                    AdministrarAnunciosE.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    GenerarQRE.isEnabled = false
+                                    GenerarQRE.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    EstatusChecadorE.isEnabled = false
+                                    EstatusChecadorE.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                                    ////222
+                                    MiPerfilE2.isEnabled = false
+
+                                    PanelUsuariosE2.isEnabled = false
+                                    AdministradorActividadesAdminE2.isEnabled = false
+
+                                    AgregarEventosE2.isEnabled = false
+
+                                    AdministrarEventosE2.isEnabled = false
+
+                                    AgregarEncuestaE2.isEnabled = false
+
+                                    AdministrarEncuestasE2.isEnabled = false
+
+                                    AgregarAnuncioE2.isEnabled = false
+
+                                    AdministrarAnunciosE2.isEnabled = false
+
+                                    GenerarQRE2.isEnabled = false
+
+                                    EstatusChecadorE2.isEnabled = false
+
+                                }
+                                else -> {
+
+                                }
+                            }
+                        } else {
+                            Log.w("saasas", "Error getting documents.", task.exception)
+                        }
+
+                    })//end for expression lambdas this very cool
+
+
                     //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
                     MiPerfilE.setOnClickListener {
                         //403 USUARIOS,404 EMPRESA
@@ -378,7 +474,47 @@ class DashboarActivity : AppCompatActivity() {
                     }
                 } else if (rol2.equals("usuario")) {
                     setContentView(R.layout.activity_dashboard_usuario)
+                    MiPerfilU.isEnabled = false
+                    MiPerfilU2.isEnabled = false
+                    val empresaEstatus = empresaCollection.whereEqualTo("id_empresa", id_empresa)
+                    empresaEstatus.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                        if (task.isSuccessful) {
+                            for (document in task.result!!) {
+                                plan_pago = document.get("estatus").toString()
+                            }
+                            when (plan_pago) {
+                                "mensual" -> {
+
+                                }
+                                "pruebainicial" -> {
+
+                                }
+                                "gratuita" -> {//empresa
+                                    showDialog()
+                                    val color = Color.parseColor("#D3D3D3")
+                                    MiPerfilU.isEnabled = false
+                                    MiPerfilU.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                                    ////222
+                                    ChecarU.isEnabled = false
+                                    ChecarU.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                                    ChecarU2.isEnabled = false
+
+                                    MiPerfilU2.isEnabled = false
+                                }
+                                else -> {
+
+                                }
+                            }
+                        } else {
+                            Log.w("saasas", "Error getting documents.", task.exception)
+                        }
+
+                    })//end for expression lambdas this very cool
+
                     consultasUsuarioNotificaciones()
+
+
+
 
                     //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
                     MiPerfilU.setOnClickListener {
@@ -538,6 +674,93 @@ class DashboarActivity : AppCompatActivity() {
                 } else if (rol2.equals("administrador")) {
                     setContentView(R.layout.activity_dashboard_administrador)
                     consultasAdministradorNotificaciones()
+                    val empresaEstatus = empresaCollection.whereEqualTo("id_empresa", id_empresa)
+                    empresaEstatus.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                        if (task.isSuccessful) {
+                            for (document in task.result!!) {
+                                plan_pago = document.get("estatus").toString()
+                            }
+                            when (plan_pago) {
+                                "mensual" -> {
+
+                                }
+                                "pruebainicial" -> {
+
+                                }
+                                "gratuita" -> {//empresa
+                                    showDialog()
+                                    val color = Color.parseColor("#D3D3D3")
+                                    MiPerfilA.isEnabled = false
+                                    MiPerfilA.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    PanelUsuariosA.isEnabled = false
+                                    PanelUsuariosA.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AgregarEventosA.isEnabled = false
+                                    AgregarEventosA.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AdministrarEventosA.isEnabled = false
+                                    AdministrarEventosA.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AgregarEncuestaA.isEnabled = false
+                                    AgregarEncuestaA.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AdministrarEncuestasA.isEnabled = false
+                                    AdministrarEncuestasA.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AdministradorActividadesAdmin.isEnabled = false
+                                    AdministradorActividadesAdmin.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AgregarAnuncioA.isEnabled = false
+                                    AgregarAnuncioA.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    AdministrarAnunciosA.isEnabled = false
+                                    AdministrarAnunciosA.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    GenerarQRA.isEnabled = false
+                                    GenerarQRA.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+                                    ChecarA.isEnabled = false
+                                    ChecarA.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+
+
+                                    EstatusChecadorA.isEnabled = false
+                                    EstatusChecadorA.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
+                                    ////222
+                                    AdministradorActividadesAdmin2.isEnabled = false
+
+                                    MiPerfilA2.isEnabled = false
+                                    ChecarA2.isEnabled = false
+
+                                    PanelUsuariosA2.isEnabled = false
+
+                                    AgregarEventosA2.isEnabled = false
+
+                                    AdministrarEventosA2.isEnabled = false
+
+                                    AgregarEncuestaA2.isEnabled = false
+
+                                    AdministrarEncuestasA2.isEnabled = false
+
+                                    AgregarAnuncioA2.isEnabled = false
+
+                                    AdministrarAnunciosA2.isEnabled = false
+
+                                    GenerarQRA2.isEnabled = false
+
+                                    EstatusChecadorA2.isEnabled = false
+
+                                }
+                                else -> {
+
+                                }
+                            }
+                        } else {
+                            Log.w("saasas", "Error getting documents.", task.exception)
+                        }
+
+                    })//end for expression lambdas this very cool
+
                     //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
                     MiPerfilA.setOnClickListener {
                         //403 USUARIOS,404 EMPRESA
@@ -844,14 +1067,13 @@ class DashboarActivity : AppCompatActivity() {
 
         })//end for expression lambdas this very cool
 
-
-
-
-//        getDataUser()
+        //getDataUser()
         //apartir de aqui se van a hacer instancias a las ventanas correspondientes
     }
 
     private fun consultasEmpresaNotificaciones() {
+        var email_mio = mAuth.currentUser!!.email.toString()
+
         val consultaUsuario = userCollection.whereEqualTo("id_empresa", id_empresa)
         //beggin with consult
         consultaUsuario.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
@@ -871,29 +1093,49 @@ class DashboarActivity : AppCompatActivity() {
             }
 
         })//end for expression lambdas this very cool
-
         //____________________________________________________________________
-        val consultaEvento = eventosCollection.whereEqualTo("id_empresa", id_empresa)
+        /*    val consultaEvento = eventosCollection.whereEqualTo("id_empresa", id_empresa)
+            //beggin with consult
+            consultaEvento.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                if (task.isSuccessful) {
+                    var con = 0
+                    for (document in task.result!!) {
+                        var fechaBD = document.get("fecha").toString()
+                        var diaBD = fechaBD.substring(0, 2).toInt()//dd
+                        var mesBD = fechaBD.substring(3, 5).toInt()//mm
+                        var anoBD = fechaBD.substring(6, 8).toInt()//yyyy
+
+                        val c = Calendar.getInstance()
+                        val df = SimpleDateFormat("dd/MM/yy")
+                        val fechaCalendar = df.format(c.getTime()).toString()
+                        var diaCalendar = fechaCalendar.substring(0, 2).toInt()//dd
+                        var mesCalendar = fechaCalendar.substring(3, 5).toInt()//mm
+                        var anoCalendar = fechaCalendar.substring(6, 8).toInt()//yyyy
+
+                        if (diaCalendar <= diaBD && mesCalendar <= mesBD && anoCalendar <= anoBD) {
+                            con++
+                        }
+                    }
+                    if (con == 0) {
+                        EmpresaVerEventoN.text = "0"
+                    } else {
+                        EmpresaVerEventoN.text = con.toString()
+                    }
+
+                } else {
+                    Log.w("saasas", "Error getting documents.", task.exception)
+                }
+
+            })//end for expression lambdas this very cool
+            */
+
+        val consultaEvento = detalleEventosCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
         //beggin with consult
         consultaEvento.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
                 var con = 0
                 for (document in task.result!!) {
-                    var fechaBD = document.get("fecha").toString()
-                    var diaBD = fechaBD.substring(0, 2).toInt()//dd
-                    var mesBD = fechaBD.substring(3, 5).toInt()//mm
-                    var anoBD = fechaBD.substring(6, 8).toInt()//yyyy
-
-                    val c = Calendar.getInstance()
-                    val df = SimpleDateFormat("dd/MM/yy")
-                    val fechaCalendar = df.format(c.getTime()).toString()
-                    var diaCalendar = fechaCalendar.substring(0, 2).toInt()//dd
-                    var mesCalendar = fechaCalendar.substring(3, 5).toInt()//mm
-                    var anoCalendar = fechaCalendar.substring(6, 8).toInt()//yyyy
-
-                    if (diaCalendar <= diaBD && mesCalendar <= mesBD && anoCalendar <= anoBD) {
-                        con++
-                    }
+                    con++
                 }
                 if (con == 0) {
                     EmpresaVerEventoN.text = "0"
@@ -906,8 +1148,9 @@ class DashboarActivity : AppCompatActivity() {
             }
 
         })//end for expression lambdas this very cool
+
         //____________________________________________________________________
-        val consultaEncuestas = encuestasCollection.whereEqualTo("status", "1").whereEqualTo("id_empresa", id_empresa)
+        val consultaEncuestas = detalleEncuestasCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
         //beggin with consult
         consultaEncuestas.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
@@ -928,7 +1171,7 @@ class DashboarActivity : AppCompatActivity() {
         })//end for expression lambdas this very cool
         //____________________________________________________________________
 
-        val anuncioConsulta = anuncioCollection.whereEqualTo("id_empresa", id_empresa)
+        val anuncioConsulta = detalleAnuncioCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
         //beggin with consult
         anuncioConsulta.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
@@ -950,6 +1193,7 @@ class DashboarActivity : AppCompatActivity() {
     }
 
     private fun consultasAdministradorNotificaciones() {
+        var email_mio = mAuth.currentUser!!.email.toString()
         val consultaUsuario = userCollection.whereEqualTo("id_empresa", id_empresa)
         //beggin with consult
         consultaUsuario.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
@@ -971,7 +1215,7 @@ class DashboarActivity : AppCompatActivity() {
         })//end for expression lambdas this very cool
         //____________________________________________________________________
         var email = mAuth.currentUser!!.email.toString()
-        val consultaActividad = actividadesCollection.whereEqualTo("correo", email)
+        val consultaActividad = actividadesCollection.whereEqualTo("correo", email).whereEqualTo("estatus", "actividades")
         //beggin with consult
         consultaActividad.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
@@ -991,27 +1235,14 @@ class DashboarActivity : AppCompatActivity() {
 
         })//end for expression lambdas this very cool
         //____________________________________________________________________
-        val consultaEvento = eventosCollection.whereEqualTo("id_empresa", id_empresa)
+        val consultaEvento = detalleEventosCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
         //beggin with consult
         consultaEvento.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
                 var con = 0
                 for (document in task.result!!) {
-                    var fechaBD = document.get("fecha").toString()
-                    var diaBD = fechaBD.substring(0, 2).toInt()//dd
-                    var mesBD = fechaBD.substring(3, 5).toInt()//mm
-                    var anoBD = fechaBD.substring(6, 8).toInt()//yyyy
+                    con++
 
-                    val c = Calendar.getInstance()
-                    val df = SimpleDateFormat("dd/MM/yy")
-                    val fechaCalendar = df.format(c.getTime()).toString()
-                    var diaCalendar = fechaCalendar.substring(0, 2).toInt()//dd
-                    var mesCalendar = fechaCalendar.substring(3, 5).toInt()//mm
-                    var anoCalendar = fechaCalendar.substring(6, 8).toInt()//yyyy
-
-                    if (diaCalendar <= diaBD && mesCalendar <= mesBD && anoCalendar <= anoBD) {
-                        con++
-                    }
                 }
                 if (con == 0) {
                     AdministradorVerEventosN.text = "0"
@@ -1026,7 +1257,7 @@ class DashboarActivity : AppCompatActivity() {
 
         })//end for expression lambdas this very cool
         //____________________________________________________________________
-        val consultaEncuestas = encuestasCollection.whereEqualTo("status", "1").whereEqualTo("id_empresa", id_empresa)
+        val consultaEncuestas = detalleEncuestasCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
         //beggin with consult
         consultaEncuestas.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
@@ -1047,7 +1278,7 @@ class DashboarActivity : AppCompatActivity() {
         })//end for expression lambdas this very cool
         //____________________________________________________________________
 
-        val anuncioConsulta = anuncioCollection.whereEqualTo("id_empresa", id_empresa)
+        val anuncioConsulta = detalleAnuncioCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
         //beggin with consult
         anuncioConsulta.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
@@ -1069,9 +1300,10 @@ class DashboarActivity : AppCompatActivity() {
     }
 
     private fun consultasUsuarioNotificaciones() {
+        var email_mio = mAuth.currentUser!!.email.toString()
         //____________________________________________________________________
         var email = mAuth.currentUser!!.email.toString()
-        val consultaActividad = actividadesCollection.whereEqualTo("correo", email)
+        val consultaActividad = actividadesCollection.whereEqualTo("correo", email).whereEqualTo("estatus", "actividades")
         //beggin with consult
         consultaActividad.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
@@ -1091,27 +1323,14 @@ class DashboarActivity : AppCompatActivity() {
 
         })//end for expression lambdas this very cool
         //____________________________________________________________________
-        val consultaEvento = eventosCollection.whereEqualTo("id_empresa", id_empresa)
+        val consultaEvento = detalleEventosCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
         //beggin with consult
         consultaEvento.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
                 var con = 0
                 for (document in task.result!!) {
-                    var fechaBD = document.get("fecha").toString()
-                    var diaBD = fechaBD.substring(0, 2).toInt()//dd
-                    var mesBD = fechaBD.substring(3, 5).toInt()//mm
-                    var anoBD = fechaBD.substring(6, 8).toInt()//yyyy
+                    con++
 
-                    val c = Calendar.getInstance()
-                    val df = SimpleDateFormat("dd/MM/yy")
-                    val fechaCalendar = df.format(c.getTime()).toString()
-                    var diaCalendar = fechaCalendar.substring(0, 2).toInt()//dd
-                    var mesCalendar = fechaCalendar.substring(3, 5).toInt()//mm
-                    var anoCalendar = fechaCalendar.substring(6, 8).toInt()//yyyy
-
-                    if (diaCalendar <= diaBD && mesCalendar <= mesBD && anoCalendar <= anoBD) {
-                        con++
-                    }
                 }
                 if (con == 0) {
                     UsuarioVerEventosN.text = "0"
@@ -1126,7 +1345,7 @@ class DashboarActivity : AppCompatActivity() {
 
         })//end for expression lambdas this very cool
         //____________________________________________________________________
-        val consultaEncuestas = encuestasCollection.whereEqualTo("status", "1").whereEqualTo("id_empresa", id_empresa)
+        val consultaEncuestas = detalleEncuestasCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
         //beggin with consult
         consultaEncuestas.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
@@ -1147,7 +1366,7 @@ class DashboarActivity : AppCompatActivity() {
         })//end for expression lambdas this very cool
         //____________________________________________________________________
 
-        val anuncioConsulta = anuncioCollection.whereEqualTo("id_empresa", id_empresa)
+        val anuncioConsulta = detalleAnuncioCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
         //beggin with consult
         anuncioConsulta.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
@@ -1189,13 +1408,33 @@ class DashboarActivity : AppCompatActivity() {
         initToolbar()
     }
 
+    private fun showDialog() {
+        //the header from dialog
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+        dialog.setContentView(R.layout.dialog_gratuita)
+        dialog.setCancelable(true)
+        val lp = WindowManager.LayoutParams()
+        lp.copyFrom(dialog.window!!.attributes)
+        lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+        lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+        //in this code I get the information on cloud firestore
+        var txt1 = (dialog.findViewById<View>(R.id.cerrarGratuita) as TextView)
+        txt1.setOnClickListener {
+            dialog.dismiss()
+        }
+        //END FOR THE BACKEND ON SHOW
+        (dialog.findViewById<View>(R.id.bt_close) as ImageButton).setOnClickListener { dialog.dismiss() }
+        dialog.show()
+        dialog.window!!.attributes = lp
+    }
+
     /**
      * initToolbar(header)
      */
     @SuppressLint("ResourceType")
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbarD) as Toolbar
-
         val email = mAuth.currentUser!!.email.toString()
         val empleado = userCollection.whereEqualTo("email", email)
         //beggin with consult

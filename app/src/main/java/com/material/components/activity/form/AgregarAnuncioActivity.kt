@@ -36,6 +36,9 @@ import com.material.components.message.ApiClient
 import com.material.components.message.ApiInter
 import com.material.components.message.Notification
 import com.material.components.message.RequestNotificaton
+import com.material.components.model.Encuesta
+import com.material.components.model.detalleAnuncios
+import com.material.components.model.detalleEncuestas
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -54,6 +57,8 @@ class AgregarAnuncioActivity : AppCompatActivity() {
     private var mStorageRef: StorageReference? = null
     private val PICK_PHOTO = 1
     private val userCollection: CollectionReference
+    private val empresaCollection: CollectionReference
+    private val detalleAnunciosCollection: CollectionReference
     lateinit var uri: Uri
 
     //init the val for get the collection the Firebase with cloud firestore
@@ -63,7 +68,8 @@ class AgregarAnuncioActivity : AppCompatActivity() {
         mStorageRef = FirebaseStorage.getInstance().getReference()
         marksCollection = FirebaseFirestore.getInstance().collection("Anuncios")
         userCollection = FirebaseFirestore.getInstance().collection("Usuarios")
-
+        empresaCollection = FirebaseFirestore.getInstance().collection("Empresas")
+        detalleAnunciosCollection = FirebaseFirestore.getInstance().collection("detalleAnuncios")
     }
 
     lateinit var dialog: AlertDialog
@@ -172,6 +178,7 @@ class AgregarAnuncioActivity : AppCompatActivity() {
     private fun saveAnuncio(anuncio: Anuncio) {
         //add the collection and save the User, this is validated
         marksCollection.add(anuncio).addOnSuccessListener {
+            anuncio.id = it.id
             marksCollection.document(it.id).update("id", it.id).addOnSuccessListener {
                 val empleado = userCollection.whereEqualTo("id_empresa", anuncio.id_empresa)
                 //beggin with consult
@@ -188,6 +195,7 @@ class AgregarAnuncioActivity : AppCompatActivity() {
                                 sendNotificationToPatner(token)
                             }
                         }
+                        saveDetalleAnucio(anuncio)
                     } else {
                         Log.w("saasas", "Error getting documents.", task.exception)
                     }
@@ -217,6 +225,62 @@ class AgregarAnuncioActivity : AppCompatActivity() {
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
         })
     }
+
+    /**
+     * @param anuncio
+     */
+    private fun saveDetalleAnucio(anuncio: Anuncio) {
+        //First I found all users for the company with that id_empresa
+        val consultaUsuarios = userCollection.whereEqualTo("id_empresa", anuncio.id_empresa)
+        //beggin with consult
+        consultaUsuarios.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    //well, now I save on detalleEvento
+                    var detalle = detalleAnuncios()
+                    detalle.correo_usuario = document.get("email").toString()
+                    detalle.id_empresa = anuncio.id_empresa
+                    detalle.estatus = "0"
+                    detalle.id_anuncio = anuncio.id
+                    detalle.id = ""
+                    detalleAnunciosCollection.add(detalle).addOnSuccessListener {
+                        detalleAnunciosCollection.document(it.id).update("id", it.id).addOnSuccessListener {
+                        }.addOnFailureListener { }
+                    }.addOnFailureListener {
+                    }
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+        val consultaEmpresa = empresaCollection.whereEqualTo("id_empresa", anuncio.id_empresa)
+        //beggin with consult
+        consultaEmpresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    //well, now I save on detalleEvento
+                    var detalle = detalleAnuncios()
+                    detalle.correo_usuario = document.get("correo").toString()
+                    detalle.id_empresa = anuncio.id_empresa
+                    detalle.estatus = "0"
+                    detalle.id_anuncio = anuncio.id
+                    detalle.id=""
+                    detalleAnunciosCollection.add(detalle).addOnSuccessListener {
+                        detalleAnunciosCollection.document(it.id).update("id", it.id).addOnSuccessListener {
+                        }.addOnFailureListener { }
+                    }.addOnFailureListener {
+                    }
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
+    }
+
 
     //see views not back
     private fun initToolbar() {

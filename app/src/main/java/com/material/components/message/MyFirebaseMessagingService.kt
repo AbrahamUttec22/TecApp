@@ -76,7 +76,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             mNotificationManager.createNotificationChannel(channel)
         }
         val mBuilder = NotificationCompat.Builder(applicationContext, channelId)
-                .setSmallIcon(R.drawable.logo_tecgurus) // notification icon
+                .setSmallIcon(R.drawable.ic_logo_one) // notification icon
                 .setContentTitle(title) // title for notification
                 .setContentText(messageBody)// message for notification
                 .setAutoCancel(true) // clear notification after click

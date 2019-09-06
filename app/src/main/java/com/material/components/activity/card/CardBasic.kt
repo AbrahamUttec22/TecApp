@@ -15,6 +15,7 @@ import android.widget.Toast
 import com.alejandrolora.finalapp.goToActivity
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
@@ -34,6 +35,7 @@ import com.material.components.message.RequestNotificaton
 import com.material.components.model.Usuario
 import kotlinx.android.synthetic.main.activity_card_basic.*
 import kotlinx.android.synthetic.main.activity_card_basic.listView
+import kotlinx.android.synthetic.main.activity_dashboard_administrador.*
 import kotlinx.android.synthetic.main.activity_user.*
 import kotlinx.android.synthetic.main.list_view_usuario.view.*
 import retrofit2.Call
@@ -52,11 +54,13 @@ import java.text.SimpleDateFormat
  */
 class CardBasic : AppCompatActivity() {
 
+    private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
     private lateinit var adapter: EventoAdapter
     private lateinit var personList: List<Evento>
     //declare val for save the collection
     private val eventoCollection: CollectionReference
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
+    private val detalleEventosCollection: CollectionReference
     // private val channelId = "com.material.components"
     private val channelId = "com.example.vicky.notificationexample"
 
@@ -65,11 +69,13 @@ class CardBasic : AppCompatActivity() {
         FirebaseApp.initializeApp(this)
         //save the collection marks on val maksCollection
         eventoCollection = FirebaseFirestore.getInstance().collection("Eventos")
+        detalleEventosCollection = FirebaseFirestore.getInstance().collection("detalleEventos")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card_basic)
+        cambiarSatus()
         initToolbar()
         addMarksListener()
         swipeRefreshLayout = findViewById(R.id.swipeEventoUsuario)
@@ -120,18 +126,18 @@ class CardBasic : AppCompatActivity() {
                     var mesCalendar = fechaCalendar.substring(3, 5).toInt()//mm
                     var anoCalendar = fechaCalendar.substring(6, 8).toInt()//yyyy
 
-                    if (diaCalendar <= diaBD && mesCalendar <= mesBD && anoCalendar<= anoBD) {
-                            con++
-                            val evento = Evento()
-                            evento.hora = document.get("hora").toString()
-                            evento.description = document.get("description").toString()
-                            evento.fecha = document.get("fecha").toString()
-                            evento.id = document.get("id").toString()
-                            evento.id_empresa = document.get("id_empresa").toString()
-                            evento.image = document.get("image").toString()
-                            evento.titulo = document.get("titulo").toString()
-                            evento.ubicacion = document.get("ubicacion").toString()
-                            itemUsuario.add(evento)
+                    if (diaCalendar <= diaBD && mesCalendar <= mesBD && anoCalendar <= anoBD) {
+                        con++
+                        val evento = Evento()
+                        evento.hora = document.get("hora").toString()
+                        evento.description = document.get("description").toString()
+                        evento.fecha = document.get("fecha").toString()
+                        evento.id = document.get("id").toString()
+                        evento.id_empresa = document.get("id_empresa").toString()
+                        evento.image = document.get("image").toString()
+                        evento.titulo = document.get("titulo").toString()
+                        evento.ubicacion = document.get("ubicacion").toString()
+                        itemUsuario.add(evento)
                     }
                 }
                 if (con == 0) {
@@ -145,6 +151,32 @@ class CardBasic : AppCompatActivity() {
                 Log.w("saasas", "Error getting documents.", task.exception)
             }
         })//end for expression lambdas this very cool
+    }
+
+    /**
+     * Este metodo es para actualizar el estatus, es decir de que el usuario ya vio los eventos
+     * y por lo tanto ya no se veria como notificacion ene l dashboard
+     * cambiar status a 1
+     */
+    private fun cambiarSatus() {
+        var email_mio = mAuth.currentUser!!.email.toString()
+        var sharedPreferencet = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
+        var id_empresa = sharedPreferencet.getString("id_empresa", "")
+        val consultaEvento = detalleEventosCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("correo_usuario", email_mio).whereEqualTo("estatus", "0")
+        //beggin with consult
+        consultaEvento.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                for (document in task.result!!) {
+                    var id_documento = document.get("id").toString()
+                    detalleEventosCollection.document(id_documento).update("estatus", "1").addOnSuccessListener {
+                    }.addOnFailureListener { }
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
     }
 
     /**

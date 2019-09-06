@@ -91,8 +91,10 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/MiPerfilE"
-                                    android:layout_width="52dp"
-                                    android:layout_height="wrap_content"
+                                    android:saveEnabled="false"
+
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
                                     android:clickable="true"
                                     android:tint="@android:color/white"
                                     app:backgroundTint="@color/amber_A400"
@@ -105,6 +107,7 @@
 
                             <TextView
                                 android:id="@+id/MiPerfilE2"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -127,6 +130,7 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/PanelUsuariosE"
+                                    android:saveEnabled="false"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:clickable="true"
@@ -155,6 +159,7 @@
 
                             <TextView
                                 android:id="@+id/PanelUsuariosE2"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -173,6 +178,7 @@
 
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/AdministradorActividadesAdminE"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -185,6 +191,7 @@
 
                             <TextView
                                 android:id="@+id/AdministradorActividadesAdminE2"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -206,6 +213,7 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/AgregarEventosE"
+                                    android:saveEnabled="false"
 
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
@@ -221,6 +229,7 @@
 
                             <TextView
                                 android:id="@+id/AgregarEventosE2"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -304,9 +313,10 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/AdministrarEventosE"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
                                     android:clickable="true"
+                                    android:saveEnabled="false"
                                     android:tint="@android:color/white"
                                     app:backgroundTint="@color/light_green_400"
                                     app:elevation="0dp"
@@ -318,6 +328,7 @@
 
                             <TextView
                                 android:id="@+id/AdministrarEventosE2"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -340,6 +351,7 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/AgregarEncuestaE"
+                                    android:saveEnabled="false"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:clickable="true"
@@ -354,6 +366,7 @@
 
                             <TextView
                                 android:id="@+id/AgregarEncuestaE2"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -439,6 +452,7 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/AdministrarEncuestasE"
+                                    android:saveEnabled="false"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:clickable="true"
@@ -453,6 +467,7 @@
                             <TextView
                                 android:id="@+id/AdministrarEncuestasE2"
                                 android:layout_width="wrap_content"
+                                android:saveEnabled="false"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
                                 android:text="Administrar Encuestas"
@@ -474,7 +489,7 @@
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/VerAnuncioE"
                                     android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
+                                    android:layout_height="match_parent"
                                     android:clickable="true"
                                     android:tint="@android:color/white"
                                     app:backgroundTint="@color/deep_orange_A400"
@@ -519,6 +534,7 @@
 
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/AdministrarAnunciosE"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -532,6 +548,7 @@
                             <TextView
                                 android:id="@+id/AdministrarAnunciosE2"
                                 android:layout_width="wrap_content"
+                                android:saveEnabled="false"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
                                 android:text="Administrar Anuncios"
@@ -548,6 +565,7 @@
 
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/AgregarAnuncioE"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -561,6 +579,7 @@
                             <TextView
                                 android:id="@+id/AgregarAnuncioE2"
                                 android:layout_width="wrap_content"
+                                android:saveEnabled="false"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
                                 android:text="Agregar Anuncio"
@@ -591,6 +610,7 @@
 
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/GenerarQRE"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -603,6 +623,7 @@
 
                             <TextView
                                 android:id="@+id/GenerarQRE2"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
@@ -621,6 +642,7 @@
 
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/EstatusChecadorE"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
@@ -633,6 +655,7 @@
 
                             <TextView
                                 android:id="@+id/EstatusChecadorE2"
+                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
