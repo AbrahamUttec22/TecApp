@@ -208,7 +208,7 @@ class AProcesoAdapter(val context: Context?, val layout: Int, val list: List<Act
             }//end for hanlder
 
             private fun sendNotificationToPatner() {
-                val notification = Notification(nombre_usuario + " ha movido la actividad a: En revisión", "Administrar Actividades")
+                val notification = Notification(nombre_usuario + " requiere revisión de su actividad", "Administrar Actividades")
                 val requestNotificaton = RequestNotificaton()
                 //token is id , whom you want to send notification ,
                 requestNotificaton.token = token_empresa_admin

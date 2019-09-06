@@ -105,6 +105,7 @@
                                 app:srcCompat="@drawable/ic_activities" />
 
                             <TextView
+                                android:id="@+id/btnAsignarActividadt"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Asignar actividad"
@@ -139,6 +140,7 @@
                                 app:srcCompat="@drawable/ic_person_outline" />
 
                             <TextView
+                                android:id="@+id/btnActualizarUsuariot"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Actualizar"
@@ -173,6 +175,7 @@
                                 app:srcCompat="@drawable/ic_delete" />
 
                             <TextView
+                                android:id="@+id/btnEliminarUsuariot"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Eliminar"

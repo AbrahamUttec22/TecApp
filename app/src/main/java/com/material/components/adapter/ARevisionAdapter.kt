@@ -213,7 +213,7 @@ class ARevisionAdapter(val context: Context?, val layout: Int, val list: List<Ac
             }//end for hanlder
 
             private fun sendNotificationToPatner() {
-                val notification = Notification(nombre_usuario + " ha movido la actividad a: Finalizado", "Administrar Actividades")
+                val notification = Notification(nombre_usuario + " finalizo la tarea que le asignaste", "Administrar Actividades")
                 val requestNotificaton = RequestNotificaton()
                 //token is id , whom you want to send notification ,
                 requestNotificaton.token = token_empresa_administrador
