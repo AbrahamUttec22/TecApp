@@ -85,15 +85,17 @@
                                 android:id="@+id/btnActualizarEvento"
                                 android:layout_width="?attr/actionBarSize"
                                 android:layout_height="?attr/actionBarSize"
-                                android:tint="@android:color/white"
-                                app:backgroundTint="@color/light_green_400"
-
                                 android:background="@drawable/btn_rounded_signup"
+                                android:tint="@android:color/white"
+
+                                app:backgroundTint="@color/light_green_400"
                                 app:srcCompat="@drawable/ic_events" />
 
                             <TextView
+                                android:id="@+id/btnActualizarEventoTwo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:longClickable="true"
                                 android:text="Actualizar"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                                 android:textColor="@color/colorPrimary" />
@@ -120,12 +122,14 @@
                                 android:id="@+id/btnEliminarEvento"
                                 android:layout_width="?attr/actionBarSize"
                                 android:layout_height="?attr/actionBarSize"
+                                android:background="@drawable/btn_rounded_signup"
                                 android:tint="@android:color/white"
                                 app:backgroundTint="@color/red_A400"
-                                android:background="@drawable/btn_rounded_signup"
                                 app:srcCompat="@drawable/ic_delete" />
 
                             <TextView
+                                android:id="@+id/btnEliminarEventoTwo"
+                                android:longClickable="true"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Eliminar"

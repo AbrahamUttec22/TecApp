@@ -482,6 +482,36 @@
                             android:gravity="center"
                             android:orientation="vertical">
 
+                            <android.support.design.widget.FloatingActionButton
+                                android:id="@+id/AgregarAnuncioE"
+                                android:saveEnabled="false"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:clickable="true"
+                                android:tint="@android:color/white"
+                                app:backgroundTint="@color/deep_orange_A400"
+                                app:elevation="0dp"
+                                app:fabSize="mini"
+                                app:rippleColor="@android:color/white"
+                                app:srcCompat="@drawable/ic_add_ob" />
+
+                            <TextView
+                                android:id="@+id/AgregarAnuncioE2"
+                                android:layout_width="wrap_content"
+                                android:saveEnabled="false"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/spacing_medium"
+                                android:text="Agregar Anuncio"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                android:textColor="@color/grey_40" />
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
                             <FrameLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content">
@@ -556,36 +586,7 @@
                                 android:textColor="@color/grey_40" />
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:gravity="center"
-                            android:orientation="vertical">
 
-                            <android.support.design.widget.FloatingActionButton
-                                android:id="@+id/AgregarAnuncioE"
-                                android:saveEnabled="false"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:clickable="true"
-                                android:tint="@android:color/white"
-                                app:backgroundTint="@color/deep_orange_A400"
-                                app:elevation="0dp"
-                                app:fabSize="mini"
-                                app:rippleColor="@android:color/white"
-                                app:srcCompat="@drawable/ic_add_ob" />
-
-                            <TextView
-                                android:id="@+id/AgregarAnuncioE2"
-                                android:layout_width="wrap_content"
-                                android:saveEnabled="false"
-                                android:layout_height="wrap_content"
-                                android:layout_marginTop="@dimen/spacing_medium"
-                                android:text="Agregar Anuncio"
-                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                                android:textColor="@color/grey_40" />
-                        </LinearLayout>
 
 
                     </LinearLayout>

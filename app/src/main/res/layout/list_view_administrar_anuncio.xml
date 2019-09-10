@@ -92,6 +92,7 @@
                                 />
 
                             <TextView
+                                android:id="@+id/btnActualizarAnuncioTwo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Actualizar"
@@ -126,6 +127,7 @@
                                 app:srcCompat="@drawable/ic_delete" />
 
                             <TextView
+                                android:id="@+id/btnEliminarAnuncioTwo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Eliminar"

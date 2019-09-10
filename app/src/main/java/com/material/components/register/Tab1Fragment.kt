@@ -114,6 +114,8 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
                         empresa.direccion = ""
                         empresa.foto = imag
                         empresa.id_empresa = ""
+                        empresa.estatus="pruebainicial"
+
                         //first save the user on authentication firebase, after that save the user on cloud firestore
                         signUpByEmail(email, password, empresa)
                         Handler().postDelayed({ nDialog.dismiss() }, 1000)

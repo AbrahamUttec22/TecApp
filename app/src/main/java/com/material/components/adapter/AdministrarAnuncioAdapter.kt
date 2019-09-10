@@ -138,6 +138,81 @@ class AdministrarAnuncioAdapter(val context: Context, val layout: Int, val list:
                     }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
                 }//end for hanlder
             })
+
+            vh.eliminarTwo.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(position: View?) {
+                    val anuncio = Anuncio()
+                    anuncio.id = id
+                    val builder = AlertDialog.Builder(context)
+                    builder.setMessage("Estas seguro de eliminar?").setPositiveButton("Si", DialogInterface.OnClickListener { dialog, id ->
+                        sentId(anuncio)
+                    }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
+                            .show()
+                }
+
+                private fun sentId(anuncio: Anuncio) {
+                    FirebaseApp.initializeApp(context)
+                    val eventoCollection: CollectionReference
+                    eventoCollection = FirebaseFirestore.getInstance().collection("Anuncios")
+                    //only this source I update the status,
+                    eventoCollection.document(anuncio.id).delete().addOnSuccessListener {
+                        Toast.makeText(context, "El anuncio se ha eliminado correctamente", Toast.LENGTH_LONG).show()
+                    }.addOnFailureListener { Toast.makeText(context, "Error  elimando el anuncio intenta de nuevo", Toast.LENGTH_LONG).show() }
+                }//end for hanlder
+            })
+            vh.actualizarTwo.setOnClickListener(object : View.OnClickListener {
+                override fun onClick(position: View?) {
+                    var anuncio = Anuncio()
+                    anuncio.id = id
+                    anuncio.description = description
+                    anuncio.titulo = titulo
+                    showdialog(anuncio)
+                }
+
+                private fun showdialog(anuncio: Anuncio) {
+                    //the header from dialog
+                    val dialog = Dialog(context)
+                    dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
+                    dialog.setContentView(R.layout.dialog_actualizar_anuncio)
+                    dialog.setCancelable(true)
+                    val lp = WindowManager.LayoutParams()
+                    lp.copyFrom(dialog.window!!.attributes)
+                    lp.width = WindowManager.LayoutParams.WRAP_CONTENT
+                    lp.height = WindowManager.LayoutParams.WRAP_CONTENT
+                    //in this code I get the information on cloud firestore
+                    (dialog.findViewById<View>(R.id.txtTituloAnuncio) as TextView).text = anuncio.titulo
+                    (dialog.findViewById<View>(R.id.txtDescriptionAnuncio) as TextView).text = anuncio.description
+                    var txt1 = (dialog.findViewById<View>(R.id.txtTituloAnuncio) as TextView)
+                    var txt2 = (dialog.findViewById<View>(R.id.txtDescriptionAnuncio) as TextView)
+
+                    (dialog.findViewById<View>(R.id.btnActualizarAnuncio2) as Button).setOnClickListener {
+                        //after that I get the data
+                        var tituloNuevo = txt1.text.toString()
+                        var descriptionNuevo = txt2.text.toString()
+                        if (!tituloNuevo.isNullOrEmpty() && !descriptionNuevo.isNullOrEmpty()) {
+                            anuncio.titulo = tituloNuevo
+                            anuncio.description = descriptionNuevo
+                            updateAnuncio(anuncio)
+                            dialog.dismiss()
+                            Toast.makeText(context, "El anuncio se ha actualizado correctamente", Toast.LENGTH_LONG).show()
+                        } else {
+                            Toast.makeText(context, "Completa los campos", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                    dialog.show()
+                    dialog.window!!.attributes = lp
+                }
+
+                private fun updateAnuncio(anuncio: Anuncio) {
+                    FirebaseApp.initializeApp(context)
+                    val eventoCollection: CollectionReference
+                    eventoCollection = FirebaseFirestore.getInstance().collection("Anuncios")
+                    //only this source I update the status,
+                    eventoCollection.document(anuncio.id).update("titulo", anuncio.titulo,
+                            "description", anuncio.description).addOnSuccessListener {
+                    }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el evento intenta de nuevo", Toast.LENGTH_LONG).show() }
+                }//end for hanlder
+            })
         } catch (e: java.lang.Exception) {
         }
 
@@ -149,4 +224,7 @@ class AdministrarAnuncioViewHolder(view: View) {
     val titulo: TextView = view.txtAnuncio
     val actualizar: ImageView = view.btnActualizarAnuncio
     val eliminar: ImageView = view.btnEliminarAnuncio
+
+    val actualizarTwo: TextView = view.btnActualizarAnuncioTwo
+    val eliminarTwo: TextView = view.btnEliminarAnuncioTwo
 }

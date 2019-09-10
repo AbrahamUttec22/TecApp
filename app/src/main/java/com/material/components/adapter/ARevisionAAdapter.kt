@@ -188,7 +188,7 @@ class ARevisionAAdapter(val context: Context?, val layout: Int, val list: List<A
             }
         })//end for expression lambdas this very cool
 
-        vh.mover.setOnClickListener(object : View.OnClickListener {
+        vh.moverFinalizado.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
                 var activid = Actividades()
                 activid.id = id
@@ -225,7 +225,7 @@ class ARevisionAAdapter(val context: Context?, val layout: Int, val list: List<A
             }
 
         })
-        vh.moverre.setOnClickListener(object : View.OnClickListener {
+        vh.moverProceso.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
                 var activid = Actividades()
                 activid.id = id
@@ -273,8 +273,8 @@ class ActividadesViewHolderThreeAdmin(view: View) {
     val descripcionThree: TextView = view.txtDescripcionAcRevisionAdmin
     val info: TextView = view.txInfoAcRevisionAdmin
     val fechaacThree: TextView = view.txtFechaActiviRevisionAdmin
-    val mover: Button = view.moverfinalizadoAdmin
-    val moverre: Button = view.moverprocesoTwoAdmin
+    val moverFinalizado: Button = view.moverfinalizadoAdmin
+    val moverProceso: Button = view.moverprocesoTwoAdmin
     val estatusFecha: TextView = view.txtEstatusFechaRevisionAdmin
 
 }

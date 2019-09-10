@@ -186,7 +186,7 @@ class AProcesoAdapter(val context: Context?, val layout: Int, val list: List<Act
         })//end for expression lambdas this very cool
 
 
-        vh.mover.setOnClickListener(object : View.OnClickListener {
+        vh.moverRevisado.setOnClickListener(object : View.OnClickListener {
             override fun onClick(position: View?) {
                 var activid = Actividades()
                 activid.id = id
@@ -233,7 +233,7 @@ class ActividadesViewHolderTwo(view: View) {
     val descripcionTwo: TextView = view.txtDescripcionAcProceso
     val info: TextView = view.txInfoAcProceso
     val fechaacTwo: TextView = view.txtFechaActiviProceso
-    val mover: Button = view.moverrevision
+    val moverRevisado: Button = view.moverrevision
     val estatusFecha: TextView = view.txtEstatusFechaProceso
 
 }

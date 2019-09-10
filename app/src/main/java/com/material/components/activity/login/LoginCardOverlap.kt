@@ -124,40 +124,43 @@ class LoginCardOverlap : AppCompatActivity() {
         mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this) { task ->
             if (task.isSuccessful) {//when the credentials are corrects
                 if (mAuth.currentUser!!.isEmailVerified) {
+
                     val admin = adminCollection.whereEqualTo("correo", email)
                     admin.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                         if (task.isSuccessful) {
+                            var conAdmin = 0
                             for (document in task.result!!) {
+                                conAdmin++
                                 //here i send the id_empresa
                                 val token = FirebaseInstanceId.getInstance().token.toString()
                                 val id = document.id
                                 adminCollection.document(id).update("token", token).addOnSuccessListener {
                                     toast("" + token)
                                 }.addOnFailureListener {}
-
                                 goToActivity<AdminDashboardActivity> {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
                                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                             }
+
                         } else {
                             Log.w("saasas", "Error getting documents.", task.exception)
                         }
 
                     })//end for expression lambdas this very cool
 
-
                     val empleado = userCollection.whereEqualTo("email", email)
                     //beggin with consult
                     empleado.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                         if (task.isSuccessful) {
+                            var conEmpleado = 0
                             for (document in task.result!!) {
+                                conEmpleado++
                                 val rol = document.get("rol").toString()
                                 val id_empresa = document.get("id_empresa").toString()
                                 val estatus = document.get("estatus").toString()
-
                                 val id = document.id
-                                if(estatus.equals("1")){
+                                if (estatus.equals("1")) {
                                     if (rol == "administrador") {
                                         val token = FirebaseInstanceId.getInstance().token.toString()
                                         userCollection.document(id).update("token", token).addOnSuccessListener {
@@ -191,11 +194,10 @@ class LoginCardOverlap : AppCompatActivity() {
                                         }
                                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                                     }
-                                }else{
+                                } else {
                                     mAuth.signOut()
                                     toast("Email o Contraseña incorrectas intenta de nuevo")
                                 }
-
                             }
                         } else {
                             Log.w("saasas", "Error getting documents.", task.exception)
@@ -206,7 +208,9 @@ class LoginCardOverlap : AppCompatActivity() {
                     val empresa = empresaCollection.whereEqualTo("correo", email)
                     empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
                         if (task.isSuccessful) {
+                            var conEmpresa = 0
                             for (document in task.result!!) {
+                                conEmpresa++
                                 //here i send the id_empresa
                                 val id_empresa = document.get("id_empresa").toString()
                                 val token = FirebaseInstanceId.getInstance().token.toString()
@@ -218,19 +222,18 @@ class LoginCardOverlap : AppCompatActivity() {
                                 sesion.putString("id_empresa", id_empresa)
                                 sesion.putString("rol", "empresa")
                                 sesion.putString("token", token)
-
                                 sesion.commit()
                                 goToActivity<DashboarActivity> {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
                                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
                             }
+
                         } else {
                             Log.w("saasas", "Error getting documents.", task.exception)
                         }
 
                     })//end for expression lambdas this very cool
-
 
                 } else {
                     toast("Confirma tu cuenta, se envio un correo con el que te registraste a tu bandeja")
@@ -239,8 +242,6 @@ class LoginCardOverlap : AppCompatActivity() {
                 toast("Email o Contraseña incorrectas intenta de nuevo")
             }
         }
-
-
     }
 
     //I need valid the access

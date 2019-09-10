@@ -54,7 +54,7 @@
                         app:civ_shadow_radius="0" />
 
                     <TextView
-                        android:id="@+id/txtPregunta"
+                        android:id="@+id/txtPreguntaEs"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/spacing_large"
@@ -95,6 +95,7 @@
                                 android:id="@+id/txtcerrarEncu"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:longClickable="true"
                                 android:text="Cerrar"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                                 android:textColor="@color/colorPrimary" />
@@ -121,8 +122,10 @@
                                 app:srcCompat="@drawable/ic_delete" />
 
                             <TextView
+                                android:id="@+id/btnEliminarEncuestaTwo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:longClickable="true"
                                 android:text="Eliminar"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                                 android:textColor="@color/colorPrimary" />
@@ -156,8 +159,10 @@
                                 app:srcCompat="@drawable/ic_ver_ob" />
 
                             <TextView
+                                android:id="@+id/btnVerResultadosTwo"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:longClickable="true"
                                 android:text="Progreso"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Body1"
                                 android:textColor="@color/colorPrimary" />
