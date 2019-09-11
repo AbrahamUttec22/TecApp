@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.material.components">
+    package="com.material.tecgurus">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -14,7 +14,10 @@
         android:roundIcon="@drawable/ic_logo_one"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".admin.PerfilAdminActivity"></activity>
+        <activity android:name=".paypal.PayPalDetailsKActivity"></activity>
+        <activity android:name=".paypal.PayPalDetailsActivity" />
+        <activity android:name=".paypal.PayPalPaymentActivity" />
+        <activity android:name=".admin.PerfilAdminActivity" />
         <activity
             android:name=".admin.PanelEmpresasActivity"
             android:label="@string/title_activity_panel_empresas"
@@ -26,10 +29,11 @@
         <activity
             android:name=".actividadesfragmentadmin.GestionActividadesAActivity"
             android:label="@string/title_activity_gestion_actividades_a"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".actividadesfragment.GestionActividadesActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".actividadesfragment.GestionActividadesActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".utils.SplashActivity" />
         <activity
             android:name=".drawer.DashboarActivity"
@@ -65,8 +69,6 @@
         <activity
             android:name=".checador.GenerarQRActivity"
             android:screenOrientation="portrait" />
-
-
         <activity
             android:name=".checador.CheckActivity"
             android:screenOrientation="portrait" />

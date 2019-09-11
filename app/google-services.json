@@ -1,42 +1,42 @@
 {
   "project_info": {
-    "project_number": "343421504665",
-    "firebase_url": "https://tecapp-25ed3.firebaseio.com",
-    "project_id": "tecapp-25ed3",
-    "storage_bucket": "tecapp-25ed3.appspot.com"
+    "project_number": "150500083008",
+    "firebase_url": "https://hola-comunicate.firebaseio.com",
+    "project_id": "hola-comunicate",
+    "storage_bucket": "hola-comunicate.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:343421504665:android:37ba31a3341be157",
+        "mobilesdk_app_id": "1:150500083008:android:dc7ec6700d9e9a1e2ba6a5",
         "android_client_info": {
-          "package_name": "com.material.components"
+          "package_name": "com.material.tecgurus"
         }
       },
       "oauth_client": [
         {
-          "client_id": "343421504665-m17ufqeu75rd1rsl28ejgv7ikpdslp2p.apps.googleusercontent.com",
+          "client_id": "150500083008-p1i57f6hgiuphf6op6gjumsupdi3sbu1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.material.components",
-            "certificate_hash": "f1d1a285a7f86d536ebf965235e3c8dceed201e6"
+            "package_name": "com.material.tecgurus",
+            "certificate_hash": "2b5c653b2c95793d87ebfd37df870aef24ff076c"
           }
         },
         {
-          "client_id": "343421504665-i8hvmmj1rqj3kaf4bae2t2ton82aeut4.apps.googleusercontent.com",
+          "client_id": "150500083008-2tu6k020ldorhntooja7vt2ejdvu03o0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyA_PgKhtfOg8wz4F2y0smyBcX1Dmh376cA"
+          "current_key": "AIzaSyA7aDzuptPAEkqDlyXLO_Vg-t-olhmZrOo"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "343421504665-i8hvmmj1rqj3kaf4bae2t2ton82aeut4.apps.googleusercontent.com",
+              "client_id": "150500083008-2tu6k020ldorhntooja7vt2ejdvu03o0.apps.googleusercontent.com",
               "client_type": 3
             }
           ]

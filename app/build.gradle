@@ -1,20 +1,22 @@
 apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'android'
+
 
 android {
     compileSdkVersion 28
-
     defaultConfig {
-        applicationId "com.material.components"
+        applicationId "com.material.tecgurus"
         multiDexEnabled true
         minSdkVersion 16
-        targetSdkVersion 27
-        versionCode 210
+        targetSdkVersion 28
+        // versiIonCode 210
+        versionCode 213
         versionName "2.1"
         vectorDrawables.useSupportLibrary = true
     }
-
     buildTypes {
         release {
             minifyEnabled true
@@ -22,7 +24,6 @@ android {
         }
     }
 }
-
 /* IMPORTANT :
  * Be careful when update dependencies, different version library may caused error */
 dependencies {
@@ -60,6 +61,8 @@ dependencies {
 
     // google gson --------------------------------------------------------------------------------
     implementation 'com.google.code.gson:gson:2.8.4'
+    //implementation for paypal
+    implementation 'com.paypal.sdk:paypal-android-sdk:2.15.3'
     // implementation 'com.github.bumptech.glide:glide:4.8.0'
     //annotationProcessor 'com.github.bumptech.glide:compiler:4.8.0'
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
@@ -87,6 +90,5 @@ repositories {
     maven { url "https://jitpack.io" }
 
 }
-
 apply plugin: 'com.google.gms.google-services'  // Google Play services Gradle plugin
 
