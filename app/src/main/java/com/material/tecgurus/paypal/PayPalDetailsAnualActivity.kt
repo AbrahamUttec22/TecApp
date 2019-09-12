@@ -1,15 +1,10 @@
 package com.material.tecgurus.paypal
 
-import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.widget.Toast
 import com.alejandrolora.finalapp.goToActivity
-import com.google.android.gms.common.data.DataBufferObserverSet
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.auth.FirebaseAuth
@@ -17,26 +12,13 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.tecgurus.R
-import com.material.tecgurus.actividadesfragment.GestionActividadesActivity
-import com.material.tecgurus.actividadesfragmentadmin.GestionActividadesAActivity
-import com.material.tecgurus.activity.about.EstatusChecadorActivity
-import com.material.tecgurus.activity.bottomsheet.UserActivity
-import com.material.tecgurus.activity.card.*
-import com.material.tecgurus.activity.dialog.EncuestaActivity
-import com.material.tecgurus.activity.form.*
-import com.material.tecgurus.activity.login.LoginCardOverlap
-import com.material.tecgurus.checador.CheckActivity
-import com.material.tecgurus.checador.GenerarQrJActivity
 import com.material.tecgurus.drawer.DashboarActivity
 import com.material.tecgurus.message.ApiClient
 import com.material.tecgurus.message.ApiInter
 import com.material.tecgurus.message.Notification
 import com.material.tecgurus.message.RequestNotificaton
 import com.material.tecgurus.model.Pagos
-import com.material.tecgurus.model.Usuario
-import kotlinx.android.synthetic.main.activity_dashboard_administrador.*
-import kotlinx.android.synthetic.main.activity_dashboard_empresa.*
-import kotlinx.android.synthetic.main.activity_dashboard_usuario.*
+import kotlinx.android.synthetic.main.activity_pay_pal_details_anual2.*
 import kotlinx.android.synthetic.main.activity_pay_pal_details_k.*
 import okhttp3.ResponseBody
 import org.json.JSONException
@@ -52,7 +34,7 @@ import java.util.*
  * Created by:
  * @author Abraham Casas Aguilar
  */
-class PayPalDetailsKActivity : AppCompatActivity() {
+class PayPalDetailsAnualActivity : AppCompatActivity() {
 
     //declare val for save the collection
     private val empresaCollection: CollectionReference
@@ -71,7 +53,7 @@ class PayPalDetailsKActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pay_pal_details_k)
+        setContentView(R.layout.activity_pay_pal_details_anual2)
         val intent = intent
         try {
             val jsonObject = JSONObject(intent.getStringExtra("PaymentDetails"))
@@ -98,7 +80,7 @@ class PayPalDetailsKActivity : AppCompatActivity() {
         calendar.time = Date()
         var calendarTime = Calendar.DAY_OF_MONTH//obtener el dia del mes
         var temp = calendar.get(calendarTime)// obetnemos el dia
-        calendar.set(calendarTime, temp + 30)
+        calendar.set(calendarTime, temp + 365)
         val dfVencimiento = SimpleDateFormat("dd/MM/yyyy")
         val fecha_vencimiento = dfVencimiento.format(calendar.getTime()).toString()
 
@@ -107,11 +89,11 @@ class PayPalDetailsKActivity : AppCompatActivity() {
             val estatus_pago = response.getString("state")
             Log.w("DETALLESPAO", "" + response.toString())
             updateAccount(fecha, hora, paymentAmount, estatus_pago, id_pago, fecha_vencimiento)
-            txtFechaPago.setText(fecha)
-            txtHoraPago.setText(hora)
-            txtMonto.setText("$" + paymentAmount + " MXN")
-            txtFechaVencimiento.setText(fecha_vencimiento)
-            fabMensual.setOnClickListener {
+            txtFechaPagoAnual.setText(fecha)
+            txtHoraPagoAnual.setText(hora)
+            txtMontoAnual.setText("$" + paymentAmount + " MXN")
+            txtFechaVencimientoAnual.setText(fecha_vencimiento)
+            fabAnual.setOnClickListener {
                 goToActivity<DashboarActivity> {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
@@ -146,7 +128,7 @@ class PayPalDetailsKActivity : AppCompatActivity() {
                     id_empresa = document.get("id_empresa").toString()
                     nombre = document.get("nombre").toString()
                 }
-                empresaCollection.document(id_document).update("estatus", "mensual",
+                empresaCollection.document(id_document).update("estatus", "anual",
                         "fecha_vencimiento_plan", fecha_vencimiento).addOnSuccessListener {
                 }.addOnFailureListener {
                 }
@@ -184,7 +166,7 @@ class PayPalDetailsKActivity : AppCompatActivity() {
                     var token = ""
                     for (document in task.result!!) {
                         token = document.get("token").toString()
-                        val notification = Notification(nombre + " ha hecho un pago Mensual", "Empresas")
+                        val notification = Notification(nombre + " ha hecho un pago Anual", "Empresas")
                         val requestNotificaton = RequestNotificaton()
                         //token is id , whom you want to send notification ,
                         requestNotificaton.token = token
@@ -209,6 +191,7 @@ class PayPalDetailsKActivity : AppCompatActivity() {
 
     }
 
+
     private var exitTime: Long = 0
 
     override fun onBackPressed() {
@@ -216,5 +199,6 @@ class PayPalDetailsKActivity : AppCompatActivity() {
         } else {
         }
     }
+
 
 }
