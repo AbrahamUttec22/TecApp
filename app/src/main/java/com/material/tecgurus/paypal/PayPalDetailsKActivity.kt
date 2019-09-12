@@ -1,4 +1,5 @@
 package com.material.tecgurus.paypal
+
 import android.app.AlertDialog
 import android.content.Context
 import android.content.DialogInterface
@@ -27,14 +28,23 @@ import com.material.tecgurus.activity.login.LoginCardOverlap
 import com.material.tecgurus.checador.CheckActivity
 import com.material.tecgurus.checador.GenerarQrJActivity
 import com.material.tecgurus.drawer.DashboarActivity
+import com.material.tecgurus.message.ApiClient
+import com.material.tecgurus.message.ApiInter
+import com.material.tecgurus.message.Notification
+import com.material.tecgurus.message.RequestNotificaton
 import com.material.tecgurus.model.Pagos
 import com.material.tecgurus.model.Usuario
 import kotlinx.android.synthetic.main.activity_dashboard_administrador.*
 import kotlinx.android.synthetic.main.activity_dashboard_empresa.*
 import kotlinx.android.synthetic.main.activity_dashboard_usuario.*
 import kotlinx.android.synthetic.main.activity_pay_pal_details_k.*
+import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import java.lang.Exception
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -48,6 +58,7 @@ class PayPalDetailsKActivity : AppCompatActivity() {
     private val empresaCollection: CollectionReference
     private val pagosCollection: CollectionReference
     private val mAuth: FirebaseAuth = FirebaseAuth.getInstance()
+    private val adminCollection: CollectionReference
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -55,6 +66,7 @@ class PayPalDetailsKActivity : AppCompatActivity() {
         //save the collection marks on val maksCollection
         empresaCollection = FirebaseFirestore.getInstance().collection("Empresas")
         pagosCollection = FirebaseFirestore.getInstance().collection("Pagos")
+        adminCollection = FirebaseFirestore.getInstance().collection("Administrador")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -70,6 +82,10 @@ class PayPalDetailsKActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * @param response
+     * @param paymentAmount
+     */
     private fun showDetails(response: JSONObject, paymentAmount: String) {
         val c = Calendar.getInstance()
         val df = SimpleDateFormat("dd/MM/yyyy")
@@ -79,9 +95,13 @@ class PayPalDetailsKActivity : AppCompatActivity() {
         val df2 = SimpleDateFormat("HH:mm:ss")
         val hora = df2.format(c2.getTime()).toString()//hora
 
-        val c3 = Calendar.getInstance()
-        val df3 = SimpleDateFormat("dd/MM/yyyy")
-        val fecha_vencimiento = df3.format(c3.getTime()).toString()
+        val calendar = Calendar.getInstance()
+        calendar.time = Date()
+        var calendarTime = Calendar.DAY_OF_MONTH//obtener el dia del mes
+        var temp = calendar.get(calendarTime)// obetnemos el dia
+        calendar.set(calendarTime, temp + 30)
+        val dfVencimiento = SimpleDateFormat("dd/MM/yyyy")
+        val fecha_vencimiento = dfVencimiento.format(calendar.getTime()).toString()
 
         try {
             val id_pago = response.getString("id")
@@ -91,12 +111,12 @@ class PayPalDetailsKActivity : AppCompatActivity() {
             txtFechaPago.setText(fecha)
             txtHoraPago.setText(hora)
             txtMonto.setText("$" + paymentAmount + " MXN")
+            txtFechaVencimiento.setText(fecha_vencimiento)
             fab.setOnClickListener {
                 goToActivity<DashboarActivity> {
                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 }
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
-
             }
         } catch (e: JSONException) {
             e.printStackTrace()
@@ -104,6 +124,14 @@ class PayPalDetailsKActivity : AppCompatActivity() {
 
     }
 
+    /**
+     * @param fecha
+     * @param hora
+     * @param monto
+     * @param estatus
+     * @param id_pago_paypal
+     * @param fecha_vencimiento
+     */
     private fun updateAccount(fecha: String, hora: String, monto: String, estatus: String, id_pago_paypal: String, fecha_vencimiento: String) {
         var email_mio = mAuth.currentUser!!.email.toString()
 
@@ -113,9 +141,11 @@ class PayPalDetailsKActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 var id_document = ""
                 var id_empresa = ""
+                var nombre = ""
                 for (document in task.result!!) {
                     id_document = document.id
                     id_empresa = document.get("id_empresa").toString()
+                    nombre = document.get("nombre").toString()
                 }
                 empresaCollection.document(id_document).update("estatus", "mensual",
                         "fecha_vencimiento_plan", fecha_vencimiento).addOnSuccessListener {
@@ -135,10 +165,48 @@ class PayPalDetailsKActivity : AppCompatActivity() {
                     }
                 }.addOnFailureListener {
                 }
+                sendNotificationToPatner(nombre)
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
             }
         })//end for expression lambdas this very cool
+
+    }
+
+    /**
+     * @param nombre
+     */
+    private fun sendNotificationToPatner(nombre: String) {
+        val consul = adminCollection
+        //beggin with consult
+        try {
+            consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+                if (task.isSuccessful) {
+                    var token = ""
+                    for (document in task.result!!) {
+                        token = document.get("token").toString()
+                        val notification = Notification(nombre + " ha hecho un pago Mensual", "Empresas")
+                        val requestNotificaton = RequestNotificaton()
+                        //token is id , whom you want to send notification ,
+                        requestNotificaton.token = token
+                        requestNotificaton.notification = notification
+                        val apiService = ApiClient.getClient().create(ApiInter::class.java)
+                        val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+                        responseBodyCall.enqueue(object : Callback<ResponseBody> {
+                            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                            }
+
+                            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+                        })
+                    }
+                } else {
+                    Log.w("saasas", "Error getting documents.", task.exception)
+                }
+            })//end for expression lambdas this very cool
+
+        } catch (e: Exception) {
+
+        }
 
     }
 
@@ -149,4 +217,5 @@ class PayPalDetailsKActivity : AppCompatActivity() {
         } else {
         }
     }
+
 }

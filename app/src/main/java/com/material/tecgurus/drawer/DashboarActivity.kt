@@ -41,6 +41,7 @@ import com.material.tecgurus.utils.Tools
 import kotlinx.android.synthetic.main.activity_dashboard_administrador.*
 import kotlinx.android.synthetic.main.activity_dashboard_empresa.*
 import kotlinx.android.synthetic.main.activity_dashboard_usuario.*
+import java.text.SimpleDateFormat
 import java.util.*
 
 /**
@@ -100,7 +101,6 @@ class DashboarActivity : AppCompatActivity() {
         var rol = sharedPreference.getString("rol", "").toString()
         var sharedPreferencet = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         id_empresa = sharedPreferencet.getString("id_empresa", "")
-
         val email = mAuth.currentUser!!.email.toString()
         val empresa = userCollection.whereEqualTo("email", email)
         empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
@@ -2082,7 +2082,7 @@ class DashboarActivity : AppCompatActivity() {
                 Log.w("saasas", "Error getting documents.", task.exception)
             }
         })//end for expression lambdas this very cool
-
+        validarPlan()
         //getDataUser()
         //apartir de aqui se van a hacer instancias a las ventanas correspondientes
     }
@@ -2401,6 +2401,75 @@ class DashboarActivity : AppCompatActivity() {
             }
 
         })//end for expression lambdas this very cool
+    }
+
+    //Pruebas pasadas con exito
+    private fun validarPlan() {
+        val empresaEstatus = empresaCollection.whereEqualTo("id_empresa", id_empresa)
+        empresaEstatus.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+            if (task.isSuccessful) {
+                var FECHA_VENCIMIENTO = ""
+                var id = ""
+                for (document in task.result!!) {
+                    FECHA_VENCIMIENTO = document.get("fecha_vencimiento_plan").toString()
+                    id = document.id
+                }
+
+                val c = Calendar.getInstance()
+                val df = SimpleDateFormat("dd/MM/yyyy")
+                val FECHA_HOY = df.format(c.getTime()).toString()
+
+                var dia_vencimiento = FECHA_VENCIMIENTO.substring(0, 2).toInt()//dd
+                var mes_vencimiento = FECHA_VENCIMIENTO.substring(3, 5).toInt()//mm
+                var ano_vencimiento = FECHA_VENCIMIENTO.substring(6, 10).toInt()//yyyy
+
+
+                var dia_hoy = FECHA_HOY.substring(0, 2).toInt()//dd
+                var mes_hoy = FECHA_HOY.substring(3, 5).toInt()//mm
+                var ano_hoy = FECHA_HOY.substring(6, 10).toInt()//yyyy
+
+                var cont = 0
+                if (mes_vencimiento == mes_hoy && ano_vencimiento == ano_hoy) {
+                    if (dia_vencimiento >= dia_hoy) {
+                        cont++
+                        //plan sigue activo
+                        toast("PLAN SIGUE ACTIVO")
+                    } else {
+                        cont++
+                        //plan se acabo
+                        toast("PLAN SE ACABO")
+                        //only this source I update the status,
+                        empresaCollection.document(id).update("estatus", "gratuita").addOnSuccessListener {
+                        }.addOnFailureListener {
+                        }
+                    }
+                } else if (ano_vencimiento > ano_hoy) {
+                    cont++
+                    //plan sigue activo
+                    toast("PLAN SIGUE ACTIVO")
+                }
+
+                if (cont == 0) {
+                    if (mes_vencimiento > mes_hoy && ano_vencimiento >= ano_hoy) {
+                        //sigue siendo valido
+                        toast("PLAN SIGUE ACTIVO")
+                    } else if (mes_vencimiento == 1 && mes_hoy == 12 && ano_vencimiento > ano_hoy) {
+                        //sigue siendo valido
+                        toast("PLAN SIGUE ACTIVO")
+                    } else {
+                        //plan se acabo
+                        toast("PLAN SE ACABO")
+                        empresaCollection.document(id).update("estatus", "gratuita").addOnSuccessListener {
+                        }.addOnFailureListener {
+                        }
+                    }
+                }
+            } else {
+                Log.w("saasas", "Error getting documents.", task.exception)
+            }
+
+        })//end for expression lambdas this very cool
+
     }
 
     private fun showConfirmDialog() {

@@ -47,6 +47,7 @@ class LoginCardOverlap : AppCompatActivity() {
     private val empresaCollection: CollectionReference
     //declare val for save the collection
     private val adminCollection: CollectionReference
+    lateinit var dialog: AlertDialog
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
@@ -76,10 +77,10 @@ class LoginCardOverlap : AppCompatActivity() {
                 builder.setView(dialogView)
                 logInByEmail(email, password)
                 builder.setCancelable(false)
-                val dialog = builder.create()
+                dialog = builder.create()
                 dialog.show()
 
-                Handler().postDelayed({ dialog.dismiss() }, 1400)
+                //Handler().postDelayed({ dialog.dismiss() }, 1400)
             } else {
                 toast("Completa los campos")
             }
@@ -125,6 +126,7 @@ class LoginCardOverlap : AppCompatActivity() {
                                 adminCollection.document(id).update("token", token).addOnSuccessListener {
                                     toast("" + token)
                                 }.addOnFailureListener {}
+                                dialog.dismiss()
                                 goToActivity<AdminDashboardActivity> {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
@@ -161,6 +163,7 @@ class LoginCardOverlap : AppCompatActivity() {
                                         sesion.putString("rol", "administrador")
                                         sesion.putString("token", token)
                                         sesion.commit()
+                                        dialog.dismiss()
                                         goToActivity<DashboarActivity> {
                                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                         }
@@ -211,6 +214,7 @@ class LoginCardOverlap : AppCompatActivity() {
                                 sesion.putString("rol", "empresa")
                                 sesion.putString("token", token)
                                 sesion.commit()
+                                dialog.dismiss()
                                 goToActivity<DashboarActivity> {
                                     flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 }
