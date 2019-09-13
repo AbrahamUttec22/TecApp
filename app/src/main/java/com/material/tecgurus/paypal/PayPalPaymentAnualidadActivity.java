@@ -1,7 +1,9 @@
 package com.material.tecgurus.paypal;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -30,12 +32,16 @@ public class PayPalPaymentAnualidadActivity extends AppCompatActivity {
     private static PayPalConfiguration config = new PayPalConfiguration().
             environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).//aqui puedes configurar el entorno
             clientId(Config.PAYPAL_CLIENT_ID);
-    private String costo = "100";
+    private String costo = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay_pal_payment_anualidad);
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            costo = extras.getString("costo_anual");
+        }
         Intent intent = new Intent(this, PayPalService.class);
         intent.putExtra(PayPalService.EXTRA_PAYPAL_CONFIGURATION, config);
         startService(intent);

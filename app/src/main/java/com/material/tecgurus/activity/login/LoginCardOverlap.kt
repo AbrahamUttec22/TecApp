@@ -124,7 +124,7 @@ class LoginCardOverlap : AppCompatActivity() {
                                 val token = FirebaseInstanceId.getInstance().token.toString()
                                 val id = document.id
                                 adminCollection.document(id).update("token", token).addOnSuccessListener {
-                                    toast("" + token)
+                                //    toast("" + token)
                                 }.addOnFailureListener {}
                                 dialog.dismiss()
                                 goToActivity<AdminDashboardActivity> {

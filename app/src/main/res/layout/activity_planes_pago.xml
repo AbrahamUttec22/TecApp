@@ -56,16 +56,23 @@
             android:textColor="@android:color/white" />
 
         <TextView
-            android:id="@+id/content"
+            android:id="@+id/precioMensual"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/spacing_middle"
             android:layout_marginTop="@dimen/spacing_medium"
             android:layout_marginRight="@dimen/spacing_middle"
-            android:text="Mensualidad: $10 MXN"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:textColor="@color/grey_20" />
+
+        <TextView
+            android:id="@+id/precioMensualOriginal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/grey_20"
+            android:visibility="invisible" />
 
         <android.support.v7.widget.AppCompatButton
             android:id="@+id/btn_Anualidad"
@@ -79,22 +86,26 @@
             android:text="Plan Anual"
             android:textColor="@android:color/white" />
 
+
+
         <TextView
-            android:id="@+id/content2"
+            android:id="@+id/precioAnual"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/spacing_middle"
             android:layout_marginTop="@dimen/spacing_medium"
             android:layout_marginRight="@dimen/spacing_middle"
-            android:text="Anualidad: $100 MXN"
             android:textAlignment="center"
             android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             android:textColor="@color/grey_20" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/spacing_middle" />
-
+        <TextView
+            android:id="@+id/precioAnualOriginal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+            android:textColor="@color/grey_20"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

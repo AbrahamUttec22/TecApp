@@ -88,7 +88,8 @@ class EstatusChecadorActivity : AppCompatActivity() {
         val df = SimpleDateFormat("dd/MM/yyyy")
         val formattedDate = df.format(c.getTime()).toString()
 
-        checadorCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("fecha", formattedDate).orderBy("hora").addSnapshotListener { snapshots, error ->
+        checadorCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("fecha", formattedDate)
+                .orderBy("hora").addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {

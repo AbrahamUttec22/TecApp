@@ -1,6 +1,5 @@
-package com.material.tecgurus.activity.card
+package com.material.tecgurus.admin
 
-import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -15,43 +14,45 @@ import com.alejandrolora.finalapp.toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.FirebaseApp
 import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.DocumentChange
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.tecgurus.R
-import com.material.tecgurus.adapter.AdministrarAnuncioAdapter
+import com.material.tecgurus.adapter.CostosAdapter
+import com.material.tecgurus.adapter.CostosAnualesAdapter
 import com.material.tecgurus.drawer.DashboarActivity
-import com.material.tecgurus.model.Anuncio
+import com.material.tecgurus.model.Costos
 import com.material.tecgurus.utils.Tools
 import kotlinx.android.synthetic.main.activity_administrar_anuncios.*
-import kotlinx.android.synthetic.main.activity_encuesta.listView
+import kotlinx.android.synthetic.main.activity_costos.*
+import kotlinx.android.synthetic.main.activity_costos_anuales.*
 import java.util.ArrayList
 
 /**
+ * Created by:
  * @author Abraham Casas Aguilar
- * admin anuncios
+ * Planes mensualmente
  */
-class AdministrarAnunciosActivity : AppCompatActivity() {
+class CostosAnualesActivity : AppCompatActivity() {
 
-    private lateinit var adapter: AdministrarAnuncioAdapter
-    private lateinit var eventoList: List<Anuncio>
+    private lateinit var adapter: CostosAnualesAdapter
     private var swipeRefreshLayout: SwipeRefreshLayout? = null
     //declare val for save the collection
-    private val anunciosCollection: CollectionReference
+    private val costosCollection: CollectionReference
+    private lateinit var costoList: List<Costos>
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
         FirebaseApp.initializeApp(this)
         //save the collection marks on val maksCollection
-        anunciosCollection = FirebaseFirestore.getInstance().collection("Anuncios")
+        costosCollection = FirebaseFirestore.getInstance().collection("Costos")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_administrar_anuncios)
+        setContentView(R.layout.activity_costos_anuales)
         initToolbar()
         addMarksListener()
-        swipeRefreshLayout = findViewById(R.id.swipeAdministrarAnuncios)
+        swipeRefreshLayout = findViewById(R.id.swipeCostosAnuales)
         swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
             addMarksListener()
             swipeRefreshLayout!!.setRefreshing(false);
@@ -62,9 +63,7 @@ class AdministrarAnunciosActivity : AppCompatActivity() {
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-        var id_empresa = sharedPreference.getString("id_empresa", "")
-        anunciosCollection.whereEqualTo("id_empresa", id_empresa).addSnapshotListener { snapshots, error ->
+        costosCollection.whereEqualTo("tipo_plan", "anual").orderBy("costo").addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
@@ -78,27 +77,22 @@ class AdministrarAnunciosActivity : AppCompatActivity() {
     }
 
     private fun listenerDb() {
-        var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-        var id_empresa = sharedPreference.getString("id_empresa", "")
-        val consul = anunciosCollection.whereEqualTo("id_empresa", id_empresa)
+
+        val consul = costosCollection.whereEqualTo("tipo_plan", "anual").orderBy("costo")
         //beggin with consult
         consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
-                val itemAnuncio = ArrayList<Anuncio>()//lista local de una sola instancia
+                val itemCostos = ArrayList<Costos>()//lista local de una sola instancia
                 var con = 0
                 for (document in task.result!!) {
                     con++
-                    itemAnuncio.add(document.toObject(Anuncio::class.java))//ir agregando los datos a la lista
+                    itemCostos.add(document.toObject(Costos::class.java))//ir agregando los datos a la lista
                 }
-                if (con == 0) {
-                    iconDefaultAdminAnuncios.setVisibility(View.VISIBLE)
-                } else {
-                    iconDefaultAdminAnuncios.setVisibility(View.INVISIBLE)
-                }
-                eventoList = itemAnuncio
-                adapter = AdministrarAnuncioAdapter(this, R.layout.list_view_administrar_anuncio, eventoList)
+
+                costoList = itemCostos
+                adapter = CostosAnualesAdapter(this, R.layout.list_view_costos_anuales, costoList)
                 //listView.btnCerrarEncuesta
-                listView.adapter = adapter
+                listViewCostosAnuales.adapter = adapter
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
             }
@@ -108,34 +102,12 @@ class AdministrarAnunciosActivity : AppCompatActivity() {
 
     }
 
-    /**
-     * @param changes
-     * aqui se hace el recorrido de la coleccion de cloudfirestore
-     */
-    private fun addChanges(changes: List<DocumentChange>) {
-        val itemAnuncio = ArrayList<Anuncio>()//lista local de una sola instancia
-        var con = 0
-        for (change in changes) {
-            con++
-            itemAnuncio.add(change.document.toObject(Anuncio::class.java))//ir agregando los datos a la lista
-        }//una ves agregado los campos mandar a llamar la vista
-        if (con == 0) {
-            iconDefaultAdminAnuncios.setVisibility(View.VISIBLE)
-        } else {
-            iconDefaultAdminAnuncios.setVisibility(View.INVISIBLE)
-        }
-        eventoList = itemAnuncio
-        adapter = AdministrarAnuncioAdapter(this, R.layout.list_view_administrar_anuncio, eventoList)
-        //listView.btnCerrarEncuesta
-        listView.adapter = adapter
-    }//end for handler
-
     //front end only
     //here the front end
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-        supportActionBar!!.title = "Administrar Anuncios"
+        supportActionBar!!.title = "Costos Anuales"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
     }
@@ -147,7 +119,7 @@ class AdministrarAnunciosActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         if (item!!.itemId == android.R.id.home) {
-            goToActivity<DashboarActivity> {
+            goToActivity<AdminDashboardActivity> {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
@@ -156,9 +128,11 @@ class AdministrarAnunciosActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        goToActivity<DashboarActivity> {
+        goToActivity<AdminDashboardActivity> {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
+
+
 }

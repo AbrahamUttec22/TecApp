@@ -72,6 +72,15 @@ class AdminDashboardActivity : AppCompatActivity() {
             }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
                     .show()
         }
+
+        CostosMensuales.setOnClickListener {
+            goToActivity<CostosActivity> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
+        }
+
+        CostosAnuales.setOnClickListener {
+            goToActivity<CostosAnualesActivity> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
+        }
+
         //____________________________________-
         MiPerfilSuperAdmin2.setOnClickListener {
             goToActivity<PerfilAdminActivity> {
@@ -94,6 +103,15 @@ class AdminDashboardActivity : AppCompatActivity() {
             }).setNegativeButton("No", DialogInterface.OnClickListener { dialog, id -> dialog.cancel() })
                     .show()
         }
+
+        CostosMensuales2.setOnClickListener {
+            goToActivity<CostosActivity> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
+        }
+
+        CostosAnuales2.setOnClickListener {
+            goToActivity<CostosAnualesActivity> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
+        }
+
 
         val anuncioConsulta = empresaCollection
         //beggin with consult
