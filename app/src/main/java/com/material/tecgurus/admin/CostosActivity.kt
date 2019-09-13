@@ -67,7 +67,7 @@ class CostosActivity : AppCompatActivity() {
      * Listener for peopleCollection
      */
     private fun addMarksListener() {
-        costosCollection.whereEqualTo("tipo_plan", "mensual").orderBy("costo").addSnapshotListener { snapshots, error ->
+        costosCollection.whereEqualTo("tipo_plan", "mensual").addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
@@ -82,7 +82,7 @@ class CostosActivity : AppCompatActivity() {
 
     private fun listenerDb() {
 
-        val consul = costosCollection.whereEqualTo("tipo_plan", "mensual").orderBy("costo")
+        val consul = costosCollection.whereEqualTo("tipo_plan", "mensual")
         //beggin with consult
         consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {

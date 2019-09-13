@@ -81,6 +81,11 @@ class AdminDashboardActivity : AppCompatActivity() {
             goToActivity<CostosAnualesActivity> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
         }
 
+        PagosAdmin.setOnClickListener {
+            goToActivity<PagosAllActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        }
         //____________________________________-
         MiPerfilSuperAdmin2.setOnClickListener {
             goToActivity<PerfilAdminActivity> {
@@ -112,6 +117,11 @@ class AdminDashboardActivity : AppCompatActivity() {
             goToActivity<CostosAnualesActivity> { flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK }
         }
 
+        PagosAdmin2.setOnClickListener {
+            goToActivity<PagosAllActivity> {
+                flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            }
+        }
 
         val anuncioConsulta = empresaCollection
         //beggin with consult

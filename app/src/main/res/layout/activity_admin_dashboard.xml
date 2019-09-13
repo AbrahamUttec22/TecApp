@@ -198,19 +198,6 @@
                                     app:rippleColor="@android:color/background_dark"
                                     app:srcCompat="@drawable/ic_payment" />
 
-                                <TextView
-                                    android:id="@+id/PagosAdminN"
-                                    android:layout_width="15dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="top|end"
-                                    android:layout_marginTop="0dp"
-                                    android:background="@drawable/ic_button_circle"
-                                    android:text="0"
-                                    android:textAlignment="center"
-                                    android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
-                                    android:textColor="@color/grey_3"
-                                    android:textSize="9dp"
-                                    android:tint="@color/colorAccentDark" />
 
                             </FrameLayout>
 

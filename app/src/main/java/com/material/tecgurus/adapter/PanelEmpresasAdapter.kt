@@ -13,7 +13,11 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.tecgurus.model.Empresa
+import kotlinx.android.synthetic.main.activity_perfil_empresa.view.*
+import kotlinx.android.synthetic.main.dialog_article_comments.view.*
 import kotlinx.android.synthetic.main.list_view_panel_empresas.view.*
+import kotlinx.android.synthetic.main.list_view_panel_empresas.view.imageEmpresa
+import kotlinx.android.synthetic.main.tab1_fragment.view.*
 
 /**
  * @author Abraham Casas Aguilar
@@ -76,10 +80,20 @@ class PanelEmpresasAdapter(val context: Context, val layout: Int, val list: List
                 for (document in task.result!!) {
                     contador++
                 }
-                vh.nombre.text = nombre
-                vh.datos.text = correo + " " + telefono + " Giro: " + giro +
-                        " Direccion: " + direccion + " Usuarios en su aplicacion: " + contador.toString() +
-                        " Plan de pago: " + plan_pago + " Fecha de registro: " + fecha_registro + " Fecha de vencimiento: " + fecha_ve
+                /*  vh.datos.text = correo + " " + telefono + " Giro: " + giro +
+                          " Direccion: " + direccion + " Usuarios en su aplicacion: " + contador.toString() +
+                          " Plan de pago: " + plan_pago + " Fecha de registro: " + fecha_registro + " Fecha de vencimiento: " + fecha_ve
+                */
+                vh.nombreEmpresa.text = nombre
+                vh.fechaRegistroEmpresa.text = fecha_registro
+                vh.correoEmpresa.text = correo
+                vh.telefonoEmpresa.text = telefono
+                vh.giroEmpresa.text = giro
+                vh.direccionEmpresa.text = direccion
+                vh.usuariosEmpresa.text = contador.toString()
+                vh.planPagoEmpresa.text = plan_pago
+                vh.fechaRegistroEmpresa.text = fecha_registro
+                vh.fechaVencimientoPlanEmpresaA.text = fecha_ve
 
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
@@ -94,9 +108,20 @@ class PanelEmpresasAdapter(val context: Context, val layout: Int, val list: List
 
 }
 
+
 class EmpresasListViewHolder(view: View) {
-    val nombre: TextView = view.textViewNameEmpresas
-    val datos: TextView = view.textDatosEmpresa
+    val nombreEmpresa: TextView = view.txtNombreEmpresaA
+    val fechaRegistroEmpresa: TextView = view.txtfechaRegistroA
+    val correoEmpresa: TextView = view.txtCorreoEmpresaA
+    val telefonoEmpresa: TextView = view.txtTelefonoEmpresaA
+
+    val giroEmpresa: TextView = view.txtGiroEmpresaA
+    val direccionEmpresa: TextView = view.txtDireccionEmpresaA
+    val usuariosEmpresa: TextView = view.txtUsuarioEmpresaA
+
+    val planPagoEmpresa: TextView = view.txtPlanPagoEmpresaA
+    val fechaVencimientoPlanEmpresaA: TextView = view.txtfechaVencimeintoPlanEmpresaA
+
 }
 
 

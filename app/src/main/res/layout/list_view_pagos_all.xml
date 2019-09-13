@@ -24,11 +24,9 @@
                 android:padding="@dimen/spacing_large">
 
                 <com.mikhaellopez.circularimageview.CircularImageView
-                    android:id="@+id/imageEmpresa"
-
                     android:layout_width="@dimen/spacing_xxlarge"
                     android:layout_height="@dimen/spacing_xxlarge"
-                    android:src="@drawable/photo_female_8"
+                    android:src="@drawable/ic_price"
                     app:civ_border="false"
                     app:civ_shadow="true"
                     app:civ_shadow_radius="0" />
@@ -53,14 +51,14 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:text="Nombre: "
+                            android:text="Pago realizado por: "
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"
                             app:fontFamily="serif" />
 
                         <TextView
-                            android:id="@+id/txtNombreEmpresaA"
+                            android:id="@+id/txtNombreEmpresaPagoA"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -82,14 +80,101 @@
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
-                            android:text="Fecha Registro: "
+                            android:text="Fecha Pago: "
                             android:textAppearance="@style/TextAppearance.AppCompat.Body2"
                             android:textColor="@android:color/black"
                             android:textStyle="bold"
                             app:fontFamily="serif" />
 
                         <TextView
-                            android:id="@+id/txtfechaRegistroA"
+                            android:id="@+id/txtFechaPagoA"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/overlay_dark_50"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="Hora Pago: "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+                        <TextView
+                            android:id="@+id/txtHoraPagoA"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/overlay_dark_50"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="Monto: "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+                        <TextView
+                            android:id="@+id/txtMontoPagoA"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/overlay_dark_50"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="Estatus: "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+                        <TextView
+                            android:id="@+id/txtEstatusPaggoA"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -117,35 +202,7 @@
                             app:fontFamily="serif" />
 
                         <TextView
-                            android:id="@+id/txtCorreoEmpresaA"
-                            android:layout_width="wrap_content"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/overlay_dark_50"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:text="Telefono: "
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-                        <TextView
-                            android:id="@+id/txtTelefonoEmpresaA"
+                            android:id="@+id/txtIdPagoPaypalA"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:gravity="center_vertical"
@@ -157,154 +214,11 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:text="Giro: "
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-                        <TextView
-                            android:id="@+id/txtGiroEmpresaA"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/overlay_dark_50"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-                        <TextView
-                            android:id="@+id/txtDireccionEmpresaA"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:text="Usuarios en su App: "
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-                        <TextView
-                            android:id="@+id/txtUsuarioEmpresaA"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/overlay_dark_50"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:text="Plan de Pago: "
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-                        <TextView
-                            android:id="@+id/txtPlanPagoEmpresaA"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/overlay_dark_50"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:text="Vencimiento: "
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@android:color/black"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-                        <TextView
-                            android:id="@+id/txtfechaVencimeintoPlanEmpresaA"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
-                            android:textColor="@color/overlay_dark_50"
-                            android:textStyle="bold"
-                            app:fontFamily="serif" />
-
-
-                    </LinearLayout>
 
                 </LinearLayout>
 
             </LinearLayout>
-
 
 
         </LinearLayout>

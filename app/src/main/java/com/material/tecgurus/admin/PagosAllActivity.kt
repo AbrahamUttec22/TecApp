@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.alejandrolora.finalapp.goToActivity
 import com.alejandrolora.finalapp.toast
 import com.google.android.gms.tasks.OnCompleteListener
@@ -17,112 +18,109 @@ import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.material.tecgurus.R
-import com.material.tecgurus.adapter.CostosAdapter
-import com.material.tecgurus.adapter.CostosAnualesAdapter
-import com.material.tecgurus.drawer.DashboarActivity
-import com.material.tecgurus.model.Costos
+import com.material.tecgurus.adapter.PagosAllAdapter
+import com.material.tecgurus.adapter.PanelEmpresasAdapter
+import com.material.tecgurus.model.Empresa
+import com.material.tecgurus.model.Pagos
 import com.material.tecgurus.utils.Tools
-import kotlinx.android.synthetic.main.activity_administrar_anuncios.*
-import kotlinx.android.synthetic.main.activity_costos.*
-import kotlinx.android.synthetic.main.activity_costos_anuales.*
+import kotlinx.android.synthetic.main.activity_pagos_all.*
+import kotlinx.android.synthetic.main.activity_panel_empresas.*
 import java.util.ArrayList
 
 /**
  * Created by:
  * @author Abraham Casas Aguilar
- * Planes mensualmente
  */
-class CostosAnualesActivity : AppCompatActivity() {
+class PagosAllActivity : AppCompatActivity() {
 
-    private lateinit var adapter: CostosAnualesAdapter
-    private var swipeRefreshLayout: SwipeRefreshLayout? = null
+    private lateinit var adapter: PagosAllAdapter
     //declare val for save the collection
-    private val costosCollection: CollectionReference
-    private lateinit var costoList: List<Costos>
+    private val pagosCollection: CollectionReference
+    private var swipeRefreshLayout: SwipeRefreshLayout? = null
+    private lateinit var pagosList: List<Pagos>
 
     //init the val for get the collection the Firebase with cloud firestore
     init {
         FirebaseApp.initializeApp(this)
         //save the collection marks on val maksCollection
-        costosCollection = FirebaseFirestore.getInstance().collection("Costos")
+        pagosCollection = FirebaseFirestore.getInstance().collection("Pagos")
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_costos_anuales)
+        setContentView(R.layout.activity_pagos_all)
         initToolbar()
         addMarksListener()
-        swipeRefreshLayout = findViewById(R.id.swipeCostosAnuales)
+        swipeRefreshLayout = findViewById(R.id.swipePagos)
         swipeRefreshLayout!!.setOnRefreshListener(SwipeRefreshLayout.OnRefreshListener {
             addMarksListener()
-            swipeRefreshLayout!!.setRefreshing(false);
+            swipeRefreshLayout!!.setRefreshing(false)
         })
     }
 
+
     /**
-     * Listener for peopleCollection
+     * Listener for empresaCollection
      */
     private fun addMarksListener() {
-        costosCollection.whereEqualTo("tipo_plan", "anual").addSnapshotListener { snapshots, error ->
+        //addSnapshotListener es para saber si ha ocurrido un cambio en la base de datos
+        pagosCollection.addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
-                    //addChanges(changes)
                     listenerDb()
                 }
             } else {
-                toast("Ha ocurrido un error intente de nuevo")
+                Toast.makeText(this, "Ha ocurrido un error intenta de nuevo", Toast.LENGTH_SHORT).show()
             }
         }
     }
 
     private fun listenerDb() {
-
-        val consul = costosCollection.whereEqualTo("tipo_plan", "anual")
         //beggin with consult
-        consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
+        pagosCollection.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
-                val itemCostos = ArrayList<Costos>()//lista local de una sola instancia
+                val itemPagos = ArrayList<Pagos>()//lista local de una sola instancia
                 var con = 0
                 for (document in task.result!!) {
                     con++
-                    itemCostos.add(document.toObject(Costos::class.java))//ir agregando los datos a la lista
+                    itemPagos.add(document.toObject(Pagos::class.java))//ir agregando los datos a la lista
                 }
+                pagosList = itemPagos
+                adapter = PagosAllAdapter(this, R.layout.list_view_pagos_all, pagosList)
+                listViewPagos.adapter = adapter
 
-                costoList = itemCostos
-                adapter = CostosAnualesAdapter(this, R.layout.list_view_costos_anuales, costoList)
-                //listView.btnCerrarEncuesta
-                listViewCostosAnuales.adapter = adapter
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
             }
-
         })//end for expression lambdas this very cool
-
-
     }
 
-    //front end only
-    //here the front end
+    /**
+     * initToolbar(header)
+     */
     private fun initToolbar() {
         val toolbar = findViewById<View>(R.id.toolbar) as Toolbar
         setSupportActionBar(toolbar)
-        supportActionBar!!.title = "Costos Anuales"
+        supportActionBar!!.title = "Pagos"
         supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         Tools.setSystemBarColor(this)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_search_setting, menu)
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_done, menu)//menu de las opciones del toolbar, menu basic
         return true
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        if (item!!.itemId == android.R.id.home) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
             goToActivity<AdminDashboardActivity> {
                 flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
             }
             overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+        } else if (item.itemId == R.id.action_search) {//icono de search
+            //Toast.makeText(applicationContext, item.title, Toast.LENGTH_SHORT).show()
+            toast("Diste click en search")
         }
         return super.onOptionsItemSelected(item)
     }
@@ -133,6 +131,4 @@ class CostosAnualesActivity : AppCompatActivity() {
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
-
-
 }
