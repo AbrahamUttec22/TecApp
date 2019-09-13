@@ -58,7 +58,8 @@ class PanelEmpresasAdapter(val context: Context, val layout: Int, val list: List
         val telefono = "${list[position].telefono}"
         val correo = "${list[position].correo}"
         val fecha_registro = "${list[position].fecha_registro}"
-
+        val plan_pago = "${list[position].estatus}"
+        val fecha_ve = "${list[position].fecha_vencimiento_plan}"
 
         Glide
                 .with(this.context)
@@ -77,8 +78,8 @@ class PanelEmpresasAdapter(val context: Context, val layout: Int, val list: List
                 }
                 vh.nombre.text = nombre
                 vh.datos.text = correo + " " + telefono + " Giro: " + giro +
-                        " Direccion: " + direccion + " Usuarios en su aplicacion: "+contador.toString() +
-                        " Plan de pago: Prueba de 15 días" + " Fecha de registro: " + fecha_registro
+                        " Direccion: " + direccion + " Usuarios en su aplicacion: " + contador.toString() +
+                        " Plan de pago: " + plan_pago + " Fecha de registro: " + fecha_registro + " Fecha de vencimiento: " + fecha_ve
 
             } else {
                 Log.w("saasas", "Error getting documents.", task.exception)
