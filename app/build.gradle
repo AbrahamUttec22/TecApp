@@ -14,8 +14,8 @@ android {
         targetSdkVersion 28
         // versionCode 212
         versionCode 213
-        // versionName 2.0
-        versionName "2.1"
+        // versionName 2.1
+        versionName "2.3"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
