@@ -1,4 +1,5 @@
 package com.material.tecgurus.drawer
+
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.app.Dialog
@@ -22,6 +23,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.material.tecgurus.Empresa.PagosEmpresaActivity
 import com.material.tecgurus.R
 import com.material.tecgurus.actividadesfragment.GestionActividadesActivity
 import com.material.tecgurus.actividadesfragmentadmin.*
@@ -121,6 +123,19 @@ class DashboarActivity : AppCompatActivity() {
                             }
                             when (plan_pago) {
                                 "mensual" -> {
+                                    PagosEmpresa.setOnClickListener {
+                                        goToActivity<PagosEmpresaActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                                    }
+
+                                    PagosEmpresa2.setOnClickListener {
+                                        goToActivity<PagosEmpresaActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                                    }
                                     //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
                                     MiPerfilE.setOnClickListener {
                                         //403 USUARIOS,404 EMPRESA
@@ -388,6 +403,19 @@ class DashboarActivity : AppCompatActivity() {
                                     }
                                 }
                                 "anual" -> {
+                                    PagosEmpresa.setOnClickListener {
+                                        goToActivity<PagosEmpresaActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                                    }
+
+                                    PagosEmpresa2.setOnClickListener {
+                                        goToActivity<PagosEmpresaActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                                    }
                                     //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
                                     MiPerfilE.setOnClickListener {
                                         //403 USUARIOS,404 EMPRESA
@@ -654,8 +682,20 @@ class DashboarActivity : AppCompatActivity() {
                                                 .show()
                                     }
                                 }
-
                                 "pruebainicial" -> {
+                                    PagosEmpresa.setOnClickListener {
+                                        goToActivity<PagosEmpresaActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                                    }
+
+                                    PagosEmpresa2.setOnClickListener {
+                                        goToActivity<PagosEmpresaActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                                    }
                                     //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
                                     MiPerfilE.setOnClickListener {
                                         //403 USUARIOS,404 EMPRESA
@@ -923,6 +963,19 @@ class DashboarActivity : AppCompatActivity() {
                                     }
                                 }
                                 "gratuita" -> {//empresa
+                                    PagosEmpresa.setOnClickListener {
+                                        goToActivity<PagosEmpresaActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                                    }
+
+                                    PagosEmpresa2.setOnClickListener {
+                                        goToActivity<PagosEmpresaActivity> {
+                                            flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                                        }
+                                        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
+                                    }
                                     //Perfil y usuarios (3) YA TIENE PROGRAMACION REACTIVA
                                     MiPerfilE.setOnClickListener {
                                         showDialog()
@@ -1084,6 +1137,8 @@ class DashboarActivity : AppCompatActivity() {
                                 else -> {
                                 }
                             }
+
+
                         } else {
                             Log.w("saasas", "Error getting documents.", task.exception)
                         }
@@ -3160,7 +3215,7 @@ class DashboarActivity : AppCompatActivity() {
                     if (dia_vencimiento >= dia_hoy) {
                         cont++
                         //plan sigue activo
-                      //  toast("PLAN SIGUE ACTIVO")
+                        //  toast("PLAN SIGUE ACTIVO")
                     } else {
                         cont++
                         //plan se acabo
@@ -3179,7 +3234,7 @@ class DashboarActivity : AppCompatActivity() {
                 if (cont == 0) {
                     if (mes_vencimiento > mes_hoy && ano_vencimiento >= ano_hoy) {
                         //sigue siendo valido
-                      //  toast("PLAN SIGUE ACTIVO")
+                        //  toast("PLAN SIGUE ACTIVO")
                     } else if (mes_vencimiento == 1 && mes_hoy == 12 && ano_vencimiento > ano_hoy) {
                         //sigue siendo valido
                         //toast("PLAN SIGUE ACTIVO")
@@ -3388,8 +3443,21 @@ class DashboarActivity : AppCompatActivity() {
                          Checar.background.setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
                          //Checar.getBackground().mutate().setColorFilter(PorterDuffColorFilter(color, PorterDuff.Mode.SRC))
         */
-                        name = document.get("nombre").toString()
-                        toolbar.title = "Hola, " + name
+                        name = document.get("estatus").toString()
+                        if (name.equals("mensual")) {
+                            toolbar.title = "Plan: " + "Mensual"
+
+                        } else if (name.equals("anual")) {
+                            toolbar.title = "Plan: " + "Anual"
+
+                        } else if (name.equals("pruebainicial")) {
+                            toolbar.title = "Plan: " + "Prueba de 15 días"
+
+                        } else if (name.equals("gratuita")) {
+                            toolbar.title = "Plan: " + "Gratuito"
+
+                        }
+                        //name = document.get("nombre").toString()
                         val id_empresa = document.get("id_empresa").toString()
                         MostrarCodigoE.text = id_empresa
                         tituloCodigoE.text = "Código Empresa"

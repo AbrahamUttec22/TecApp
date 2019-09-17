@@ -14,7 +14,8 @@
         android:roundIcon="@drawable/ic_logo_one"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".admin.PagosAllActivity"></activity>
+        <activity android:name=".Empresa.PagosEmpresaActivity"></activity>
+        <activity android:name=".admin.PagosAllActivity" />
         <activity android:name=".admin.CostosAnualesActivity" />
         <activity android:name=".admin.CostosActivity" />
         <activity android:name=".paypal.PayPalDetailsAnualActivity" />

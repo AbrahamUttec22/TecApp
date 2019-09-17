@@ -91,11 +91,11 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/MiPerfilE"
-                                    android:saveEnabled="false"
-
                                     android:layout_width="match_parent"
+
                                     android:layout_height="match_parent"
                                     android:clickable="true"
+                                    android:saveEnabled="false"
                                     android:tint="@android:color/white"
                                     app:backgroundTint="@color/amber_A400"
                                     app:elevation="0dp"
@@ -107,10 +107,10 @@
 
                             <TextView
                                 android:id="@+id/MiPerfilE2"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
                                 android:text="Mi Perfil"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -130,10 +130,10 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/PanelUsuariosE"
-                                    android:saveEnabled="false"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:clickable="true"
+                                    android:saveEnabled="false"
                                     android:tint="@android:color/white"
                                     app:backgroundTint="@color/yellow_600"
                                     app:elevation="0dp"
@@ -159,10 +159,10 @@
 
                             <TextView
                                 android:id="@+id/PanelUsuariosE2"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
                                 android:text="Usuarios"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -178,10 +178,10 @@
 
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/AdministradorActividadesAdminE"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
+                                android:saveEnabled="false"
                                 android:tint="@android:color/white"
                                 app:backgroundTint="@color/purple_400"
                                 app:elevation="0dp"
@@ -191,10 +191,10 @@
 
                             <TextView
                                 android:id="@+id/AdministradorActividadesAdminE2"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
                                 android:text="Administrar Actividades"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -213,11 +213,11 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/AgregarEventosE"
-                                    android:saveEnabled="false"
-
                                     android:layout_width="wrap_content"
+
                                     android:layout_height="wrap_content"
                                     android:clickable="true"
+                                    android:saveEnabled="false"
                                     android:tint="@android:color/white"
                                     app:backgroundTint="@color/light_green_400"
                                     app:elevation="0dp"
@@ -229,10 +229,10 @@
 
                             <TextView
                                 android:id="@+id/AgregarEventosE2"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
                                 android:text="Agregar Evento"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -328,10 +328,10 @@
 
                             <TextView
                                 android:id="@+id/AdministrarEventosE2"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
                                 android:text="Administrar Eventos"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -351,10 +351,10 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/AgregarEncuestaE"
-                                    android:saveEnabled="false"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:clickable="true"
+                                    android:saveEnabled="false"
                                     android:tint="@android:color/white"
                                     app:backgroundTint="@color/cyan_800"
                                     app:elevation="0dp"
@@ -366,10 +366,10 @@
 
                             <TextView
                                 android:id="@+id/AgregarEncuestaE2"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
                                 android:text="Agregar Encuesta"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -452,10 +452,10 @@
 
                                 <android.support.design.widget.FloatingActionButton
                                     android:id="@+id/AdministrarEncuestasE"
-                                    android:saveEnabled="false"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:clickable="true"
+                                    android:saveEnabled="false"
                                     android:tint="@android:color/white"
                                     app:backgroundTint="@color/cyan_800"
                                     app:elevation="0dp"
@@ -467,9 +467,9 @@
                             <TextView
                                 android:id="@+id/AdministrarEncuestasE2"
                                 android:layout_width="wrap_content"
-                                android:saveEnabled="false"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
                                 android:text="Administrar Encuestas"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -484,10 +484,10 @@
 
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/AgregarAnuncioE"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
+                                android:saveEnabled="false"
                                 android:tint="@android:color/white"
                                 app:backgroundTint="@color/deep_orange_A400"
                                 app:elevation="0dp"
@@ -498,13 +498,14 @@
                             <TextView
                                 android:id="@+id/AgregarAnuncioE2"
                                 android:layout_width="wrap_content"
-                                android:saveEnabled="false"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
                                 android:text="Agregar Anuncio"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
                         </LinearLayout>
+
                         <LinearLayout
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
@@ -564,10 +565,10 @@
 
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/AdministrarAnunciosE"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
+                                android:saveEnabled="false"
                                 android:tint="@android:color/white"
                                 app:backgroundTint="@color/deep_orange_A400"
                                 app:elevation="0dp"
@@ -578,15 +579,13 @@
                             <TextView
                                 android:id="@+id/AdministrarAnunciosE2"
                                 android:layout_width="wrap_content"
-                                android:saveEnabled="false"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
                                 android:text="Administrar Anuncios"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
                         </LinearLayout>
-
-
 
 
                     </LinearLayout>
@@ -601,6 +600,44 @@
                         android:gravity="center_horizontal"
                         android:orientation="horizontal">
 
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content">
+
+                                <android.support.design.widget.FloatingActionButton
+                                    android:id="@+id/PagosEmpresa"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:saveEnabled="false"
+                                    android:tint="@android:color/white"
+                                    app:backgroundTint="@color/light_green_900"
+                                    app:elevation="0dp"
+                                    app:fabSize="mini"
+                                    app:rippleColor="@android:color/white"
+                                    app:srcCompat="@drawable/ic_payment" />
+
+
+                            </FrameLayout>
+
+                            <TextView
+                                android:id="@+id/PagosEmpresa2"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
+                                android:text="Pagos"
+                                android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
+                                android:textColor="@color/grey_40" />
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="0dp"
@@ -611,10 +648,10 @@
 
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/GenerarQRE"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
+                                android:saveEnabled="false"
                                 android:tint="@android:color/white"
                                 app:backgroundTint="@color/indigo_600"
                                 app:elevation="0dp"
@@ -624,10 +661,10 @@
 
                             <TextView
                                 android:id="@+id/GenerarQRE2"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
                                 android:text="Generar QR"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />
@@ -643,10 +680,10 @@
 
                             <android.support.design.widget.FloatingActionButton
                                 android:id="@+id/EstatusChecadorE"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:clickable="true"
+                                android:saveEnabled="false"
                                 android:tint="@android:color/white"
                                 app:backgroundTint="@color/indigo_600"
                                 app:elevation="0dp"
@@ -656,10 +693,10 @@
 
                             <TextView
                                 android:id="@+id/EstatusChecadorE2"
-                                android:saveEnabled="false"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/spacing_medium"
+                                android:saveEnabled="false"
                                 android:text="Estatus del checador"
                                 android:textAppearance="@style/Base.TextAppearance.AppCompat.Caption"
                                 android:textColor="@color/grey_40" />

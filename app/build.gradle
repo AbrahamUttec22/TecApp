@@ -6,16 +6,21 @@ apply plugin: 'android'
 
 
 android {
+    lintOptions {
+
+        checkReleaseBuilds false
+
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.material.tecgurus"
         multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 28
-        // versionCode 214
-        versionCode 215
-        // versionName 2.4
-        versionName "2.5"
+        // versionCode 216
+        versionCode 217
+        // versionName 2.6
+        versionName "2.7"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {

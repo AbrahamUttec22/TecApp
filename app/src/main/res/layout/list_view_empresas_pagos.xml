@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical">
+
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="@dimen/spacing_large">
+
+                <com.mikhaellopez.circularimageview.CircularImageView
+                    android:layout_width="@dimen/spacing_xxlarge"
+                    android:layout_height="@dimen/spacing_xxlarge"
+                    android:src="@drawable/ic_price"
+                    app:civ_border="false"
+                    app:civ_shadow="true"
+                    app:civ_shadow_radius="0" />
+
+                <View
+                    android:layout_width="@dimen/spacing_mlarge"
+                    android:layout_height="0dp" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="Pago realizado por: "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+                        <TextView
+                            android:id="@+id/txtNombreEmpresaPagoA"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/overlay_dark_50"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="Fecha Pago: "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+                        <TextView
+                            android:id="@+id/txtFechaPagoA"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/overlay_dark_50"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="Hora Pago: "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+                        <TextView
+                            android:id="@+id/txtHoraPagoA"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/overlay_dark_50"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="Monto: "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+                        <TextView
+                            android:id="@+id/txtMontoPagoA"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/overlay_dark_50"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:text="Estatus: "
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+                        <TextView
+                            android:id="@+id/txtEstatusPaggoA"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/overlay_dark_50"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@android:color/black"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+                        <TextView
+                            android:id="@+id/txtIdPagoPaypalA"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center_vertical"
+                            android:textAppearance="@style/TextAppearance.AppCompat.Body2"
+                            android:textColor="@color/overlay_dark_50"
+                            android:textStyle="bold"
+                            app:fontFamily="serif" />
+
+
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+    </android.support.v4.widget.NestedScrollView>
+
+</LinearLayout>
+
+
+
+
