@@ -29,9 +29,13 @@ public class PayPalPaymentAnualidadActivity extends AppCompatActivity {
 
     //all variables for the paypal
     public static final int PAYPAL_REQUEST_CODE = 7171;
+  /*   private static PayPalConfiguration config = new PayPalConfiguration().
+           environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).//aqui puedes configurar el entorno
+          clientId(Config.PAYPAL_CLIENT_ID_SANDBOX);*/
+
     private static PayPalConfiguration config = new PayPalConfiguration().
-            environment(PayPalConfiguration.ENVIRONMENT_SANDBOX).//aqui puedes configurar el entorno
-            clientId(Config.PAYPAL_CLIENT_ID);
+            environment(PayPalConfiguration.ENVIRONMENT_PRODUCTION).
+            clientId(Config.PAYPAL_CLIENT_ID_PRODUCTION);
     private String costo = "";
 
     @Override

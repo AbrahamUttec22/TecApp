@@ -180,6 +180,7 @@ class LoginCardOverlap : AppCompatActivity() {
                                         sesion.putString("rol", "usuario")
                                         sesion.putString("token", token)
                                         sesion.commit()
+                                        dialog.dismiss()
                                         goToActivity<DashboarActivity> {
                                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                                         }
@@ -188,6 +189,7 @@ class LoginCardOverlap : AppCompatActivity() {
                                 } else {
                                     mAuth.signOut()
                                     toast("Email o Contraseña incorrectas intenta de nuevo")
+                                    dialog.dismiss()
                                 }
                             }
                         } else {
@@ -229,9 +231,11 @@ class LoginCardOverlap : AppCompatActivity() {
 
                 } else {
                     toast("Confirma tu cuenta, se envio un correo con el que te registraste a tu bandeja")
+                    dialog.dismiss()
                 }
             } else {
                 toast("Email o Contraseña incorrectas intenta de nuevo")
+                dialog.dismiss()
             }
         }
     }

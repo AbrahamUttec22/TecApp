@@ -29,6 +29,7 @@
                     android:id="@+id/txtCosto"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="number"
                     android:hint="$0 MXN" />
 
             </android.support.design.widget.TextInputLayout>
