@@ -52,7 +52,7 @@ class Tab2Fragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         //the image for default
-        val imag = "https://firebasestorage.googleapis.com/v0/b/tecapp-25ed3.appspot.com/o/usuarios%2Fic_default_user.png?alt=media&token=7e64e478-9802-4149-915a-dba6d3c69c59"//this is a image for default
+        val imag = "https://firebasestorage.googleapis.com/v0/b/hola-comunicate.appspot.com/o/usuarios%2Fdefault.png?alt=media&token=31267436-5b72-4339-afc7-0756ae93dc60"//this is a image for default
         //on listener for the buton on register a new user
         view.btnRegistrarEmpleado.setOnClickListener {
             //direction foto and id_empresa is empty first
@@ -143,7 +143,13 @@ class Tab2Fragment : Fragment() {
                 showConfirmDialog()
             } else {
                 // toast("Los Datos ingresados ya estan registrados,intenta con uno nuevo")
-                Toast.makeText(context, "Los Datos ingresados ya estan registrados,intenta con uno nuevo", Toast.LENGTH_LONG).show()
+                if (password.length <= 5) {
+                    Toast.makeText(context, "La constraseña debe tener al menos 6 digitos", Toast.LENGTH_LONG).show()
+
+                } else {
+                    Toast.makeText(context, "Los Datos ingresados ya estan registrados,intenta con uno nuevo", Toast.LENGTH_LONG).show()
+
+                }
             }
         }
     }

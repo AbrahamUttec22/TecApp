@@ -1,5 +1,7 @@
 package com.material.tecgurus.model
 
+import android.support.annotation.Keep
+
 /**
  * To set private is very important because firebase not deserializable on cloud firestore
  * @author Abraham Casas Aguilar
@@ -12,6 +14,7 @@ private   var id: String = "",
 private   var id_empresa: String = "",
 private   var hora: String = "") {
  */
+@Keep
 class Evento(var description: String = "",
              var fecha: String = "",
              var image: String = "",

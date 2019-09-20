@@ -17,10 +17,10 @@ android {
         multiDexEnabled true
         minSdkVersion 16
         targetSdkVersion 28
-        // versionCode 218
-        versionCode 219
-        // versionName 2.8
-        versionName "2.9"
+        // versionCode 219
+        versionCode 300
+        // versionName 2.9
+        versionName "3.0"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {
@@ -55,6 +55,10 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore:18.1.0'
     implementation 'com.google.firebase:firebase-auth:16.2.0'
     implementation 'com.google.firebase:firebase-storage:16.1.0'
+    implementation 'com.google.firebase:firebase-messaging:9.8.0'
+
+    implementation 'com.google.gms:google-services:4.1.0'
+
 
     implementation "com.squareup.retrofit2:retrofit:2.3.0"
     implementation "com.squareup.retrofit2:adapter-rxjava2:2.3.0"

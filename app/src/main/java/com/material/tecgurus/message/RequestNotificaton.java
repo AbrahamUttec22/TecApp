@@ -1,11 +1,10 @@
 package com.material.tecgurus.message;
-
 import com.google.gson.annotations.SerializedName;
 
 public class RequestNotificaton {
 
     @SerializedName("to") //  "to" changed to token
-    private String to;
+    public String to;
 
     @Override
     public String toString() {
@@ -13,7 +12,7 @@ public class RequestNotificaton {
     }
 
     @SerializedName("notification")
-    private Notification notification;
+    public Notification notification;
 
     public Notification getNotification() {
         return notification;
@@ -30,6 +29,5 @@ public class RequestNotificaton {
     public void setToken(String token) {
         this.to = token;
     }
-
 
 }

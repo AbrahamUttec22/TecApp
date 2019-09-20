@@ -42,7 +42,7 @@ class MainEmptyActivity : AppCompatActivity() {
                 if (mAuth.currentUser!!.isEmailVerified) {
                     var correo = mAuth.currentUser!!.email.toString()
                     //guerrerog@gmail.com
-                    if (correo.equals("guerrerog@gmail.com")) {
+                    if (correo.equals("eguerrerog14@gmail.com")) {
                         goToActivity<AdminDashboardActivity> {
                             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                         }

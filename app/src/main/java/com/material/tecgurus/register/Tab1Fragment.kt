@@ -1,4 +1,5 @@
 package com.material.tecgurus.register
+
 import android.app.Dialog
 import android.app.ProgressDialog
 import android.content.DialogInterface
@@ -113,9 +114,9 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
                         empresa.giro = giro
                         empresa.direccion = ""
                         empresa.foto = imag
-                        empresa.fecha_vencimiento_plan=fecha_vencimiento
+                        empresa.fecha_vencimiento_plan = fecha_vencimiento
                         empresa.id_empresa = ""
-                        empresa.estatus="pruebainicial"
+                        empresa.estatus = "pruebainicial"
 
                         //first save the user on authentication firebase, after that save the user on cloud firestore
                         signUpByEmail(email, password, empresa)
@@ -189,7 +190,13 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
                 mAuth.signOut()//this is necesary because the val is in general
                 showConfirmDialog()
             } else {
-                Toast.makeText(context, "Los Datos ingresados ya estan registrados,intenta con uno nuevo", Toast.LENGTH_LONG).show()
+                if (password.length <= 5) {
+                    Toast.makeText(context, "La constraseña debe tener al menos 6 digitos", Toast.LENGTH_LONG).show()
+
+                } else {
+                    Toast.makeText(context, "Los Datos ingresados ya estan registrados,intenta con uno nuevo", Toast.LENGTH_LONG).show()
+
+                }
             }
         }
 

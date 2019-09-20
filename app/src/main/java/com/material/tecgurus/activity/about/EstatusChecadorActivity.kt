@@ -32,11 +32,13 @@ import java.lang.Exception
 import android.os.Environment
 import android.util.Log
 import com.alejandrolora.finalapp.goToActivity
+import com.alejandrolora.finalapp.toast
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.firestore.QuerySnapshot
 //import com.material.components.adapter.ActividadesAdapter
 import com.material.tecgurus.drawer.DashboarActivity
 import kotlinx.android.synthetic.main.activity_encuesta.listView
+import kotlinx.android.synthetic.main.activity_estatus_checador.*
 
 /**
  * @author Abraham Casas Aguilar
@@ -83,23 +85,21 @@ class EstatusChecadorActivity : AppCompatActivity() {
     private fun addMarksListener() {
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var id_empresa = sharedPreference.getString("id_empresa", "")
-        //toast(id_empresa)
         val c = Calendar.getInstance()
         val df = SimpleDateFormat("dd/MM/yyyy")
         val formattedDate = df.format(c.getTime()).toString()
-
         checadorCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("fecha", formattedDate)
-                .orderBy("hora").addSnapshotListener { snapshots, error ->
-            if (error == null) {
-                val changes = snapshots?.documentChanges
-                if (changes != null) {
-                    //  addChanges(changes)
-                    listenerDb()
+                .addSnapshotListener { snapshots, error ->
+                    if (error == null) {
+                        val changes = snapshots?.documentChanges
+                        if (changes != null) {
+                            //  addChanges(changes)
+                            listenerDb()
+                        }
+                    } else {
+                        // toast("Ha ocurrido un error intente de nuevo")
+                    }
                 }
-            } else {
-                // toast("Ha ocurrido un error intente de nuevo")
-            }
-        }
     }
 
     private fun listenerDb() {
@@ -109,7 +109,7 @@ class EstatusChecadorActivity : AppCompatActivity() {
         val c = Calendar.getInstance()
         val df = SimpleDateFormat("dd/MM/yyyy")
         val formattedDate = df.format(c.getTime()).toString()
-        val consul = checadorCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("fecha", formattedDate).orderBy("hora")
+        val consul = checadorCollection.whereEqualTo("id_empresa", id_empresa).whereEqualTo("fecha", formattedDate)
         //beggin with consult
         consul.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->
             if (task.isSuccessful) {
@@ -119,7 +119,7 @@ class EstatusChecadorActivity : AppCompatActivity() {
                 }
                 eventoList = itemChecador
                 Log.w("LISTA", eventoList.toString())
-                adapter = EstatusChecadorAdapter(this, R.layout.list_view_estatus_checador, eventoList)
+                adapter = EstatusChecadorAdapter(this, R.layout.list_view_estatus_checador, itemChecador)
                 //listView.btnCerrarEncuesta
                 listView.adapter = adapter
             } else {
@@ -151,7 +151,7 @@ class EstatusChecadorActivity : AppCompatActivity() {
     private fun addMarksListenerTWO() {
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var id_empresa = sharedPreference.getString("id_empresa", "")
-        checadorCollection.whereEqualTo("id_empresa", id_empresa).orderBy("fecha").orderBy("hora").addSnapshotListener { snapshots, error ->
+        checadorCollection.whereEqualTo("id_empresa", id_empresa).addSnapshotListener { snapshots, error ->
             if (error == null) {
                 val changes = snapshots?.documentChanges
                 if (changes != null) {
@@ -411,7 +411,7 @@ class EstatusChecadorActivity : AppCompatActivity() {
             //show file saved message with file name and path
         } catch (e: Exception) {
             //if anything goes wrong causing exception, get and show exception message
-            Toast.makeText(this, "No hay registros de checador en ese mes", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "No se puede generar el pdf, por vesion del celular", Toast.LENGTH_SHORT).show()
         }
     }
 

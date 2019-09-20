@@ -121,7 +121,6 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
         })//end for expression lambdas this very cool
 
 
-
         /* vh.eliminar.setOnClickListener(object : View.OnClickListener {
              override fun onClick(position: View?) {
                  val usuario = Usuario()
@@ -324,17 +323,29 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 }//end for hanlder
 
                 private fun sendNotificationToPatner(token: String) {
-                    val notification = Notification(nombre_asigno+" te asigno una actividad", "Actividad")
+                    val notification = Notification(nombre_asigno + " te asigno una actividad", "Actividad")
+                    Log.w("IGOT", "nombre" + nombre_asigno)
                     val requestNotificaton = RequestNotificaton()
+                    Log.w("IGOT", "haciendo el request" + nombre_asigno)
                     //token is id , whom you want to send notification ,
                     requestNotificaton.token = token
                     requestNotificaton.notification = notification
+                    Log.w("IGOT", "token" + token)
                     val apiService = ApiClient.getClient().create(ApiInter::class.java)
                     val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+                    Log.w("IGOT", "token" + token)
                     responseBodyCall.enqueue(object : Callback<ResponseBody> {
                         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                            Log.w("IGOT", "SI LA ENVIE"+call.toString()+response.toString())
+                            Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+
+
                         }
-                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+
+                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                            Log.w("IGOT", "NO LA ENVIE")
+
+                        }
                     })
                 }
             })
@@ -549,7 +560,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 }//end for hanlder
 
                 private fun sendNotificationToPatner(token: String) {
-                    val notification = Notification(nombre_asigno+" te asigno una actividad", "Actividad")
+                    val notification = Notification(nombre_asigno + " te asigno una actividad", "Actividad")
                     val requestNotificaton = RequestNotificaton()
                     //token is id , whom you want to send notification ,
                     requestNotificaton.token = token
@@ -559,6 +570,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                     responseBodyCall.enqueue(object : Callback<ResponseBody> {
                         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                         }
+
                         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
                     })
                 }

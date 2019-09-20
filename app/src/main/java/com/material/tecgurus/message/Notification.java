@@ -1,7 +1,10 @@
 package com.material.tecgurus.message;
 
+import android.support.annotation.Keep;
+
+@Keep
 public class Notification {
-    private String body,title;
+    public String body, title;
 
     public Notification(String body, String title) {
         this.body = body;
