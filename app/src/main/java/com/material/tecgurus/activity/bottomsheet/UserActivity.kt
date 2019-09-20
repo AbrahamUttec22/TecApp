@@ -1,5 +1,4 @@
 package com.material.tecgurus.activity.bottomsheet
-
 import android.content.Context
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
@@ -127,6 +126,8 @@ class UserActivity : AppCompatActivity() {
                 Log.w("saasas", "Error getting documents.", task.exception)
             }
         })//end for expression lambdas this very cool
+
+
     }
 
     /**
@@ -218,6 +219,7 @@ class UserActivity : AppCompatActivity() {
          dialog.window!!.attributes = lp
      }
  */
+
     /**
      * initToolbar(header)
      */
@@ -253,4 +255,5 @@ class UserActivity : AppCompatActivity() {
         }
         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
+
 }

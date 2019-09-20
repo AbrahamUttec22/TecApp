@@ -6,21 +6,29 @@ apply plugin: 'android'
 
 
 android {
+    signingConfigs {
+        reelase {
+            storeFile file('C:\\Users\\polit\\Downloads\\certificado.jks')
+            storePassword 'Politecnico'
+            keyAlias = 'key0'
+            keyPassword 'Politecnico'
+        }
+    }
     lintOptions {
 
         checkReleaseBuilds false
 
     }
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         applicationId "com.material.tecgurus"
         multiDexEnabled true
         minSdkVersion 16
-        targetSdkVersion 28
-        // versionCode 219
-        versionCode 300
-        // versionName 2.9
-        versionName "3.0"
+        targetSdkVersion 29
+        // versionCode 300
+        versionCode 301
+        // versionName 3.0
+        versionName "3.1"
         vectorDrawables.useSupportLibrary = true
     }
     buildTypes {

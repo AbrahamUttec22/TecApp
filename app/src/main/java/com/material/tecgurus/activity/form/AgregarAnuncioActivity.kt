@@ -85,7 +85,7 @@ class AgregarAnuncioActivity : AppCompatActivity() {
                     val obj = Anuncio()
                     var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                     var id_empresa = sharedPreference.getString("id_empresa", "")
-                    obj.id_empresa = id_empresa
+                    obj.id_empresa = id_empresa.toString()
                     obj.description = description
                     obj.titulo = titulo
                     val c = Calendar.getInstance()
@@ -157,7 +157,7 @@ class AgregarAnuncioActivity : AppCompatActivity() {
             try {
                 val bitmapImagen = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
                 imgAnuncio.setImageBitmap(bitmapImagen)
-                uri = data.data
+                uri = data.data!!
             } catch (e: IOException) {
                 e.printStackTrace()
             }

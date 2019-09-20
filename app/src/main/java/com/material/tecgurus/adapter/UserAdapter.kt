@@ -323,23 +323,23 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 }//end for hanlder
 
                 private fun sendNotificationToPatner(token: String) {
-                    val notification = Notification(nombre_asigno + " te asigno una actividad", "Actividad")
-                    Log.w("IGOT", "nombre" + nombre_asigno)
+                    var bo=nombre_asigno + " te asigno una actividad"
+                    val notification = Notification()
+                    notification.body=bo
+                    notification.title="Actividad"
+                    Log.w("IGOT", "body" + notification)
                     val requestNotificaton = RequestNotificaton()
-                    Log.w("IGOT", "haciendo el request" + nombre_asigno)
                     //token is id , whom you want to send notification ,
                     requestNotificaton.token = token
                     requestNotificaton.notification = notification
                     Log.w("IGOT", "token" + token)
                     val apiService = ApiClient.getClient().create(ApiInter::class.java)
                     val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
-                    Log.w("IGOT", "token" + token)
+                    Log.w("IGOT", "alfo"+responseBodyCall.toString())
                     responseBodyCall.enqueue(object : Callback<ResponseBody> {
                         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                             Log.w("IGOT", "SI LA ENVIE"+call.toString()+response.toString())
                             Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
-
-
                         }
 
                         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -442,6 +442,7 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                         Toast.makeText(context, "El rol se ha actualizado correctamente", Toast.LENGTH_LONG).show()
                     }.addOnFailureListener { Toast.makeText(context, "Error  actualizando el usuario intenta de nuevo", Toast.LENGTH_LONG).show() }
                 }//end for hanlder
+
 
             })
 
@@ -560,20 +561,36 @@ class UserAdapter(val context: Context, val layout: Int, val list: List<Usuario>
                 }//end for hanlder
 
                 private fun sendNotificationToPatner(token: String) {
-                    val notification = Notification(nombre_asigno + " te asigno una actividad", "Actividad")
+                    var bo=nombre_asigno + " te asigno una actividad"
+                    val notification = Notification()
+                    notification.body=bo
+                    notification.title="Actividad"
+                    Log.w("IGOT", "body" + notification)
                     val requestNotificaton = RequestNotificaton()
+                    Log.w("IGOT", "haciendo el request" + nombre_asigno)
                     //token is id , whom you want to send notification ,
                     requestNotificaton.token = token
                     requestNotificaton.notification = notification
+                    Log.w("IGOT", "token" + token)
                     val apiService = ApiClient.getClient().create(ApiInter::class.java)
                     val responseBodyCall = apiService.sendChatNotification(requestNotificaton)
+                    Log.w("IGOT", "token" + token)
                     responseBodyCall.enqueue(object : Callback<ResponseBody> {
                         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                            Log.w("IGOT", "SI LA ENVIE"+call.toString()+response.toString())
+                            Toast.makeText(context, response.toString(), Toast.LENGTH_LONG).show()
+
+
                         }
 
-                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {}
+                        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                            Log.w("IGOT", "NO LA ENVIE")
+
+                        }
                     })
                 }
+
+
             })
 
             vh.eliminar2.setOnClickListener(object : View.OnClickListener {

@@ -1,4 +1,5 @@
 package com.material.tecgurus.message
+
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -51,8 +52,6 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             showNotification("${it.body}", "${it.title}")
         }
         // remoteMessage.getNotification().getBody();
-
-
     }
 
     /**
@@ -62,6 +61,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
      */
 
     fun showNotification(messageBody: String, title: String) {
+
         val channelId = getString(R.string.default_notification_channel_id)
         val channelName: String = "my_channel_01"
         val mNotificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager

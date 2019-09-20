@@ -174,7 +174,7 @@ class PerfilEmpresaActivity : AppCompatActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         if (resultCode == RESULT_OK) {
             if (requestCode == PICK_PHOTO) {
-                uri = data!!.data
+                uri = data!!.data!!
                 val builder = AlertDialog.Builder(this)
                 val dialogView = layoutInflater.inflate(R.layout.progress_dialog, null)
                 val message = dialogView.findViewById<TextView>(R.id.mensaje)

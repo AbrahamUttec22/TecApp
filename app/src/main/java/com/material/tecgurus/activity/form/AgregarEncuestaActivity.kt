@@ -119,7 +119,7 @@ class AgregarEncuestaActivity : AppCompatActivity() {
                             var encuesta = Encuesta()//this isn´t global because the instance
                             var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                             var id_empresa = sharedPreference.getString("id_empresa", "")
-                            encuesta.id_empresa = id_empresa
+                            encuesta.id_empresa = id_empresa.toString()
                             encuesta.pregunta = pregunta
                             encuesta.status = "1"
                             encuesta.respuestas = listOf(txtRespuestas.text.toString(), txtRespuestas2.text.toString())
@@ -142,7 +142,7 @@ class AgregarEncuestaActivity : AppCompatActivity() {
                             var encuesta = Encuesta()//this isn´t global because the instance
                             var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
                             var id_empresa = sharedPreference.getString("id_empresa", "")
-                            encuesta.id_empresa = id_empresa
+                            encuesta.id_empresa = id_empresa.toString()
                             encuesta.pregunta = pregunta
                             encuesta.status = "1"
                             encuesta.respuestas = listOf(txtRespuestas.text.toString(), txtRespuestas2.text.toString(), txtRespuestas3.text.toString())

@@ -1,5 +1,4 @@
 package com.material.tecgurus.message
-
 import android.app.NotificationChannel
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle

@@ -176,7 +176,7 @@ class CheckActivity : AppCompatActivity() {
     override fun onRestoreInstanceState(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
         super.onRestoreInstanceState(savedInstanceState)
         savedInstanceState?.let {
-            scannedResult = it.getString("scannedResult")
+            scannedResult = it.getString("scannedResult").toString()
 
 
         }

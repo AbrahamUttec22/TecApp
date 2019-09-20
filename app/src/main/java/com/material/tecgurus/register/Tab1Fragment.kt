@@ -204,7 +204,7 @@ class Tab1Fragment : Fragment(), View.OnClickListener {
 
     private fun showConfirmDialog() {
         //the header from dialog
-        val dialog = Dialog(context)
+        val dialog = Dialog(context!!)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE) // before
         dialog.setContentView(R.layout.dialog_send_email)
         dialog.setCancelable(true)

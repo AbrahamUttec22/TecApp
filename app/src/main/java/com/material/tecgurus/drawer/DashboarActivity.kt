@@ -102,7 +102,7 @@ class DashboarActivity : AppCompatActivity() {
         var sharedPreference = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
         var rol = sharedPreference.getString("rol", "").toString()
         var sharedPreferencet = getSharedPreferences("shared_login_data", Context.MODE_PRIVATE)
-        id_empresa = sharedPreferencet.getString("id_empresa", "")
+        id_empresa = sharedPreferencet.getString("id_empresa", "").toString()
         val email = mAuth.currentUser!!.email.toString()
         val empresa = userCollection.whereEqualTo("email", email)
         empresa.get().addOnCompleteListener(OnCompleteListener<QuerySnapshot> { task ->

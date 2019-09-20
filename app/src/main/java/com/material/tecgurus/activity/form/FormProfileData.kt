@@ -295,7 +295,7 @@ class FormProfileData : AppCompatActivity() {
             try {
                 val bitmapImagen = MediaStore.Images.Media.getBitmap(contentResolver, filePath)
                 btnGaleriaEvento.setImageBitmap(bitmapImagen)
-                uri = data!!.data
+                uri = data!!.data!!
             } catch (e: IOException) {
                 e.printStackTrace()
             }

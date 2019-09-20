@@ -19,7 +19,6 @@ import com.material.tecgurus.message.Notification
 import com.material.tecgurus.message.RequestNotificaton
 import com.material.tecgurus.model.Pagos
 import kotlinx.android.synthetic.main.activity_pay_pal_details_anual2.*
-import kotlinx.android.synthetic.main.activity_pay_pal_details_k.*
 import okhttp3.ResponseBody
 import org.json.JSONException
 import org.json.JSONObject
